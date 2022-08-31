@@ -1,12 +1,14 @@
+import numpy as np
+
+# dcamapi4.py : Jun 18, 2021
 #
-# these codes are created by re-organizing the dcamapi4.py from the official Hamamatsu API.
-#
-#
+# Copyright (C) 2021 Hamamatsu Photonics K.K.. All right reserved.
+
 
 import platform
 from enum import IntEnum
 from ctypes import *
-import numpy as np
+
 
 # ==== load shared library ====
 
@@ -2037,5 +2039,3 @@ class Dcam:
         # ret is DCAMWAIT_CAPEVENT.FRAMEREADY
 
         return True
-
-
