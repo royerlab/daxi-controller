@@ -1,0 +1,107 @@
+Hardware information
+
+Description: this file stores all the information about the microscope at the devices level.
+Microscope Name: DaXi-Alpha
+
+------------------------------------ Device Section: camera ------------------------------------
+camera model: Hamamatsu Orca Flash V4
+serial number:
+output trigger terminal on camera:
+output trigger terminal connection on DAQ card:
+camera - [Hamamatsu Orca Flash v4] - [ input terminal: "asistage-output-trigger"] - [output terminal: daq-""/cDAQ1/PFI0""]
+
+
+------------------------------------ Device Section: lasers ------------------------------------
+laser model:
+serial number:
+laser lines: template: line [index x] - [wavelength x] - [input terminal]-[voltage to turn on]-[voltage to turn off]-[maximum power]
+line 1 - [wavelength '405'] - [input terminal: daq-"cDAQ1DIO/port0/line0"] - [V-on: v] - [V-off: v] - [max power: mW]
+line 2 - [wavelength '488'] - [input terminal: daq-"cDAQ1DIO/port0/line1"] - [V-on: v] - [V-off: v] - [max power: mW]
+line 3 - [wavelength '561'] - [input terminal: daq-"cDAQ1DIO/port0/line2"] - [V-on: v] - [V-off: v] - [max power: mW]
+line 4 - [wavelength '639'] - [input terminal: daq-"cDAQ1DIO/port0/line3"] - [V-on: v] - [V-off: v] - [max power: mW]
+
+
+------------------------------------ Device Section: bright field LED ------------------------------------
+controller line:
+BF line 1 - [input terminal: "cDAQ1DIO/port0/line4"] - [V-on: v] - [V-off: v] - [max power: mW]
+
+
+------------------------------------ Device Section: scanning galvo ------------------------------------
+[scanning galvo] - [ctr terminal: "cDAQ1AO/ao0"]
+
+
+------------------------------------ Device Section: view switching galvos ------------------------------------
+[VS galvo 1] - [ctr terminal: "cDAQ1AO/ao1"]
+[VS galvo 2] - [ctr terminal: "cDAQ1AO/ao2"]
+
+
+------------------------------------ Device Section: strip reduction galvo ------------------------------------
+[strip reduction galvo] - [ctr terminal: "cDAQ1AO/ao3"]
+
+
+------------------------------------ Device Section: light sheet plane incident angle galvo
+[LS incident angle galvo] - [ctr terminal: "cDAQ1AO2/ao0"]
+
+
+------------------------------------ Device Section: DAQ card ------------------------------------
+device 1
+model name: cDAQ-9178
+device type: CompactDAQ Chassis
+serial number:
+
+overall resources:
+available counter channels:
+{
+"counter 0": "/cDAQ1/_ctr0",
+"counter 0 internal output": "/cDAQ1/Ctr0InternalOutput",
+
+"counter 1": "/cDAQ1/_ctr1",
+"counter 1 internal output": "/cDAQ1/Ctr1InternalOutput",
+
+"counter 2": "/cDAQ1/_ctr2",
+"counter 2 internal output": "/cDAQ1/Ctr2InternalOutput",
+
+"counter 3": "/cDAQ1/_ctr3",
+"counter 3 internal output": "/cDAQ1/Ctr3InternalOutput",
+}
+
+device 2
+model name:
+device type"
+serial number:
+available AO channels
+
+open floor.
+
+------------------------------------ Device Section: stage ------------------------------------
+{
+'company': ASI
+'model name': ''
+'serial number': ''
+}
+
+
+------------------------------------ Device Section: O1 piezo ------------------------------------
+{
+'company': 'PI'
+'model name': ''
+'serial number': ''
+}
+
+
+------------------------------------ Device Section: O3 piezo ------------------------------------
+{
+'company': 'PI'
+'model name': ''
+'serial number': ''
+}
+
+
+------------------------------------ Device Section: filter wheel ------------------------------------
+{
+'company': ''
+'model name': ''
+'serial number': ''
+'connection type': 'Serial Port'
+'Port name': ''
+}

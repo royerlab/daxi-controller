@@ -1,0 +1,125 @@
+# todo - need to make a GUI to generate this file.
+------------------------------------ Connection Section: nidaq_terminals
+nidaq terminals:
+definition start.
+{
+'DAQ operation frequency': 1000, # unit = Hz
+
+    'metronome terminals':
+    {
+    'device name': 'metronome',
+    'type': 'virtual tool',
+    'counter terminal': "/cDAQ1/_ctr0",
+    'counting output terminal': "/cDAQ1/Ctr0InternalOutput",
+    'trigger terminal': "/cDAQ1/PFI0"
+    },
+
+    'counter terminals':
+    {
+    'device name': 'counter',
+    'type': 'virtual tool',
+    'counter terminal': "/cDAQ1/_ctr1",
+    'counting input terminal': "/cDAQ1/PFI0"
+    },
+
+    'do task bundle':
+    {
+    'device name': 'DO_task_bundle',
+    'type': 'do task',
+    'trigger terminal': "/cDAQ1/PFI0"
+    },
+
+    'ao task bundle':
+    {
+    'device name': 'AO_task_bundle',
+    'type': 'ao task',
+    'trigger terminal': "/cDAQ1/PFI0"
+    },
+
+    'scanning galvo':
+    {
+    'device name': 'scanning galvo',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1AO/ao0",
+    'distance (um) to voltage (v) conversion factor (v/um)': 0.008, # todo this one doesn't seem to belong here.
+    },
+
+    'view switching galvo 1':
+    {
+    'device name': 'view switching galvo 1',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1AO/ao1",
+    },
+
+    'view switching galvo 2':
+    {
+    'device name': 'view switching galvo 2',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1AO/ao2",
+    },
+
+    'gamma galvo strip reduction':
+    {
+    'device name': 'gamma galvo strip reduction',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1AO/ao3",
+    },
+
+    'beta galvo light sheet incident angle':
+    {
+    'device name': 'beta galvo light sheet incident angle',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1AO2/ao0",
+    },
+
+    'O1':
+    {
+    'device name': 'O1',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1AO2/ao1",
+    },
+
+    'O3':
+    {
+    'device name': 'O3',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1AO2/ao2",
+    },
+
+    '405 laser':
+    {
+    'device name': '405 laser',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1DIO/port0/line0" ,
+    },
+
+    '488 laser':
+    {
+    'device name': '488 laser',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1DIO/port0/line1" ,
+    },
+
+    '561 laser':
+    {
+    'device name': '561 laser',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1DIO/port0/line2" ,
+    },
+
+    '639 laser':
+    {
+    'device name': '639 laser',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1DIO/port0/line3" ,
+    },
+
+    'bright field':
+    {
+    'device name': 'bright field',
+    'type': 'physical device',
+    'voltage output terminal': "cDAQ1DIO/port0/line4" ,
+    },
+
+}
+definition end.

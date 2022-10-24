@@ -1,0 +1,19 @@
+this stores the specific configurations for the microscope
+------------------------------------ Acquisition Parameter Section: acquisition mode options ------------------------------------
+
+[mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
+[mode 2] - [layer 1: position] - [layer 2: view] - [layer 3: slice] - [layer 4: color]
+[mode 3] - [layer 1: position] - [layer 2: view] - [layer 3: slice, color]
+[mode 4] - [layer 1: position, view] - [layer 2: color] - [layer 3: slice]
+[mode 5] - [layer 1: position, view] - [layer 2: slice] - [layer 3: color]
+[mode 6] - [layer 1: position, view] - [layer 2: slice, color]
+
+description:
+
+looping order:
+loop over layer 1:
+    loop over layer 2:
+        loop over layer 3:
+            loop over layer 4.
+
+------------------------------------ Acquisition Parameter Section: acquisition mode options ------------------------------------

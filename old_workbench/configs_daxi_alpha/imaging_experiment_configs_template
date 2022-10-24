@@ -1,0 +1,32 @@
+
+------------------------------------ Acquisition Parameter Section: general parameter ------------------------------------
+{
+'acquisition mode': 'mode 1'
+'number of time points': 10
+}
+
+
+------------------------------------ Acquisition Parameter Section: lasers list ------------------------------------
+{
+'laser list': ['488', '561']
+}
+
+
+------------------------------------ Acquisition Parameter Section: camera settings ------------------------------------
+{
+'camera exposure time': '100 ms'
+'camera cycle time': '110 ms'
+}
+
+
+------------------------------------ Acquisition Parameter Section: stage ------------------------------------
+{
+
+'scanning range': '2 mm'
+'scanning speed': '0.05 mm/s'
+'time per volume per view': '40 s'
+
+}
+
+
+--- end ---

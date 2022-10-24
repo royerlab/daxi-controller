@@ -1,0 +1,190 @@
+# may need to change these all into standard format, perhaps YAML file
+virtual tools configurations.
+
+# when change this file format, change this one, and the corresponding parser.py
+
+# todo should definitely c hange this into yaml file, when that happens, remember to update the parser.
+
+------------------------------------ Virtual Tools Section: counter
+counter 1:
+definition start.
+{
+'name': 'image slices number counter',
+'counter terminal': "/cDAQ1/_ctr1", # internal virtual channel, it is a counter.
+'counting input terminal': "/cDAQ1/PFI0", # camera exposure, signal sent from camera to the daq card.
+'counting edge': "RISING",
+'initial count': 0,  # count from 0
+'purpose': "to count the number of slices acquired in a stack",
+'current count': 0,
+'verbose': False,
+}
+definition end.
+
+------------------------------------ Virtual Tools Section: metronome
+metronome:
+definition start.
+{
+'name': 'metronome',
+'counter terminal': "/cDAQ1/_ctr0",
+'counting output terminal': "/cDAQ1/Ctr0InternalOutput",
+'idle state': 'LOW',
+'frequency': 1000.0, # Hz
+'sample mode': 'FINITE', # options: CONTINUOUS  FINITE
+'number of samples': 500,
+'trigger terminal': "/cDAQ1/PFI0",
+'trigger edge': 'RISING',
+'retriggerable': True,
+'purpose': "to provide a metronome to orchestrate all DAQ profiles for both AO and DO outputs",
+}
+definition end.
+
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------ Physical Devices Section ----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+# design principles:
+This configs file is expected to be created by a UI where you have a small configuration panels with buttons that
+allows the user to define the funciton of a physical device. Each device should have a task, and this task has a type.
+task types:
+1. direct controlled task that belongs to the direct module (rename it with the clas sname once the module is implemented)
+2. nidaq task - there will be SubTaskAO, SubTaskDO.
+3. types of devices:
+    01. hamamatsu camera
+    02. asi stage
+    03. scanning galvo
+    04. view switching galvo 1
+    05. view switching galvo 2.
+    06. strip reduction galvo - to have in-plane tilting of the light sheet to reduce strip artifacts.
+    07. light sheet pivot angle galvo - to have out-of-plane tilting of the light sheet to align light sheet to the focal plane
+    08. piezo stage of O1.
+    09. piezo stage of O2.
+    10. oscilloscope - directly connected to oscilloscope
+    11. strobe - generate a simulated trigger signal.
+
+basic attributes for each subtask:
+task type
+1. direct control
+2. serial controled
+3. daq controlled
+    name: str
+    number of samples: int
+    voltage output terminal: str
+    data_generator: method
+    data_generation_configs: dict.
+    # from the UI, when you choose "daq controlled" by pressing some check box, the relative configuration panel
+    # for DAQ controlled device would become available, and the relevant configurations would be populated in to this
+    # data_generation_configs attribute as a dictionary.
+
+# all the *configs file should follow the same formatting convention, and should be recognized by the same parser.
+
+------------------------------------ Physical Devices Section: AO_task_bundle
+AO_task_bundle:
+definition start.
+{
+'name': "ao task bundle",
+'trigger terminal': "/cDAQ1/PFI0",
+'trigger edge': 'RISING',
+'sample mode': 'CONTINUOUS',
+
+}
+definition end.
+
+------------------------------------ Physical Devices Section: oscilloscope_channel1
+oscilloscope1:
+definition start.
+{
+'device': 'oscilloscope',
+'name': 'oscilloscope measure channel 1',
+'idle state': 'LOW',
+'trigger terminal':"/cDAQ1/PFI0",
+'trigger edge': 'RISING',
+'voltage output terminal': "cDAQ1AO/ao0",
+'data': None,
+'data generator': 'sinusoidal',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'amplitude': 2, # volt
+    'sample number': 500,
+    'sample number per period': 500,
+    'center voltage': 0,  # volt
+    'initial phase': 0, # unit: degree
+    },
+}
+definition end.
+
+------------------------------------ Physical Devices Section: oscilloscope_channel2
+oscilloscope1:
+definition start.
+{
+'device': 'oscilloscope',
+'name': 'oscilloscope measure channel 2',
+'idle state': 'LOW',
+'trigger terminal':"/cDAQ1/PFI0",
+'trigger edge': 'RISING',
+'voltage output terminal': "cDAQ1AO/ao1",
+'data': None,
+'data generator': 'sinusoidal',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'amplitude': 1.5, # volt
+    'sample number': 500,
+    'sample number per period': 250,
+    'center voltage': 0,  # volt
+    'initial phase': 0, # unit: degree
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: oscilloscope_channel3
+oscilloscope2:
+definition start.
+{
+'device': 'oscilloscope',
+'name': 'oscilloscope measure channel 3',
+'idle state': 'LOW',
+'trigger terminal':"/cDAQ1/PFI0",
+'trigger edge': 'RISING',
+'voltage output terminal': "cDAQ1AO/ao2",
+'data': None,
+'data generator': 'sinusoidal',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'amplitude': 1, # volt
+    'sample number': 500,
+    'sample number per period': 75,
+    'center voltage': 0,  # volt
+    'initial phase': 0, # unit: degree
+    },
+}
+definition end.
+
+
+
+------------------------------------ Physical Devices Section: scanning_galvo_soft_retraction
+scanning_galvo:
+definition start.
+{
+'device': 'scanning_galvo',
+'name': 'Scanning Galvo with linear ramp soft retraction',
+'idle state': 'LOW',
+'voltage output terminal': "cDAQ1AO/ao0",
+'distance (um) to voltage (v) conversion factor (v/um)': 0.4, # this value should be calibrated.
+'data': None,
+'data generator': 'linear_ramp_soft_retraction',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'linear ramp start': -4, # volt
+    'linear ramp stop': 4, # volt
+    'linear ramp sample number': 400, # volt
+    'soft retraction sample number': 100, # volt
+    },
+}
+definition end.
+
+
+

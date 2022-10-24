@@ -1,0 +1,55 @@
+1. figure out pip packaging workflow and configure daxi-protocol package under development mode
+    10:36 am  - started.
+    10:44 am - distracted by slack msgs, resume the work. - now check the toml files in other royer lab repos.
+    10:53 am - further distracted by emails and slack msgs.. mute all notifications now.
+    now - refactoring the folders
+    organize the toml file
+    veresion files
+    install a directory in editable mode:
+        command: pip install -e path-to-directory
+            - overwrite the directory in site-packages with a symbolic link to the locations repository,
+              meaning any changes to code in there will automatically be reflected - just reload the
+              page (so long as you're using the development server).
+        need:
+            setup.py
+    11:19 am - read this:
+        https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/
+        follow this instructions:
+        https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#requirements-for-packaging-and-distributing
+        11:49 -  finished configuring setup.py
+        11:54 - figuringout MANIFIST.ini, how to generate it
+        12:00 - seems finished with the editable mode isntallation.
+
+    12:01 - miniplanning
+       - redefine workflow - 12:04 to
+       12:06 - now try to find useful patterns of the workflow on github
+       - update workflow prompt messages.
+       - try to write tests for the daxi package for datatypes. start from configuration classes.
+        2:10 continue.
+
+        7:29 - ahh!
+        finished configuring the editable installation of daxi package.
+        finished initial trial of implementing the laser base module and the associated test cases.
+
+    7:30 pm
+        now implement the structure.
+        implement ao tools.
+        impelemnt up to the point make WKB structure in the code structure, and mark asn todo.
+        now implement our laser.
+
+        think about WBS structure
+        Today - enable the previosu demos in the new daxi package folder.
+
+            define configuraiton files
+
+
+    later in the day
+    look into pytest fixtures, and the temporary path for tests.
+    10:47.. trouble shoot the installatin and paths issues in pycharm and the terminals
+    thought about the daq controlled devices structure.
+
+WBS laser module:
+    need some interactive diagnostic tools that are connected to the DAQ cards.
+    have a collection of diagnostic tools that are totally independent from each other.
+
+

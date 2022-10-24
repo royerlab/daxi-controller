@@ -1,0 +1,182 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2634
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11820\viewh18260\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 What are the functions required for taxi-codes?\
+\
+\
+High level:\
+	system\
+		tmdaxi - housekeeping bash scripts.\
+		logger: log user operations\
+		acquisition_configs\
+		workflow manager:\
+			manage acquisition mode\
+			basically plan out the workbook for the conductor.\
+			live acquisition\
+			acquire/save a dataset.\
+			scripting interface\
+			scripting workflow synthesis\
+			scripting tool\
+				update location during iteration.\
+				update other acquisition specs during iteration\
+				configure for/if/while/case to jump from processes:\
+					processes (in acquisition):\
+\
+		notes: the system module interfaces with all the rest of the modules.\
+\
+\
+	inspection: \
+		notes: this will be heavily used when building the microscope.\
+		will involve the engineer to work together with the inspection codes, and check the indicators for the diagnose signals.\
+		General inspection suite: \
+			general maintenance check - \
+			-a collection of sections packaged to be used as a routine.\
+			check everything is connected correctly\
+			check every device is working and functioning\
+			make	sure the wiring is correct.\
+			make sure the basic control functions can be performed as desired.\
+				scan stage at given speed\
+				image at given frame rate\
+				drive laser at given rates\
+				synchronization\
+				etc.\
+\
+		Special inspection: individual specialized inspection steps, extendible.\
+			check DAQ cards.\
+			check camera function.\
+			check laser control.\
+			check stage.\
+			push every piece to the extreme and make sure it works.\
+			resolution benchmark with a standard sample.\
+\
+\
+	acquisition\
+		use for a single data acquisition of a single 3D stack.\
+		acquisition mode (live, datasets, scripting(single_datasets)).\
+		data storage.\
+		acquisition configuration storage.\
+\
+\
+	navigation\
+		store positions\
+		iterate over positions\
+		path finder\
+		move\
+		decide on where and how to move.\
+\
+	alignment \
+		specs\
+		data storage: streaming, conversion.\
+		GUI: \
+		keyboard tools: to use keyboard for navigation.\
+		autofocus - match focal plane with detection plane\
+		auto conjugate O1 to O2\
+	\
+	\
+	calibration\
+		calibrate scanning salvo range\
+		calibrate pixel size\
+		calibrate magnification\
+\
+	\
+	data\
+		analysis\
+		visualization\
+		management-storage\
+		management-conversion\
+		management-streaming\
+\
+\
+	conductor\
+		take all the acquisition, and orchestrate the entire imaging session.\
+\
+	hardware\
+		DAQControlledDevices\
+			daq_general\
+				nidaqtasks_ao\
+				nidaqtasks_do\
+				tasks_counter\
+			Specific classes:\
+				daq_versalase\
+					laser controller relevant functions\
+				daq_galvos\
+					salvo congroller relevant functions\
+				daq_ledlight\
+					LED controller relevant functions\
+	\
+		OrcaFlashV4\
+			live acquisition\
+			data display\
+			configuration panel\
+		\
+		AsiMs2kStage\
+			configuration \
+	\
+\
+\
+\
+\
+Think about using the analogy for installing AC system.\
+select parts\
+select site\
+Inspect parts\
+Installation\
+system-inspection-initial\
+system-calibration-initial\
+system-service\
+	user use it\
+system-inspection-maintenance\
+system-calibration-maintenance\
+\
+\
+\
+Folder-hierarchy\
+daxi.py\
+daxigui.py\
+System\
+	defaultconfigs.py\
+	generatefcns.py\
+	init_configs.py\
+	\
+Acquisition\
+Inspection\
+Navigation\
+Calibration\
+Alignment\
+Hardware\
+	hardwaremanager.py\
+	directcontrol\
+		devices/*get_device*.py: this is to recruit from the device pool, and condition it to this workplace.\
+		tests/test_*.py\
+		demos/demo_*.py\
+		inspections/inspect_*.py\
+\
+\
+	serialcontrol\
+		devices/*device*.py\
+		tests/test_*.py\
+		demos/demo_*.py\
+		inspections/inspect_*.py\
+\
+	daqcontrol\
+		devices/*get_device*.py \
+			tasks_aio.py\
+				append metronome\
+			tasks_dio.py\
+\
+			tasks_cio.py\
+				metronome\
+\
+		signalforms.py\
+		tests/test_*.py\
+		demos/demo_*.py\
+		inspections/inspect_*.py\
+\
+\
+Data\
+\
+}

@@ -1,0 +1,69 @@
+- morning worked on configuration files. norming development process
+
+1:16 - work on implementing framework of the nidaq devcies manaber module.
+
+get a parser
+worked on nidaq module.
+
+how to find out the counter channel names?
+
+2022-09-26
+
+
+finish up everything about metronome
+module
+test
+demo
+
+Features:
+task bundle, AO task bundle, and implement a demo to generate sine wave.
+
+DO task bundle
+
+
+how to deal with forgetting about the details in the design of features, etc.
+write notes.
+
+write the configuration book.
+
+
+2022-09-27
+11:33 am:
+1. warm up and pick up what was left over from yesterday
+develop the aotaskbundle and aosubtask module
+
+norming the process.
+
+
+work on the following aspects each time when you start to work on a new feature:
+1. module code it self, refactor when necessary, take notes of the thoughts.
+2. update the parser, and the paser test. # derive demo from the tests.
+2. write the test codes
+3. write the demo cdes
+4. write the read me to note down the throught process
+5. write in the log to note down the big picture thought processes.
+
+4:32 - pm updated the parser and it's tests. prepared 3 testing terminals for tests.
+may need to put in more configurations into the oscilloscope configurations in the configs txt file.
+decided to keep all configurations in a single file.
+
+4:03 pm:
+[] continue with aotaskbundle and subtask,
+[] refactor the data generator function into the daxi package. where to find? devices
+[] finish ao task bundle, and ao subtask module. demo with 3 oscilloscopes all attached to the ao bundle.
+
+4: work on data generator funciton for sinusoidal function first, and configure it for oscilloscope1 config.
+generator function should be wired by the facilitator.
+
+think about how to define the subtasks-- perhaps define it directly into
+
+scanning galvo
+
+
+there are devices
+
+
+there are devices configurations.
+
+how to make it compatible....
+

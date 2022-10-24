@@ -1,0 +1,362 @@
+bits of thoughts:
+this is the core configurations for all the devices, perhaps this should be one of those hidden configuration files
+for the software that the user would never see.
+
+I expect the device facilitators who configures the configurations for all the devices would load this
+files as the starting template. In the meanwhile, the DeviceFcltr (or the associated tool) would also read
+the acquisition parameters (that is handed over from the process facilitator), and based on the parameters to
+populate up the None fields in these configurations for all the devices.
+
+------------------------------------ Virtual Tools Section: metronome
+metronome:
+definition start.
+{
+'name': 'metronome',
+'task type': 'CO',
+'counter terminal': None,
+'counting output terminal': None,
+'idle state': 'LOW',
+'frequency': 10000, # 10kHz
+'sample mode': 'FINITE', # options: CONTINUOUS  FINITE
+'number of samples': None,
+'trigger terminal': None,
+'trigger edge': 'RISING',
+'retriggerable': True,
+'purpose': "to provide a metronome to orchestrate all DAQ profiles for both AO and DO outputs",
+}
+definition end.
+
+
+------------------------------------ Virtual Tools Section: counter
+counter 1:
+definition start.
+{
+'name': 'image slices number counter',
+'task type': 'CI',
+'counter terminal': None, # internal virtual channel, it is a counter.
+'counting input terminal': None, # camera exposure, signal sent from camera to the daq card.
+'counting edge': "RISING",
+'initial count': None,  # count from 0
+'purpose': "to count the number of slices acquired in a stack",
+'current count': None,
+'verbose': False,
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: DO_task_bundle
+DO_task_bundle:
+definition start.
+{
+'name': "do task bundle",
+'task type': 'DO',
+'trigger terminal': None,
+'trigger edge': 'RISING',
+'sample mode': 'CONTINUOUS',
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: AO_task_bundle
+AO_task_bundle:
+definition start.
+{
+'name': "ao task bundle",
+'task type': 'AO',
+'trigger terminal': None,
+'trigger edge': 'RISING',
+'sample mode': 'CONTINUOUS',
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: scanning_galvo
+scanning_galvo:
+definition start.
+{
+'device': 'scanning_galvo',
+'name': 'Scanning Galvo with linear ramp soft retraction',
+'task type': 'AO subtask',
+'idle state': 'LOW',
+'voltage output terminal': None,
+'home voltage for view 1': 0.12, # volt, should be obtained and adjusted during alignment
+'home voltage for view 2': -0.05, # volt, should be obtained and adjusted during alignment
+'distance (um) to voltage (v) conversion factor (v/um)': None, # this value should be calibrated.
+'data for view 2': None,
+'data for view 1': None,
+'data generator': 'linear_ramp_soft_retraction',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'linear ramp start for view 1': None, # volt
+    'linear ramp stop for view 1': None, # volt
+    'linear ramp start for view 2': None, # volt
+    'linear ramp stop for view 2': None, # volt
+    'linear ramp sample number': None, # volt
+    'soft retraction sample number': None, # volt
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: view_switching_galvo_1
+view_switching_galvo_1:
+definition start.
+{
+'device': 'scanning_galvo',
+'name': 'view switching galvo 1',
+'task type': 'AO subtask',
+'idle state': 'LOW',
+'voltage output terminal': None,
+'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': -0.2, # volt, should be obtained and adjusted during alignment
+'data for view 2': None,
+'data for view 1': None,
+'data generator': 'constant',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'sample number': None,
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: view_switching_galvo_2
+view_switching_galvo_2:
+definition start.
+{
+'device': 'scanning_galvo',
+'name': 'view switching galvo 2',
+'task type': 'AO subtask',
+'idle state': 'LOW',
+'voltage output terminal': None,
+'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': -0.2, # volt, should be obtained and adjusted during alignment
+'data for view 2': None,
+'data for view 1': None,
+'data generator': 'constant',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'sample number': None,
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: gamma_galvo_strip_reduction
+gamma_galvo_strip_reduction_galvo:
+definition start.
+{
+'device': 'scanning_galvo',
+'name': 'Scanning Galvo with linear ramp soft retraction',
+'task type': 'AO subtask',
+'idle state': 'LOW',
+'voltage output terminal': None,
+'home voltage offset for view 1': 0, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': 0, # volt, should be obtained and adjusted during alignment
+'data': None,
+'data generator': 'linear_ramp_soft_retraction',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'linear ramp start': None, # volt
+    'linear ramp stop': None, # volt
+    'linear ramp sample number': None, # volt
+    'soft retraction sample number': None, # volt
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: beta_galvo_light_sheet_incident_angle
+beta_galvo_light_sheet_incident_angle:
+definition start.
+{
+'device': 'scanning_galvo',
+'name': 'Scanning Galvo with linear ramp soft retraction',
+'task type': 'AO subtask',
+'idle state': 'LOW',
+'voltage output terminal': None,
+'home voltage offset for view 1': 0, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': 0, # volt, should be obtained and adjusted during alignment
+'data': None,
+'data generator': 'sequence',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'on-duty sample number': None,
+    'off-duty sample number': None,
+    'acquisition mode': None,
+    'number of options for the sequence': None,
+    'voltage on': None, # volt
+    'voltage off': None, # volt
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: O1
+O1:
+definition start.
+{
+'device': 'scanning_galvo',
+'name': 'Scanning Galvo with linear ramp soft retraction',
+'task type': 'AO subtask',
+'idle state': 'LOW',
+'voltage output terminal': None,
+'home voltage offset for view 1': 0, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': 0, # volt, should be obtained and adjusted during alignment
+'data': None,
+'data generator': 'sequence',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'on-duty sample number': None,
+    'off-duty sample number': None,
+    'acquisition mode': None,
+    'number of options for the sequence': None,
+    'voltage on': None, # volt
+    'voltage off': None, # volt
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: O3
+O3:
+definition start.
+{
+'device': 'scanning_galvo',
+'name': 'Scanning Galvo with linear ramp soft retraction',
+'task type': 'AO subtask',
+'idle state': 'LOW',
+'voltage output terminal': None,
+'home voltage offset for view 1': 0, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': 0, # volt, should be obtained and adjusted during alignment
+'data': None,
+'data generator': 'sequence',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'on-duty sample number': None,
+    'off-duty sample number': None,
+    'acquisition mode': None,
+    'number of options for the sequence': None,
+    'voltage on': None, # volt
+    'voltage off': None, # volt
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: 405-laser
+405-laser:
+definition start.
+{
+'device': '405-laser',
+'name': '405 laser',
+'task type': 'DO subtask',
+'voltage output terminal': None,
+'data': None,
+'data generator': 'sequence',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'on-duty sample number': None,
+    'off-duty sample number': None,
+    'acquisition mode': None,
+    'number of options for the sequence': None,
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: 488-laser
+488-laser:
+definition start.
+{
+'device': '488-laser',
+'name': '488 laser',
+'task type': 'DO subtask',
+'voltage output terminal': None,
+'data': None,
+'data generator': 'sequence',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'on-duty sample number': None,
+    'off-duty sample number': None,
+    'acquisition mode': None,
+    'number of options for the sequence': None,
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: 561-laser
+561-laser:
+definition start.
+{
+'device': '561-laser',
+'name': '561 laser',
+'task type': 'DO subtask',
+'voltage output terminal': None,
+'data': None,
+'data generator': 'sequence',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'on-duty sample number': None,
+    'off-duty sample number': None,
+    'acquisition mode': None,
+    'number of options for the sequence': None,
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: 639-laser
+639-laser:
+definition start.
+{
+'device': '639-laser',
+'name': '639 laser',
+'task type': 'DO subtask',
+'voltage output terminal': None,
+'data': None,
+'data generator': 'sequence',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'on-duty sample number': None,
+    'off-duty sample number': None,
+    'acquisition mode': None,
+    'number of options for the sequence': None,
+    },
+}
+definition end.
+
+
+------------------------------------ Physical Devices Section: bright-field
+bright-field:
+definition start.
+{
+'device': 'bright-field',
+'name': 'bright-field',
+'task type': 'DO subtask',
+'voltage output terminal': None,
+'data': None,
+'data generator': 'sequence',
+'data configs':
+    {
+    'type': 'ao subtask configuration',
+    'on-duty sample number': None,
+    'off-duty sample number': None,
+    'acquisition mode': None,
+    'number of options for the sequence': None,
+    },
+}
+definition end.
+

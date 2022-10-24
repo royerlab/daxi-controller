@@ -1,0 +1,15 @@
+# may need to change these all into standard format, perhaps YAML file
+virtual tools configurations.
+------------------------------------ Virtual Tools Section: counter ------------------------------------
+
+counter 1:
+{
+'name': 'image slices number counter',
+'counter terminal': "/cDAQ1/_ctr0", # internal virtual channle, it is a counter.
+'counting input terminal': "/cDAQ1/PFI0", # camera exposure, signal sent from camera to the daq card.
+'counting edge': "RISING",
+'initial count': 0,  # count from 0
+'purpose': "to count the number of slices acquired in a stack",
+'current count': 0,
+'verbose': False,
+}

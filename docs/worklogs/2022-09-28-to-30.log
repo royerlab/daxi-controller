@@ -1,0 +1,41 @@
+work on subtaskao module
+
+files to take care of each time when you implement a feature:
+
+    codes
+    demo
+    test
+    parser
+    config file
+
+test oscilloscope_channel1
+
+test data generator
+
+2022-09-29
+write demo cases fist for the oscilloscope channel 1.
+demo 1, without awareness of the device facilitator.
+demo 2, demo through the device facilitator.
+
+
+
+write function generator with soft retraction curve.
+
+need an artificial trigger.
+sequence:
+ prepare task bundle
+ add subchannels
+ implement metronome
+ implement trigger
+ write data
+ start metronome
+ start task bundle
+
+2022-09-30
+implement a test to add multiple AO channels
+implement a test to assert sequence
+implement a test to assert wiring.
+implement function generator
+
+
+debug - retriggerable bug.

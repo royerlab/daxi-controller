@@ -1,0 +1,78 @@
+#!/bin/bash
+function sys.what
+{
+
+echo -- tmdaxi.clean
+echo     - to clean junk files in the repo.
+
+
+}
+function tmdaxi.clean
+{
+    if [ "$1" == what ]
+    then
+        echo
+        echo
+        s=""
+        echo $s Options:
+        echo $s ---- what
+        echo $s ---- junk
+        echo $s ---- fnamehead [fnameheadstr]
+    fi
+
+    if [ "$1" == junk ]
+    then
+        # this is a bash script that removes all the 
+        # files and file folders with the following naming patterns
+        name_patterns=("*pycache*")
+        name_patterns+=("*.pytest_cache*")
+        name_patterns+=(".DS_Store")
+        name_patterns+=(".idea")
+        name_patterns+=("*.pyc")
+        name_patterns+=("*ipynb_checkpoints*")
+
+        echo cleaning start ... 
+        echo files and folders to be cleaned will be displayed below ...
+        for i0 in ${name_patterns[@]}:
+        do
+            for i1 in $(find . -maxdepth 10 -type d -name $i0)
+            do
+                echo removing file/directory: $i1
+                rm -r $i1
+            done
+        done
+
+        for i0 in ${name_patterns[@]}:
+        do
+            for i1 in $(find . -maxdepth 10 -name $i0)
+            do
+                echo removing file/directory: $i1
+                rm -r $i1
+            done
+        done
+
+        echo finished cleaning the repository with dir depth of 10
+    fi
+
+    if [ "$1" == fnamehead ]
+    then
+        fnamehead=\"$2"*"\"
+        findcmd="find . -maxdepth 10 -name "$fnamehead
+
+        echo now we are deleting all files and file folders with its name starting with $fnamehead
+        for i1 in $(eval $findcmd)
+        do
+            echo discovered file/directory: $i1
+            # rm -r $i1
+        done
+        echo remove all discovered files and file folders shown above?
+        opt=n
+        echo y/[n]
+        read opt 
+        if [[ $opt == y ]]
+        then
+        echo removing them all
+        fi
+    fi
+
+}
