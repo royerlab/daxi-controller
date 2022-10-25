@@ -15,13 +15,16 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
     And the methods here is to calculate and populate up the "None" fields.
     """
 
-    def __init__(self, params=None,
+    def __init__(self,
+                 params=None,
                  nidaq_terminals=None,
                  calibration_records=None,
-                 alignment_records=None):
+                 alignment_records=None,
+                 verbose=False):
         super().__init__(nidaq_terminals,
                          calibration_records=calibration_records,
                          alignment_records=alignment_records)
+        self.verbose = verbose
         self._get_core_configs_for_all()
 
         # total number of samples
@@ -127,8 +130,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         sr = params['scanning range (um)']
 
         # home voltage for view 1 and view 2:
-        vhome_view1 = self.configs_scanning_galvo['home voltage for view 1']
-        vhome_view2 = self.configs_scanning_galvo['home voltage for view 2']
+        vhome_view1 = self.configs_scanning_galvo['home voltage offset for view 1']
+        vhome_view2 = self.configs_scanning_galvo['home voltage offset for view 2']
 
         # voltage conversion factor
         d2v = self.configs_scanning_galvo['distance (um) to voltage (v) conversion factor (v/um)']
@@ -171,7 +174,7 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
 
         return self.configs_scanning_galvo
 
-    def get_configs_view_switching_galvo_1(self, params, nidaq_terminals):
+    def get_configs_view_switching_galvo_1(self, params):
         self.configs_view_switching_galvo_1['data configs']['sample number'] = self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_view_switching_galvo_1['data generator'] == 'constant':
@@ -179,16 +182,16 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_1['home voltage offset for view 1'],
-                 )
+                )
             self.configs_view_switching_galvo_1['data for view 2'] = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_1['home voltage offset for view 2'],
-                 )
+                )
 
         return self.configs_view_switching_galvo_1
 
-    def get_configs_view_switching_galvo_2(self, params, nidaq_terminals):
+    def get_configs_view_switching_galvo_2(self, params):
         self.configs_view_switching_galvo_2['data configs']['sample number'] = self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_view_switching_galvo_2['data generator'] == 'constant':
@@ -196,99 +199,150 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_2['home voltage offset for view 1'],
-                 )
+                )
             self.configs_view_switching_galvo_2['data for view 2'] = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_2['home voltage offset for view 2'],
-                 )
+                )
 
         return self.configs_view_switching_galvo_2
 
-    def get_configs_gamma_galvo_strip_reduction(self, params, nidaq_terminals):
-        self.configs_gamma_galvo_strip_reduction['data'] = None
-        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start'] = None
-        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop'] = None
-        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp sample number'] = None
-        self.configs_gamma_galvo_strip_reduction['data configs']['soft retraction sample number'] = None
+    def get_configs_gamma_galvo_strip_reduction(self, params):
+        # copy over the start and stop voltage for view 1.
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 1'] = \
+            self.calibration_records['gamma galvo strip reduction']['linear ramp start for view 1']
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 1'] = \
+            self.calibration_records['gamma galvo strip reduction']['linear ramp stop for view 1']
+        v_start_view1 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 1']
+        v_stop_view1 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 1']
+
+        # copy over the start and stop voltage for view 2.
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 2'] = \
+            self.calibration_records['gamma galvo strip reduction']['linear ramp start for view 2']
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 2'] = \
+            self.calibration_records['gamma galvo strip reduction']['linear ramp stop for view 2']
+        v_start_view2 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 2']
+        v_stop_view2 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 2']
+
+        # checkout a data generator
+        dg = DAQDataGenerator()
+        if self.configs_gamma_galvo_strip_reduction['data generator'] == 'linear_ramp_soft_retraction':
+            data_view1 = dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view1,
+                                                               v1=v_stop_view1,
+                                                               n_sample_ramp=self.sample_number_on_duty,
+                                                               n_sample_retraction=self.sample_number_off_duty)
+
+            data_view2 = dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view2,
+                                                               v1=v_stop_view2,
+                                                               n_sample_ramp=self.sample_number_on_duty,
+                                                               n_sample_retraction=self.sample_number_off_duty)
+
+            self.configs_gamma_galvo_strip_reduction['data for view 1'] = data_view1
+            self.configs_gamma_galvo_strip_reduction['data for view 2'] = data_view2
+
+        # self.configs_gamma_galvo_strip_reduction['data'] = None
         return self.configs_gamma_galvo_strip_reduction
 
-    def get_configs_beta_galvo_light_sheet_incident_angle(self, params, nidaq_terminals):
-        self.configs_beta_galvo_light_sheet_incident_angle['data'] = None
-        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['on-duty sample number'] = None
-        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['off-duty sample number'] = None
-        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['acquisition mode'] = None
-        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['number of options for the sequence'] = None
-        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['voltage on'] = None
-        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['voltage off'] = None
+    def get_configs_beta_galvo_light_sheet_incident_angle(self, params):
+        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_beta_galvo_light_sheet_incident_angle['data generator'] == 'constant':
+            self.configs_beta_galvo_light_sheet_incident_angle['data for view 1'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 1'],
+                )
+            self.configs_beta_galvo_light_sheet_incident_angle['data for view 2'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 2'],
+                )
         return self.configs_beta_galvo_light_sheet_incident_angle
 
-    def get_configs_o1(self, params, nidaq_terminals):
-        self.configs_o1['data'] = None
-        self.configs_o1['data configs']['on-duty sample number'] = None
-        self.configs_o1['data configs']['off-duty sample number'] = None
-        self.configs_o1['data configs']['acquisition mode'] = None
-        self.configs_o1['data configs']['number of options for the sequence'] = None
-        self.configs_o1['data configs']['voltage on'] = None
-        self.configs_o1['data configs']['voltage off'] = None
+    def get_configs_o1(self, params):
+        self.configs_o1['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_o1['data generator'] == 'constant':
+            self.configs_o1['data for view 1'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o1['home voltage offset for view 1'],
+                )
+            self.configs_o1['data for view 2'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o1['home voltage offset for view 2'],
+                )
         return self.configs_o1
 
-    def get_configs_o3(self, params, nidaq_terminals):
-        self.configs_o3['data'] = None
-        self.configs_o3['data configs']['on-duty sample number'] = None
-        self.configs_o3['data configs']['off-duty sample number'] = None
-        self.configs_o3['data configs']['acquisition mode'] = None
-        self.configs_o3['data configs']['number of options for the sequence'] = None
-        self.configs_o3['data configs']['voltage on'] = None
-        self.configs_o3['data configs']['voltage off'] = None
+    def get_configs_o3(self, params):
+        self.configs_o3['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_o3['data generator'] == 'constant':
+            self.configs_o3['data for view 1'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o3['home voltage offset for view 1'],
+                )
+            self.configs_o3['data for view 2'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o3['home voltage offset for view 2'],
+                )
         return self.configs_o3
 
-    def get_configs_405_laser(self, params, nidaq_terminals):
-        self.configs_405_laser['data'] = None
-        self.configs_405_laser['data configs']['on-duty sample number'] = None
-        self.configs_405_laser['data configs']['off-duty sample number'] = None
-        self.configs_405_laser['data configs']['acquisition mode'] = None
-        self.configs_405_laser['data configs']['number of options for the sequence'] = None
-        self.configs_405_laser['data configs']['voltage on'] = None
-        self.configs_405_laser['data configs']['voltage off'] = None
+    def get_configs_405_laser(self, params):
+        self.configs_405_laser['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_405_laser['data generator'] == 'on-off sequence':
+            self.configs_405_laser['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_405_laser
 
-    def get_configs_488_laser(self, params, nidaq_terminals):
-        self.configs_488_laser['data'] = None
-        self.configs_488_laser['data configs']['on-duty sample number'] = None
-        self.configs_488_laser['data configs']['off-duty sample number'] = None
-        self.configs_488_laser['data configs']['acquisition mode'] = None
-        self.configs_488_laser['data configs']['number of options for the sequence'] = None
-        self.configs_488_laser['data configs']['voltage on'] = None
-        self.configs_488_laser['data configs']['voltage off'] = None
+    def get_configs_488_laser(self, params):
+        self.configs_488_laser['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_488_laser['data generator'] == 'on-off sequence':
+            self.configs_488_laser['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_488_laser
 
-    def get_configs_561_laser(self, params, nidaq_terminals):
-        self.configs_561_laser['data'] = None
-        self.configs_561_laser['data configs']['on-duty sample number'] = None
-        self.configs_561_laser['data configs']['off-duty sample number'] = None
-        self.configs_561_laser['data configs']['acquisition mode'] = None
-        self.configs_561_laser['data configs']['number of options for the sequence'] = None
-        self.configs_561_laser['data configs']['voltage on'] = None
-        self.configs_561_laser['data configs']['voltage off'] = None
+    def get_configs_561_laser(self, params):
+        self.configs_561_laser['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_561_laser['data generator'] == 'on-off sequence':
+            self.configs_561_laser['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_561_laser
 
-    def get_configs_639_laser(self, params, nidaq_terminals):
-        self.configs_639_laser['data'] = None
-        self.configs_639_laser['data configs']['on-duty sample number'] = None
-        self.configs_639_laser['data configs']['off-duty sample number'] = None
-        self.configs_639_laser['data configs']['acquisition mode'] = None
-        self.configs_639_laser['data configs']['number of options for the sequence'] = None
-        self.configs_639_laser['data configs']['voltage on'] = None
-        self.configs_639_laser['data configs']['voltage off'] = None
+    def get_configs_639_laser(self, params):
+        self.configs_639_laser['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_639_laser['data generator'] == 'on-off sequence':
+            self.configs_639_laser['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_639_laser
 
-    def get_configs_bright_field(self, params, nidaq_terminals):
-        self.configs_bright_field['data'] = None
-        self.configs_bright_field['data configs']['on-duty sample number'] = None
-        self.configs_bright_field['data configs']['off-duty sample number'] = None
-        self.configs_bright_field['data configs']['acquisition mode'] = None
-        self.configs_bright_field['data configs']['number of options for the sequence'] = None
-        self.configs_bright_field['data configs']['voltage on'] = None
-        self.configs_bright_field['data configs']['voltage off'] = None
+    def get_configs_bright_field(self, params):
+        self.configs_bright_field['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_bright_field['data generator'] == 'on-off sequence':
+            self.configs_bright_field['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_bright_field
