@@ -1,8 +1,9 @@
 import platform
+import os
 daxi_path = 'C:/Users/PiscesScope/xiyu_workbench/daxi-controller/daxi'
 
 if platform.system() == 'Darwin':
-    daxi_path='/Users/xiyuyi/Desktop/Research/P-daxi-codes/daxi-controller/daxi'
+    daxi_path = os.path.join(os.getcwd(), 'daxi')
 
 virtual_tools_configs_path = daxi_path + "/globals_configs_constants_general_tools/" \
                              "configuration_templates/devices_configs"
