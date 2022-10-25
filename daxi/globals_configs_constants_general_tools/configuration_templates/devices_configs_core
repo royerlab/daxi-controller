@@ -79,8 +79,8 @@ definition start.
 'task type': 'AO subtask',
 'idle state': 'LOW',
 'voltage output terminal': None,
-'home voltage for view 1': 0.12, # volt, should be obtained and adjusted during alignment
-'home voltage for view 2': -0.05, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 1': None, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': None, # volt, should be obtained and adjusted during alignment
 'distance (um) to voltage (v) conversion factor (v/um)': None, # this value should be calibrated.
 'data for view 2': None,
 'data for view 1': None,

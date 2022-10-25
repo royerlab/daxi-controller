@@ -15,13 +15,16 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
     And the methods here is to calculate and populate up the "None" fields.
     """
 
-    def __init__(self, params=None,
+    def __init__(self,
+                 params=None,
                  nidaq_terminals=None,
                  calibration_records=None,
-                 alignment_records=None):
+                 alignment_records=None,
+                 verbose=False):
         super().__init__(nidaq_terminals,
                          calibration_records=calibration_records,
                          alignment_records=alignment_records)
+        self.verbose = verbose
         self._get_core_configs_for_all()
 
         # total number of samples
@@ -127,8 +130,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         sr = params['scanning range (um)']
 
         # home voltage for view 1 and view 2:
-        vhome_view1 = self.configs_scanning_galvo['home voltage for view 1']
-        vhome_view2 = self.configs_scanning_galvo['home voltage for view 2']
+        vhome_view1 = self.configs_scanning_galvo['home voltage offset for view 1']
+        vhome_view2 = self.configs_scanning_galvo['home voltage offset for view 2']
 
         # voltage conversion factor
         d2v = self.configs_scanning_galvo['distance (um) to voltage (v) conversion factor (v/um)']

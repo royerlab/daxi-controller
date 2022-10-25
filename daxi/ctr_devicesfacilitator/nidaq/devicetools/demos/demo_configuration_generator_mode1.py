@@ -41,7 +41,6 @@ configs_generator = NIDAQDevicesConfigsGeneratorMode1(params=process_parameters,
                                                       alignment_records=alignment_records)
 
 
-
 # now use the configuration generator to get the configurations for all 16 devices.
 configs_metronome = \
     configs_generator.get_configs_for_metronome()
@@ -69,23 +68,24 @@ plt.plot(configs_scanning_galvo['data for view 1'], 'r-o')
 plt.plot(configs_scanning_galvo['data for view 2'], 'b-o')
 plt.title('voltage profile for scanning galvo for view 1 and 2')
 plt.show()
-#
-#
-# configs_view_switching_galvo_1 = \
-#     configs_generator.get_configs_view_switching_galvo_1(process_parameters, daq_terminal_configs)
-# # plot switching galvo voltage profile
-# plt.figure(figsize=(15,5))
-# plt.subplot(131)
-# plt.plot(configs_view_switching_galvo_1['data for view 1'], 'r-o')
-# plt.title('voltage profile for view switching galvo 1 for view 1')
-# plt.subplot(132)
-# plt.plot(configs_view_switching_galvo_1['data for view 2'], 'b-o')
-# plt.title('voltage profile for view switching galvo 1 for view 2')
-# plt.subplot(133)
-# plt.plot(configs_view_switching_galvo_1['data for view 1'], 'r-o')
-# plt.plot(configs_view_switching_galvo_1['data for view 2'], 'b-o')
-# plt.title('voltage profile for view switching galvo 1 for view 1 and 2')
-#
+
+
+configs_view_switching_galvo_1 = \
+    configs_generator.get_configs_view_switching_galvo_1(process_parameters, daq_terminal_configs)
+# plot switching galvo voltage profile
+plt.figure(figsize=(15,5))
+plt.subplot(131)
+plt.plot(configs_view_switching_galvo_1['data for view 1'], 'r-o')
+plt.title('voltage profile for view switching galvo 1 for view 1')
+plt.subplot(132)
+plt.plot(configs_view_switching_galvo_1['data for view 2'], 'b-o')
+plt.title('voltage profile for view switching galvo 1 for view 2')
+plt.subplot(133)
+plt.plot(configs_view_switching_galvo_1['data for view 1'], 'r-o')
+plt.plot(configs_view_switching_galvo_1['data for view 2'], 'b-o')
+plt.title('voltage profile for view switching galvo 1 for view 1 and 2')
+plt.show()
+
 # configs_view_switching_galvo_2 = \
 #     configs_generator.get_configs_view_switching_galvo_2(process_parameters, daq_terminal_configs)
 # plt.figure(figsize=(15,5))

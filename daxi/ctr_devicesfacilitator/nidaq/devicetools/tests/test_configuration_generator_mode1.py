@@ -81,18 +81,21 @@ def configs_generator():
         p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
 
     output = NIDAQDevicesConfigsGeneratorMode1(params=pr,
-                                                          nidaq_terminals=d,
-                                                          calibration_records=c,
-                                                          alignment_records=a)
+                                               nidaq_terminals=d,
+                                               calibration_records=c,
+                                               alignment_records=a,
+                                               verbose=False)
 
     return output
 
 
-def test_configs_generator_mode1_initiation(daq_terminal_configs, process_parameters, calibration_records):
-    configs_generator = NIDAQDevicesConfigsGeneratorMode1(params=process_parameters,
-                                                          nidaq_terminals=daq_terminal_configs,
-                                                          calibration_records=calibration_records)
-    assert isinstance(configs_generator, NIDAQDevicesConfigsGeneratorMode1)
+def test_configs_generator_mode1_initiation(daq_terminal_configs, process_parameters, calibration_records, alignment_records):
+    c = NIDAQDevicesConfigsGeneratorMode1(params=process_parameters,
+                                          nidaq_terminals=daq_terminal_configs,
+                                          calibration_records=calibration_records,
+                                          alignment_records=alignment_records,
+                                          verbose=False)
+    assert isinstance(c, NIDAQDevicesConfigsGeneratorMode1)
 
 
 def test_configs_generator_mode1_fixture_initiation(configs_generator):
@@ -132,7 +135,6 @@ def test_configs_scanning_galvo(configs_generator, process_parameters):
         configs_generator.get_configs_scanning_galvo(params=process_parameters)
     # make sure all the fields are populated up. (no None)
     assert any([v is None for v in configs_scanning_galvo.values()]) is False
-
 
 # def test_configs_view_switching_galvo_1(daq_terminal_configs, process_parameters):
 #     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
