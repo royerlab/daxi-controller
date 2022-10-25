@@ -165,19 +165,17 @@ def test_configs_beta_galvo_light_sheet_incident_angle(configs_generator, proces
     assert any([v is None for v in configs_beta_galvo_light_sheet_incident_angle.values()]) is False
 
 
-# def test_configs_o1(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_o1 = configs_generator.get_configs_o1(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_o1.values()]) is False
-#
-#
-# def test_configs_o3(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_o3 = configs_generator.get_configs_o3(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_o3.values()]) is False
-#
+def test_configs_o1(configs_generator, process_parameters):
+    configs_o1 = configs_generator.get_configs_o1(params = process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_o1.values()]) is False
+
+
+def test_configs_o3(configs_generator, process_parameters):
+    configs_o3 = configs_generator.get_configs_o3(params = process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_o3.values()]) is False
+
 #
 # def test_configs_405_laser(daq_terminal_configs, process_parameters):
 #     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)

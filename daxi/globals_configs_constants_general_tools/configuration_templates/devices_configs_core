@@ -205,19 +205,15 @@ definition start.
 'task type': 'AO subtask',
 'idle state': 'LOW',
 'voltage output terminal': None,
-'home voltage offset for view 1': 0, # volt, should be obtained and adjusted during alignment
-'home voltage offset for view 2': 0, # volt, should be obtained and adjusted during alignment
-'data': None,
-'data generator': 'sequence',
+'home voltage offset for view 1': None, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': None, # volt, should be obtained and adjusted during alignment
+'data for view 1': None,
+'data for view 2': None,
+'data generator': 'constant',
 'data configs':
     {
     'type': 'ao subtask configuration',
-    'on-duty sample number': None,
-    'off-duty sample number': None,
-    'acquisition mode': None,
-    'number of options for the sequence': None,
-    'voltage on': None, # volt
-    'voltage off': None, # volt
+    'sample number': None,
     },
 }
 definition end.
@@ -232,19 +228,15 @@ definition start.
 'task type': 'AO subtask',
 'idle state': 'LOW',
 'voltage output terminal': None,
-'home voltage offset for view 1': 0, # volt, should be obtained and adjusted during alignment
-'home voltage offset for view 2': 0, # volt, should be obtained and adjusted during alignment
-'data': None,
-'data generator': 'sequence',
+'home voltage offset for view 1': None, # volt, should be obtained and adjusted during alignment
+'home voltage offset for view 2': None, # volt, should be obtained and adjusted during alignment
+'data for view 1': None,
+'data for view 2': None,
+'data generator': 'constant',
 'data configs':
     {
     'type': 'ao subtask configuration',
-    'on-duty sample number': None,
-    'off-duty sample number': None,
-    'acquisition mode': None,
-    'number of options for the sequence': None,
-    'voltage on': None, # volt
-    'voltage off': None, # volt
+    'sample number': None,
     },
 }
 definition end.

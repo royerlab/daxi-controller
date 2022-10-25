@@ -260,24 +260,36 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                 )
         return self.configs_beta_galvo_light_sheet_incident_angle
 
-    def get_configs_o1(self, params, nidaq_terminals):
-        self.configs_o1['data'] = None
-        self.configs_o1['data configs']['on-duty sample number'] = None
-        self.configs_o1['data configs']['off-duty sample number'] = None
-        self.configs_o1['data configs']['acquisition mode'] = None
-        self.configs_o1['data configs']['number of options for the sequence'] = None
-        self.configs_o1['data configs']['voltage on'] = None
-        self.configs_o1['data configs']['voltage off'] = None
+    def get_configs_o1(self, params):
+        self.configs_o1['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_o1['data generator'] == 'constant':
+            self.configs_o1['data for view 1'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o1['home voltage offset for view 1'],
+                )
+            self.configs_o1['data for view 2'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o1['home voltage offset for view 2'],
+                )
         return self.configs_o1
 
-    def get_configs_o3(self, params, nidaq_terminals):
-        self.configs_o3['data'] = None
-        self.configs_o3['data configs']['on-duty sample number'] = None
-        self.configs_o3['data configs']['off-duty sample number'] = None
-        self.configs_o3['data configs']['acquisition mode'] = None
-        self.configs_o3['data configs']['number of options for the sequence'] = None
-        self.configs_o3['data configs']['voltage on'] = None
-        self.configs_o3['data configs']['voltage off'] = None
+    def get_configs_o3(self, params):
+        self.configs_o3['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_o3['data generator'] == 'constant':
+            self.configs_o3['data for view 1'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o3['home voltage offset for view 1'],
+                )
+            self.configs_o3['data for view 2'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o3['home voltage offset for view 2'],
+                )
         return self.configs_o3
 
     def get_configs_405_laser(self, params, nidaq_terminals):

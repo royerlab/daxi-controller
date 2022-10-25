@@ -157,6 +157,18 @@ definition start.
     'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
     'home voltage offset for view 2': -0.1, # volt, should be obtained and adjusted during alignment
     },
+
+    'O1':
+    {
+    'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': -0.1, # volt, should be obtained and adjusted during alignment
+    },
+
+    'O3':
+    {
+    'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': -0.1, # volt, should be obtained and adjusted during alignment
+    },
 }
 definition end.
 

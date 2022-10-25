@@ -188,6 +188,11 @@ class NIDAQDevicesConfigsGeneratorBase:
         self.configs_o1['voltage output terminal'] = \
             self.nidaq_terminals['O1']['voltage output terminal']
 
+        self.configs_o1['home voltage offset for view 1'] = \
+            self.alignment_records['O1']['home voltage offset for view 1']
+        self.configs_o1['home voltage offset for view 2'] = \
+            self.alignment_records['O1']['home voltage offset for view 2']
+
     def _get_core_configs_o3(self):
         self.configs_o3 = \
             self.parser.get_configs_by_path_section_keyword(section='Physical Devices Section',
@@ -195,6 +200,11 @@ class NIDAQDevicesConfigsGeneratorBase:
                                                             verbose=self.verbose)
         self.configs_o3['voltage output terminal'] = \
             self.nidaq_terminals['O3']['voltage output terminal']
+
+        self.configs_o3['home voltage offset for view 1'] = \
+            self.alignment_records['O3']['home voltage offset for view 1']
+        self.configs_o3['home voltage offset for view 2'] = \
+            self.alignment_records['O3']['home voltage offset for view 2']
 
     def _get_core_configs_405_laser(self):
         self.configs_405_laser = \
