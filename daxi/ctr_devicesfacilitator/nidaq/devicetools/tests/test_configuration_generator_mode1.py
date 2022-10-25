@@ -136,38 +136,35 @@ def test_configs_scanning_galvo(configs_generator, process_parameters):
     # make sure all the fields are populated up. (no None)
     assert any([v is None for v in configs_scanning_galvo.values()]) is False
 
-# def test_configs_view_switching_galvo_1(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_view_switching_galvo_1 = \
-#         configs_generator.get_configs_view_switching_galvo_1(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_view_switching_galvo_1.values()]) is False
-#
-#
-# def test_configs_view_switching_galvo_2(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_view_switching_galvo_2 = \
-#         configs_generator.get_configs_view_switching_galvo_2(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_view_switching_galvo_2.values()]) is False
-#
-#
-# def test_configs_gamma_galvo_strip_reduction(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_gamma_galvo_strip_reduction = \
-#         configs_generator.get_configs_gamma_galvo_strip_reduction(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_gamma_galvo_strip_reduction.values()]) is False
-#
-#
-# def test_configs_beta_galvo_light_sheet_incident_angle(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_beta_galvo_light_sheet_incident_angle = \
-#         configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_beta_galvo_light_sheet_incident_angle.values()]) is False
-#
-#
+
+def test_configs_view_switching_galvo_1(configs_generator, process_parameters):
+    configs_view_switching_galvo_1 = \
+        configs_generator.get_configs_view_switching_galvo_1(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_view_switching_galvo_1.values()]) is False
+
+
+def test_configs_view_switching_galvo_2(configs_generator, process_parameters):
+    configs_view_switching_galvo_2 = \
+        configs_generator.get_configs_view_switching_galvo_2(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_view_switching_galvo_2.values()]) is False
+
+
+def test_configs_gamma_galvo_strip_reduction(configs_generator, process_parameters):
+    configs_gamma_galvo_strip_reduction = \
+        configs_generator.get_configs_gamma_galvo_strip_reduction(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_gamma_galvo_strip_reduction.values()]) is False
+
+
+def test_configs_beta_galvo_light_sheet_incident_angle(configs_generator, process_parameters):
+    configs_beta_galvo_light_sheet_incident_angle = \
+        configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_beta_galvo_light_sheet_incident_angle.values()]) is False
+
+
 # def test_configs_o1(daq_terminal_configs, process_parameters):
 #     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
 #     configs_o1 = configs_generator.get_configs_o1(process_parameters, daq_terminal_configs)

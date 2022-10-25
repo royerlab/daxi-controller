@@ -135,6 +135,10 @@ class NIDAQDevicesConfigsGeneratorBase:
                                                             verbose=self.verbose)
         self.configs_view_switching_galvo_1['voltage output terminal'] = \
             self.nidaq_terminals['view switching galvo 1']['voltage output terminal']
+        self.configs_view_switching_galvo_1['home voltage offset for view 1'] = \
+            self.alignment_records['view switching galvo 1']['home voltage offset for view 1']
+        self.configs_view_switching_galvo_1['home voltage offset for view 2'] = \
+            self.alignment_records['view switching galvo 1']['home voltage offset for view 2']
 
     def _get_core_configs_view_switching_galvo_2(self):
         self.configs_view_switching_galvo_2 = \
@@ -143,6 +147,10 @@ class NIDAQDevicesConfigsGeneratorBase:
                                                             verbose=self.verbose)
         self.configs_view_switching_galvo_2['voltage output terminal'] = \
             self.nidaq_terminals['view switching galvo 2']['voltage output terminal']
+        self.configs_view_switching_galvo_2['home voltage offset for view 1'] = \
+            self.alignment_records['view switching galvo 2']['home voltage offset for view 1']
+        self.configs_view_switching_galvo_2['home voltage offset for view 2'] = \
+            self.alignment_records['view switching galvo 2']['home voltage offset for view 2']
 
     def _get_core_configs_gamma_galvo_strip_reduction(self):
         self.configs_gamma_galvo_strip_reduction = \
@@ -151,6 +159,14 @@ class NIDAQDevicesConfigsGeneratorBase:
                                                             verbose=self.verbose)
         self.configs_gamma_galvo_strip_reduction['voltage output terminal'] = \
             self.nidaq_terminals['gamma galvo strip reduction']['voltage output terminal']
+        self.configs_gamma_galvo_strip_reduction['home voltage offset for view 1'] = \
+            self.alignment_records['gamma galvo strip reduction']['home voltage offset for view 1']
+        self.configs_gamma_galvo_strip_reduction['home voltage offset for view 2'] = \
+            self.alignment_records['gamma galvo strip reduction']['home voltage offset for view 2']
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp sample number'] = \
+            self.sample_number_on_duty
+        self.configs_gamma_galvo_strip_reduction['data configs']['soft retraction sample number'] = \
+            self.sample_number_off_duty
 
     def _get_core_configs_beta_galvo_light_sheet_incident_angle(self):
         self.configs_beta_galvo_light_sheet_incident_angle = \
@@ -159,6 +175,10 @@ class NIDAQDevicesConfigsGeneratorBase:
                                                             verbose=self.verbose)
         self.configs_beta_galvo_light_sheet_incident_angle['voltage output terminal'] = \
             self.nidaq_terminals['beta galvo light sheet incident angle']['voltage output terminal']
+        self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 1'] = \
+            self.alignment_records['beta galvo light sheet incident angle']['home voltage offset for view 1']
+        self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 2'] = \
+            self.alignment_records['beta galvo light sheet incident angle']['home voltage offset for view 2']
 
     def _get_core_configs_o1(self):
         self.configs_o1 = \
