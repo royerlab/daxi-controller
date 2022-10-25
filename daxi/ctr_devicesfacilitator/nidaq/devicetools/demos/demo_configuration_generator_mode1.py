@@ -120,17 +120,17 @@ plt.show()
 
 configs_beta_galvo_light_sheet_incident_angle = \
     configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(process_parameters)
-1
-# configs_o1 = configs_generator.get_configs_o1(process_parameters, daq_terminal_configs)
-#
-# configs_o3 = configs_generator.get_configs_o3(process_parameters, daq_terminal_configs)
-#
-# configs_405_laser = configs_generator.get_configs_405_laser(process_parameters, daq_terminal_configs)
-#
-# configs_488_laser = configs_generator.get_configs_488_laser(process_parameters, daq_terminal_configs)
-#
-# configs_561_laser = configs_generator.get_configs_561_laser(process_parameters, daq_terminal_configs)
-#
-# configs_639_laser = configs_generator.get_configs_639_laser(process_parameters, daq_terminal_configs)
-#
-# configs_bright_field = configs_generator.get_configs_bright_field(process_parameters, daq_terminal_configs)
+
+configs_o1 = configs_generator.get_configs_o1(process_parameters)
+
+configs_o3 = configs_generator.get_configs_o3(process_parameters)
+
+configs_405_laser = configs_generator.get_configs_405_laser(process_parameters)
+
+configs_488_laser = configs_generator.get_configs_488_laser(process_parameters, daq_terminal_configs)
+
+configs_561_laser = configs_generator.get_configs_561_laser(process_parameters, daq_terminal_configs)
+
+configs_639_laser = configs_generator.get_configs_639_laser(process_parameters, daq_terminal_configs)
+
+configs_bright_field = configs_generator.get_configs_bright_field(process_parameters, daq_terminal_configs)

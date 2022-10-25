@@ -89,7 +89,8 @@ def configs_generator():
     return output
 
 
-def test_configs_generator_mode1_initiation(daq_terminal_configs, process_parameters, calibration_records, alignment_records):
+def test_configs_generator_mode1_initiation(daq_terminal_configs, process_parameters, calibration_records,
+                                            alignment_records):
     c = NIDAQDevicesConfigsGeneratorMode1(params=process_parameters,
                                           nidaq_terminals=daq_terminal_configs,
                                           calibration_records=calibration_records,
@@ -166,49 +167,42 @@ def test_configs_beta_galvo_light_sheet_incident_angle(configs_generator, proces
 
 
 def test_configs_o1(configs_generator, process_parameters):
-    configs_o1 = configs_generator.get_configs_o1(params = process_parameters)
+    configs_o1 = configs_generator.get_configs_o1(params=process_parameters)
     # make sure all the fields are populated up. (no None)
     assert any([v is None for v in configs_o1.values()]) is False
 
 
 def test_configs_o3(configs_generator, process_parameters):
-    configs_o3 = configs_generator.get_configs_o3(params = process_parameters)
+    configs_o3 = configs_generator.get_configs_o3(params=process_parameters)
     # make sure all the fields are populated up. (no None)
     assert any([v is None for v in configs_o3.values()]) is False
 
-#
-# def test_configs_405_laser(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_405_laser = configs_generator.get_configs_405_laser(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_405_laser.values()]) is False
-#
-#
-# def test_configs_488_laser(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_488_laser = configs_generator.get_configs_488_laser(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_488_laser.values()]) is False
-#
-#
-# def test_configs_561_laser(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_561_laser = configs_generator.get_configs_561_laser(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_561_laser.values()]) is False
-#
-#
-# def test_configs_639_laser(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_639_laser = configs_generator.get_configs_639_laser(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_639_laser.values()]) is False
-#
-#
-# def test_configs_bright_field(daq_terminal_configs, process_parameters):
-#     configs_generator = NIDAQDevicesConfigsGeneratorMode1(process_parameters, daq_terminal_configs)
-#     configs_bright_field = configs_generator.get_configs_bright_field(process_parameters, daq_terminal_configs)
-#     # make sure all the fields are populated up. (no None)
-#     assert any([v is None for v in configs_bright_field.values()]) is False
-#
-#
+
+def test_configs_405_laser(configs_generator, process_parameters):
+    configs_405_laser = configs_generator.get_configs_405_laser(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_405_laser.values()]) is False
+
+
+def test_configs_488_laser(configs_generator, process_parameters):
+    configs_488_laser = configs_generator.get_configs_488_laser(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_488_laser.values()]) is False
+
+
+def test_configs_561_laser(configs_generator, process_parameters):
+    configs_561_laser = configs_generator.get_configs_561_laser(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_561_laser.values()]) is False
+
+
+def test_configs_639_laser(configs_generator, process_parameters):
+    configs_639_laser = configs_generator.get_configs_639_laser(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_639_laser.values()]) is False
+
+
+def test_configs_bright_field(configs_generator, process_parameters):
+    configs_bright_field = configs_generator.get_configs_bright_field(params=process_parameters)
+    # make sure all the fields are populated up. (no None)
+    assert any([v is None for v in configs_bright_field.values()]) is False

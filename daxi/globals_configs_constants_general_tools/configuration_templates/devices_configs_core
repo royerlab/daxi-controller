@@ -251,14 +251,10 @@ definition start.
 'task type': 'DO subtask',
 'voltage output terminal': None,
 'data': None,
-'data generator': 'sequence',
+'data generator': 'on-off sequence',
 'data configs':
     {
-    'type': 'ao subtask configuration',
-    'on-duty sample number': None,
-    'off-duty sample number': None,
-    'acquisition mode': None,
-    'number of options for the sequence': None,
+    'type': 'do subtask configuration',
     },
 }
 definition end.
@@ -273,14 +269,10 @@ definition start.
 'task type': 'DO subtask',
 'voltage output terminal': None,
 'data': None,
-'data generator': 'sequence',
+'data generator': 'on-off sequence',
 'data configs':
     {
-    'type': 'ao subtask configuration',
-    'on-duty sample number': None,
-    'off-duty sample number': None,
-    'acquisition mode': None,
-    'number of options for the sequence': None,
+    'type': 'do subtask configuration',
     },
 }
 definition end.
@@ -295,14 +287,10 @@ definition start.
 'task type': 'DO subtask',
 'voltage output terminal': None,
 'data': None,
-'data generator': 'sequence',
+'data generator': 'on-off sequence',
 'data configs':
     {
-    'type': 'ao subtask configuration',
-    'on-duty sample number': None,
-    'off-duty sample number': None,
-    'acquisition mode': None,
-    'number of options for the sequence': None,
+    'type': 'do subtask configuration',
     },
 }
 definition end.
@@ -317,14 +305,10 @@ definition start.
 'task type': 'DO subtask',
 'voltage output terminal': None,
 'data': None,
-'data generator': 'sequence',
+'data generator': 'on-off sequence',
 'data configs':
     {
-    'type': 'ao subtask configuration',
-    'on-duty sample number': None,
-    'off-duty sample number': None,
-    'acquisition mode': None,
-    'number of options for the sequence': None,
+    'type': 'do subtask configuration',
     },
 }
 definition end.
@@ -339,14 +323,10 @@ definition start.
 'task type': 'DO subtask',
 'voltage output terminal': None,
 'data': None,
-'data generator': 'sequence',
+'data generator': 'on-off sequence',
 'data configs':
     {
-    'type': 'ao subtask configuration',
-    'on-duty sample number': None,
-    'off-duty sample number': None,
-    'acquisition mode': None,
-    'number of options for the sequence': None,
+    'type': 'do subtask configuration',
     },
 }
 definition end.

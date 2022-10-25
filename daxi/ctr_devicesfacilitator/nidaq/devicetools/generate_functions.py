@@ -178,3 +178,11 @@ class DAQDataGenerator:
 
         self.data = np.ones(n_samples) * constant
         return self.data
+
+    def on_off_sequence(self,
+                        n_samples_on=None,
+                        n_samples_off=None,
+                        on_value=None,
+                        off_value=None):
+        self.data = [on_value] * n_samples_on + [off_value] * n_samples_off
+        return self.data

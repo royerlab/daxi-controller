@@ -182,12 +182,12 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_1['home voltage offset for view 1'],
-                 )
+                )
             self.configs_view_switching_galvo_1['data for view 2'] = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_1['home voltage offset for view 2'],
-                 )
+                )
 
         return self.configs_view_switching_galvo_1
 
@@ -199,12 +199,12 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_2['home voltage offset for view 1'],
-                 )
+                )
             self.configs_view_switching_galvo_2['data for view 2'] = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_2['home voltage offset for view 2'],
-                 )
+                )
 
         return self.configs_view_switching_galvo_2
 
@@ -292,52 +292,57 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                 )
         return self.configs_o3
 
-    def get_configs_405_laser(self, params, nidaq_terminals):
-        self.configs_405_laser['data'] = None
-        self.configs_405_laser['data configs']['on-duty sample number'] = None
-        self.configs_405_laser['data configs']['off-duty sample number'] = None
-        self.configs_405_laser['data configs']['acquisition mode'] = None
-        self.configs_405_laser['data configs']['number of options for the sequence'] = None
-        self.configs_405_laser['data configs']['voltage on'] = None
-        self.configs_405_laser['data configs']['voltage off'] = None
+    def get_configs_405_laser(self, params):
+        self.configs_405_laser['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_405_laser['data generator'] == 'on-off sequence':
+            self.configs_405_laser['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_405_laser
 
-    def get_configs_488_laser(self, params, nidaq_terminals):
-        self.configs_488_laser['data'] = None
-        self.configs_488_laser['data configs']['on-duty sample number'] = None
-        self.configs_488_laser['data configs']['off-duty sample number'] = None
-        self.configs_488_laser['data configs']['acquisition mode'] = None
-        self.configs_488_laser['data configs']['number of options for the sequence'] = None
-        self.configs_488_laser['data configs']['voltage on'] = None
-        self.configs_488_laser['data configs']['voltage off'] = None
+    def get_configs_488_laser(self, params):
+        self.configs_488_laser['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_488_laser['data generator'] == 'on-off sequence':
+            self.configs_488_laser['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_488_laser
 
-    def get_configs_561_laser(self, params, nidaq_terminals):
-        self.configs_561_laser['data'] = None
-        self.configs_561_laser['data configs']['on-duty sample number'] = None
-        self.configs_561_laser['data configs']['off-duty sample number'] = None
-        self.configs_561_laser['data configs']['acquisition mode'] = None
-        self.configs_561_laser['data configs']['number of options for the sequence'] = None
-        self.configs_561_laser['data configs']['voltage on'] = None
-        self.configs_561_laser['data configs']['voltage off'] = None
+    def get_configs_561_laser(self, params):
+        self.configs_561_laser['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_561_laser['data generator'] == 'on-off sequence':
+            self.configs_561_laser['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_561_laser
 
-    def get_configs_639_laser(self, params, nidaq_terminals):
-        self.configs_639_laser['data'] = None
-        self.configs_639_laser['data configs']['on-duty sample number'] = None
-        self.configs_639_laser['data configs']['off-duty sample number'] = None
-        self.configs_639_laser['data configs']['acquisition mode'] = None
-        self.configs_639_laser['data configs']['number of options for the sequence'] = None
-        self.configs_639_laser['data configs']['voltage on'] = None
-        self.configs_639_laser['data configs']['voltage off'] = None
+    def get_configs_639_laser(self, params):
+        self.configs_639_laser['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_639_laser['data generator'] == 'on-off sequence':
+            self.configs_639_laser['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_639_laser
 
-    def get_configs_bright_field(self, params, nidaq_terminals):
-        self.configs_bright_field['data'] = None
-        self.configs_bright_field['data configs']['on-duty sample number'] = None
-        self.configs_bright_field['data configs']['off-duty sample number'] = None
-        self.configs_bright_field['data configs']['acquisition mode'] = None
-        self.configs_bright_field['data configs']['number of options for the sequence'] = None
-        self.configs_bright_field['data configs']['voltage on'] = None
-        self.configs_bright_field['data configs']['voltage off'] = None
+    def get_configs_bright_field(self, params):
+        self.configs_bright_field['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_bright_field['data generator'] == 'on-off sequence':
+            self.configs_bright_field['data'] = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
         return self.configs_bright_field
