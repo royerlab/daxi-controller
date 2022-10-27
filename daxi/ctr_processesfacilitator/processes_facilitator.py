@@ -1,4 +1,5 @@
 from daxi.ctr_processesfacilitator.processes_facilitator_gui import ProcessesFcltrGUI
+import yaml
 
 
 class ProcessesFcltr(ProcessesFcltrGUI):
@@ -71,3 +72,14 @@ class ProcessesFcltr(ProcessesFcltrGUI):
         :return:
         """
         self.configs_save_data = None
+
+
+def save_process_configs(path: str, configs: dict):
+    """
+    save out the process configurations out to the path
+    :param path:  full path to the yaml file.
+    :param configs:  full path to the yaml file.
+    :return:
+    """
+    with open(path, 'w') as outfile:
+        yaml.dump(configs, outfile, default_flow_style=False)

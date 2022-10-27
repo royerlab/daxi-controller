@@ -80,16 +80,16 @@ class AcqParamBase:
         :param view_number: total number of views, 1 or 2 for daxi.
         :param number_of_scans_per_timepoint: number of stacks per time point. this number chanes with the acquisiton mode.
         """
-        self.dx = dx
-        self.length = length
+        self.dx = float(dx)
+        self.length = float(length)
         self.colors = colors
         self.number_of_colors = len(colors)
         self.number_of_colors_per_slice = number_of_colors_per_slice
         self.views = views
         self.number_of_views = len(views)
-        self.t_exposure = t_exposure
-        self.t_readout = t_readout
-        self.t_stage_retraction = t_stage_retraction  # todo - make this a measured value as a calibration modules.
+        self.t_exposure = float(t_exposure)
+        self.t_readout = float(t_readout)
+        self.t_stage_retraction = float(t_stage_retraction)  # todo - make this a measured value as a calibration modules.
         self.ns = None
         self.ys_list = None
         self.vs_list = None
@@ -106,13 +106,13 @@ class AcqParamBase:
         # during the read out time of the color channels except for the last color channel.).
         self.t_SG_retraction = self.t_readout  # SG retraction time, this should be during the read out time of the
         # last color channel.
-        self.number_of_scans_per_time_point = number_of_scans_per_timepoint
+        self.number_of_scans_per_time_point = int(number_of_scans_per_timepoint)
         self.slice_color_list = slice_color_list
         self.positions = positions
         self.positions_views_list = positions_views_list
-        self.name='base class'
-        self.type='base'
-        self.looping_order=None
+        self.name = 'base class'
+        self.type = 'base'
+        self.looping_order = None
 
     def find_parameter_combinations(self):
         """
@@ -212,12 +212,12 @@ class AcqParamBase:
         n = magnification_factor
         y = n * self.dx
         v = np.sqrt(2) * y / (self.t_exposure + self.t_readout) / self.number_of_colors_per_slice  # unit = um/ms
-        n_slices = np.ceil(self.length / np.sqrt(2) / n / self.dx)
+        n_slices = int(np.ceil(self.length / np.sqrt(2) / n / self.dx))
         length_updated = n_slices * np.sqrt(2) * n * self.dx
         scan_duration = n_slices * self.t_per_slice + self.t_stage_retraction
         time_per_datapoint = scan_duration*self.number_of_scans_per_time_point
-        self.stage_travel_distance = length_updated
-        self.scanning_galvo_range_per_slice = v * self.t_SG_scan
+        self.stage_travel_distance = float(length_updated)
+        self.scanning_galvo_range_per_slice = float(v * self.t_SG_scan)
         self.selected_parameters = \
             {
                 'name': self.name,
@@ -225,12 +225,12 @@ class AcqParamBase:
                 'looping order': self.looping_order,
                 "pixel size in xy (um)": self.dx,
                 "mag-factor": n,
-                "slice distance (um)": y,
+                "slice distance (um)": float(y),
                 "n slices": n_slices,
-                "time per stack per view (s)": scan_duration/1000,
-                "time per time point (s)": time_per_datapoint/1000,
-                "scanning range (um)": length_updated,
-                "scanning speed (nm/ms)": v*1000,
+                "time per stack per view (s)": float(scan_duration/1000),
+                "time per time point (s)": float(time_per_datapoint/1000),
+                "scanning range (um)": float(length_updated),
+                "scanning speed (nm/ms)": float(v*1000),
                 "exposure time (ms)": self.t_exposure,
                 "camera read out time (ms)": self.t_readout,
                 "stage retraction time (ms)": self.t_stage_retraction,

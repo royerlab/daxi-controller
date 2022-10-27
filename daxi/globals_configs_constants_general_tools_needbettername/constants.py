@@ -3,19 +3,19 @@ import os
 daxi_path = 'C:/Users/PiscesScope/xiyu_workbench/daxi-controller/daxi'
 
 if platform.system() == 'Darwin':
-    daxi_path = os.path.join(os.getcwd(), 'daxi')
+    m = os.getcwd()
+    daxi_path = os.path.join(os.path.join(m.split('daxi-controller')[0], 'daxi-controller'), 'daxi')
 
-virtual_tools_configs_path = daxi_path + "/globals_configs_constants_general_tools_needbettername/" \
-                             "configuration_templates/devices_configs"
+configs_templates_path = daxi_path + "/globals_configs_constants_general_tools_needbettername/" \
+                             "configuration_templates"
+process_templates = configs_templates_path + '/process_templates'
 
-device_fcltr_configs_path = daxi_path + "/globals_configs_constants_general_tools_needbettername/" \
-                             "configuration_templates/devices_fcltr_configs_panel"
+virtual_tools_configs_path = configs_templates_path+"/devices_configs"
 
-params_test_selected_params = daxi_path + "/globals_configs_constants_general_tools_needbettername/" \
-                             "configuration_templates/params_test_selected_params_for_mode1to6"
+device_fcltr_configs_path = configs_templates_path+"/devices_fcltr_configs_panel"
 
-configs_daq_terminals = daxi_path + "/globals_configs_constants_general_tools_needbettername/" \
-                             "configuration_templates/wiring_alignment_and_calibration"
+params_test_selected_params = configs_templates_path+"/params_test_selected_params_for_mode1to6"
 
-configs_core_daq_devices = daxi_path + "/globals_configs_constants_general_tools_needbettername/" \
-                             "configuration_templates/devices_configs_core"
+configs_daq_terminals = configs_templates_path+"/wiring_alignment_and_calibration"
+
+configs_core_daq_devices = configs_templates_path+"/devices_configs_core"
