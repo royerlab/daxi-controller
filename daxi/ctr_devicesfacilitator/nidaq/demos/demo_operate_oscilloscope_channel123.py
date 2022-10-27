@@ -10,8 +10,8 @@
 
 from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, SubTaskAO
 from daxi.ctr_devicesfacilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
-from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
-from daxi.globals_configs_constants_general_tools.constants import virtual_tools_configs_path
+from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
+from daxi.globals_configs_constants_general_tools_needbettername.constants import virtual_tools_configs_path
 from time import sleep
 
 # get configuration of the oscilloscope_channel1.

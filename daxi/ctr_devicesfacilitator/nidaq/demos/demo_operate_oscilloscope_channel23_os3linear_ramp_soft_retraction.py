@@ -3,8 +3,8 @@
 # 3. get configurations for scanning galvo, and configure it to have linear ramp soft retraction voltage curve.
 
 from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, SubTaskAO
-from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
-from daxi.globals_configs_constants_general_tools.constants import virtual_tools_configs_path
+from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
+from daxi.globals_configs_constants_general_tools_needbettername.constants import virtual_tools_configs_path
 from time import sleep
 
 # todo edit this into a demo, after device facilitator class is done.

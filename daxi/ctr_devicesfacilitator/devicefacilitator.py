@@ -1,4 +1,4 @@
-from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
+from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO
 
 

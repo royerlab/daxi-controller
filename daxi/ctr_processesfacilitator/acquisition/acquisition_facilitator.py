@@ -21,6 +21,7 @@ class AcquisitionFcltr():
     def execute(self):
         """
         look ad the configurations and perform the acquisition for all devices.
+        this object serves as a command.
 
         based on the receiver and the data, perform the process.
         :return:

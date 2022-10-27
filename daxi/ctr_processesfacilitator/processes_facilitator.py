@@ -30,8 +30,8 @@ class ProcessesFcltr(ProcessesFcltrGUI):
         (the gui can generate the parameter dictionary from all fileds configurations, or load from a file, etc.).
         :return:
         """
-        from daxi.globals_configs_constants_general_tools.constants import params_test_selected_params
-        from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
+        from daxi.globals_configs_constants_general_tools_needbettername.constants import params_test_selected_params
+        from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
         p = NIDAQConfigsParser()
         p.set_configs_path(params_test_selected_params)
         section = 'Selected Parameters Section'
