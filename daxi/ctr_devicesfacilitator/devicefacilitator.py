@@ -4,6 +4,7 @@ from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, Tas
 
 class DevicesFcltr:
     """
+
     Think about the role of a device facilitator
     it will take the configuration from an overal panel, or a template.
     it will then perform the 8 step tasks for all the devices.
@@ -189,7 +190,7 @@ class DevicesFcltr:
     def daq_add_subtasks_do(self):
         """
         add subtasks_do to do taskbundle
-        :return:
+        :return:-
         """
         for st in self.subtask_do_list:
             self.taskbundle_do.add_subtask(st)
