@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class AcqParamToolsBase:
+class AcqParamBase:
     """
     Below are random bits of thoughts - talking to myself.
 
@@ -239,7 +239,7 @@ class AcqParamToolsBase:
             }
 
 
-class AcqParamToolsMode1(AcqParamToolsBase):
+class AcqParamMode1(AcqParamBase):
     """
     loop layers:
     [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
@@ -265,7 +265,7 @@ class AcqParamToolsMode1(AcqParamToolsBase):
         self.looping_order = '[mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]'
 
 
-class AcqParamToolsMode2(AcqParamToolsBase):
+class AcqParamMode2(AcqParamBase):
     """
     [mode 2] - [layer 1: position] - [layer 2: view] - [layer 3: slice] - [layer 4: color]
     This mode corresponds to the intervened acquisiton mode. for each slice, it takes the list of all colors acquisition
@@ -283,7 +283,7 @@ class AcqParamToolsMode2(AcqParamToolsBase):
         self.looping_order = '[mode 2] - [layer 1: position] - [layer 2: view] - [layer 3: slice] - [layer 4: color]'
 
 
-class AcqParamToolsMode3(AcqParamToolsBase):
+class AcqParamMode3(AcqParamBase):
     """
     [mode 3] - [layer 1: position] - [layer 2: view] - [layer 3: slice, color]
     this acquisition mode uses a pre-defined list of slice/color. user can choose which slice to use which color
@@ -300,7 +300,7 @@ class AcqParamToolsMode3(AcqParamToolsBase):
         self.looping_order = '[mode 3] - [layer 1: position] - [layer 2: view] - [layer 3: slice, color]'
 
 
-class AcqParamToolsMode4(AcqParamToolsBase):
+class AcqParamMode4(AcqParamBase):
     """
     [mode 4] - [layer 1: position, view] - [layer 2: color] - [layer 3: slice]
     this acquisition mode uses a pre-defined list of slice/color. user can choose which slice to use which color
@@ -317,7 +317,7 @@ class AcqParamToolsMode4(AcqParamToolsBase):
         self.looping_order = '[mode 4] - [layer 1: position, view] - [layer 2: color] - [layer 3: slice]'
 
 
-class AcqParamToolsMode5(AcqParamToolsBase):
+class AcqParamMode5(AcqParamBase):
     """
     [mode 5] - [layer 1: position, view] - [layer 2: slice] - [layer 3: color]
     this acquisition mode uses a pre-defined list of slice/color. user can choose which slice to use which color
@@ -334,7 +334,7 @@ class AcqParamToolsMode5(AcqParamToolsBase):
         self.looping_order = '[mode 5] - [layer 1: position, view] - [layer 2: slice] - [layer 3: color]'
 
 
-class AcqParamToolsMode6(AcqParamToolsBase):
+class AcqParamMode6(AcqParamBase):
     """
     [mode 6] - [layer 1: position, view] - [layer 2: slice, color]
     this acquisition mode uses a pre-defined list of slice/color. user can choose which slice to use which color

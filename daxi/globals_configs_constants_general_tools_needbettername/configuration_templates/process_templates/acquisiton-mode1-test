@@ -1,0 +1,32 @@
+date: 2022-10-27
+
+Description: "this is a test configuration for the development of mode1 acquisiton pipeline, which is done while desgning the
+architecture of the DaXi controller codes. This should follow the format recognizable by the parser."
+
+These configurations should be pared with the device_configs_core, as well as the alignment and calibration records.
+it should contain information enough for the client to know which focused process facilitator to use
+it should contain all the specific acquisition parameter that is suggeste and chose from the SystemFcltr.
+it should also contain the specific information for the command to handle all the receiveres. but this is specific for
+some titles for the process.
+
+{
+"process type": "acquisition"
+"process configs":
+    {
+    "configs type": "acquisition, mode 1"
+    "number of time point":
+    # look into the parameter suggestion codes in SystemFcltr
+    }
+"devices configs":
+    {
+    "devices configs - core":
+        {
+        },
+    "devices configs - alignment":
+        {
+        },
+    "devices configs - calibration":
+        {
+        },
+    },
+}
