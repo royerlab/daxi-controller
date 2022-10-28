@@ -3,7 +3,7 @@
 nidaq terminals:
 definition start.
 {
-'DAQ operation frequency': 1000, # unit = Hz
+'DAQ operation frequency': float(1000), # unit = Hz
 
     'metronome terminals':
     {
@@ -130,44 +130,44 @@ definition start.
 {
     'scanning galvo':
     {
-    'home voltage offset for view 1': 0.12, # volt, should be obtained and adjusted during alignment
-    'home voltage offset for view 2': -0.05, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 1': float(0.12), # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': float(-0.05), # volt, should be obtained and adjusted during alignment
     },
 
     'view switching galvo 1':
     {
-    'home voltage offset for view 1': 3, # volt, should be obtained and adjusted during alignment
-    'home voltage offset for view 2': -3, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 1': float(3), # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': float(-3), # volt, should be obtained and adjusted during alignment
     },
 
     'view switching galvo 2':
     {
-    'home voltage offset for view 1': -3, # volt, should be obtained and adjusted during alignment
-    'home voltage offset for view 2': 3, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 1': float(-3), # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': float(3), # volt, should be obtained and adjusted during alignment
     },
 
     'gamma galvo strip reduction':
     {
-    'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
-    'home voltage offset for view 2': 0.1, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 1': float(0.1), # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': float(0.1), # volt, should be obtained and adjusted during alignment
     },
 
     'beta galvo light sheet incident angle':
     {
-    'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
-    'home voltage offset for view 2': -0.1, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 1': float(0.1), # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': float(-0.1), # volt, should be obtained and adjusted during alignment
     },
 
     'O1':
     {
-    'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
-    'home voltage offset for view 2': -0.1, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 1': float(0.1), # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': float(-0.1), # volt, should be obtained and adjusted during alignment
     },
 
     'O3':
     {
-    'home voltage offset for view 1': 0.1, # volt, should be obtained and adjusted during alignment
-    'home voltage offset for view 2': -0.1, # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 1': float(0.1), # volt, should be obtained and adjusted during alignment
+    'home voltage offset for view 2': float(-0.1), # volt, should be obtained and adjusted during alignment
     },
 }
 definition end.
@@ -179,15 +179,15 @@ definition start.
 {
     'scanning galvo':
     {
-    'distance (um) to voltage (v) conversion factor (v/um)': 0.008,
+    'distance (um) to voltage (v) conversion factor (v/um)': float(0.008),
     },
 
     'gamma galvo strip reduction':
     {
-    'linear ramp start for view 1': 0.1, # volt, should be obtained and adjusted during alignment
-    'linear ramp stop for view 1': 0.3, # volt, should be obtained and adjusted during alignment
-    'linear ramp start for view 2': 0.2, # volt, should be obtained and adjusted during alignment
-    'linear ramp stop for view 2': 0.4, # volt, should be obtained and adjusted during alignment
+    'linear ramp start for view 1': float(0.1), # volt, should be obtained and adjusted during alignment
+    'linear ramp stop for view 1': float(0.3), # volt, should be obtained and adjusted during alignment
+    'linear ramp start for view 2': float(0.2), # volt, should be obtained and adjusted during alignment
+    'linear ramp stop for view 2': float(0.4), # volt, should be obtained and adjusted during alignment
     },
 
 }

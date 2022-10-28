@@ -1,5 +1,5 @@
 from daxi.ctr_devicesfacilitator.devicefacilitator import DevicesFcltr
-from daxi.globals_configs_constants_general_tools.constants import device_fcltr_configs_path
+from daxi.globals_configs_constants_general_tools_needbettername.constants import device_fcltr_configs_path
 
 
 def test_check_AObundle():

@@ -1,13 +1,24 @@
-from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
+from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO
 
 
 class DevicesFcltr:
     """
-    Think about the role of a device facilitator
-    it will take the configuration from an overal panel, or a template.
-    it will then perform the 8 step tasks for all the devices.
+
+    this is a receiver -- in the pattern for cli/gui, process facilitators and configurations.
+
+    Think about the role of a device facilitator (it's the receiver, receives command from a focused process fcltr.)
+
+    it will take the configuration from an overal panel, or a template. (that's the client)
+
+    it will then perform the 8 step tasks for all the devices. (the receiver executes the process)
+
     Now for daq, there are 10 steps, and should be included in all child classes of the Device Facilitators.
+    the command will use the methods in the receiver, through the receiver, to orchestrates the tasks. so the execute
+    steps composition happens in the focused process facilitators.
+
+    the receiver contains all the methods (things they can do and they know how to do), and the command (focused
+    process facilitator) uses them through the receiver for the specific process.
 
     """
     def __init__(self):
@@ -63,6 +74,18 @@ class DevicesFcltr:
                 )
                 # assign the attributes
                 setattr(self, 'configs_'+device_tool, configs)
+
+    def receive_device_configs(self, device_configs):
+        """
+
+        :param device_configs: dict. It should be passed in by a command - a FocusedProcessFcltr type.
+        (leave abstraction for future for now.)
+        this should do things equivalent to load_device_configs, but instead of doing it from loading things from file,
+        it receive from outside the dictionary - device_configs.
+        #todo implement the specifics.
+
+        :return: nothing
+        """
 
     def show_devices_configs(self):
         """
@@ -189,7 +212,7 @@ class DevicesFcltr:
     def daq_add_subtasks_do(self):
         """
         add subtasks_do to do taskbundle
-        :return:
+        :return:-
         """
         for st in self.subtask_do_list:
             self.taskbundle_do.add_subtask(st)

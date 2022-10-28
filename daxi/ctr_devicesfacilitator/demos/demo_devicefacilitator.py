@@ -1,8 +1,18 @@
 # demo_devicefacilitator.py
 from daxi.ctr_devicesfacilitator.devicefacilitator import DevicesFcltr
-from daxi.globals_configs_constants_general_tools.constants import device_fcltr_configs_path
+from daxi.globals_configs_constants_general_tools_needbettername.constants import device_fcltr_configs_path
 from time import sleep
 
+"""
+using a device facilitator to:
+load deviced configurations
+prepare the divices
+get_ready()
+start()
+
+so to some extend the DevicesFcltr is working like a workflow.
+
+"""
 # 0.  checkout a devices facilitator
 df = DevicesFcltr()
 

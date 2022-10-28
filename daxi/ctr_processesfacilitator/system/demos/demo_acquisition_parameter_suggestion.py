@@ -1,11 +1,11 @@
-from daxi.ctr_processesfacilitator.system.tools.acquisition_parameter_suggestion import AcqParamToolsBase
+from daxi.ctr_processesfacilitator.system.tools.acquisition_parameter_suggestion import AcqParamBase
 import pprint
 
 # Prints the nicely formatted dictionary
-m = AcqParamToolsBase(dx=0.4,
-                      length=1000,
-                      t_exposure=90,
-                      t_readout=10)
+m = AcqParamBase(dx=0.4,
+                 length=1000,
+                 t_exposure=90,
+                 t_readout=10)
 
 m.find_parameter_combinations()
 

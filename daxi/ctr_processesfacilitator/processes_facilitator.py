@@ -1,4 +1,5 @@
 from daxi.ctr_processesfacilitator.processes_facilitator_gui import ProcessesFcltrGUI
+import yaml
 
 
 class ProcessesFcltr(ProcessesFcltrGUI):
@@ -30,8 +31,8 @@ class ProcessesFcltr(ProcessesFcltrGUI):
         (the gui can generate the parameter dictionary from all fileds configurations, or load from a file, etc.).
         :return:
         """
-        from daxi.globals_configs_constants_general_tools.constants import params_test_selected_params
-        from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
+        from daxi.globals_configs_constants_general_tools_needbettername.constants import params_test_selected_params
+        from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
         p = NIDAQConfigsParser()
         p.set_configs_path(params_test_selected_params)
         section = 'Selected Parameters Section'
@@ -71,3 +72,14 @@ class ProcessesFcltr(ProcessesFcltrGUI):
         :return:
         """
         self.configs_save_data = None
+
+
+def save_process_configs(path: str, configs: dict):
+    """
+    save out the process configurations out to the path
+    :param path:  full path to the yaml file.
+    :param configs:  full path to the yaml file.
+    :return:
+    """
+    with open(path, 'w') as outfile:
+        yaml.dump(configs, outfile, default_flow_style=False)

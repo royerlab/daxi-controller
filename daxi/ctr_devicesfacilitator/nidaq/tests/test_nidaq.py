@@ -5,9 +5,9 @@ from time import sleep
 import os
 from daxi.ctr_devicesfacilitator.nidaq.nidaq import Counter, Metronome, TaskBundleAO, SubTaskAO
 from daxi.ctr_devicesfacilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
-from daxi.globals_configs_constants_general_tools.python_globals import devices_connected
-from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
-from daxi.globals_configs_constants_general_tools.constants import virtual_tools_configs_path
+from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
+from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
+from daxi.globals_configs_constants_general_tools_needbettername.constants import virtual_tools_configs_path
 
 
 @pytest.mark.skipif(devices_connected is False, reason="This test requires daq cards to be connected.")

@@ -1,5 +1,5 @@
-from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
-from daxi.globals_configs_constants_general_tools.constants import virtual_tools_configs_path, device_fcltr_configs_path
+from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
+from daxi.globals_configs_constants_general_tools_needbettername.constants import virtual_tools_configs_path, device_fcltr_configs_path
 
 
 def create_nidaq_parser():

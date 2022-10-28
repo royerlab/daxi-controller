@@ -1,5 +1,5 @@
-from daxi.globals_configs_constants_general_tools.parser import NIDAQConfigsParser
-from daxi.globals_configs_constants_general_tools.constants import configs_core_daq_devices
+from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
+from daxi.globals_configs_constants_general_tools_needbettername.constants import configs_core_daq_devices
 
 
 class NIDAQDevicesConfigsGeneratorBase:
