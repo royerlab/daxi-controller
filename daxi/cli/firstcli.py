@@ -28,17 +28,22 @@ class CliInvoker:
         history: command line interface history
         """
         self.history = []
+        self.process = None
 
-    def invoke(self, command):
+    def add_process(self, process):
         """
-
-        :param command: in DaXi controller, the command object here should be a focused process facilitator. the cli
+        :param process: in DaXi controller, the command object here should be a focused process facilitator. the cli
         should act as if it is a general process facilitator that composes and logs the actions for a specific
         process. - assemble the team, and hand over the tasks.
         :return:
         """
-        self.history.append(command)
-        command.execute()  # the focused process facilitators alls hould have an execute method. develop the abstraction
+        self.history.append(process)
+        self.process = process
+
+    def execute_process(self, process_configs):
+        """ this will execute the command with the configurations specified in configs """
+        self.process.execute(process_configs)
+        # the focused process facilitators all should have an execute method. develop the abstraction
         # when many focused process facilitators are implemented.
 
 
@@ -84,14 +89,22 @@ def acquire(configs_path):
     suitable focused fcltrs (like concrete commands), each of which would access their receivers to
     perform specific process tasks.
 
+    what a client do:
+    receiver = Receiver()
+    cmd = CommandImplementation(receiver)  the command takes a receiver upon initiation
+    invoker = Invoker()
+    invoker.command(cmd) , with the data.
+    invoker.execute() the invoker tells the command to execute
 
     it seems like the command, object composition, and aggregation patterns all fit well here (probably...)
 
+    check out the following pattern and implement the structure:
+    https://www.geeksforgeeks.org/command-method-python-design-patterns/
 
 
     """
     # receiver
-    device_fcltr = DeviceFcltr()  # this is the receiver object
+    device_fcltr = DevicesFcltr()  # this is the receiver object
     configs = get_configs(configs_path)  # this is the data that is delivered to the receiver through the command.
     acquisition = AcquisitionFcltr()  # this is the command object. it does not create nor destroy the device_fcltr, it only access the device_fcltr. destroying
     # acquisition do not destroy the device_fcltr instances.
