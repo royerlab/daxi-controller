@@ -39,6 +39,12 @@ class DevicesFcltr:
         self.configs_view_switching_galvo_2 = None
         self.configs_gamma_galvo_strip_reduction = None
         self.configs_beta_galvo_light_sheet_incident_angle = None
+        self.configs_405_laser = None
+        self.configs_488_laser = None
+        self.configs_561_laser = None
+        self.configs_639_laser = None
+        self.configs_bright_field = None
+
         self.configs_O1 = None
         self.configs_O3 = None
 
@@ -47,6 +53,9 @@ class DevicesFcltr:
         It will take the configs_path as an input parameter, and load in all the configurations.
         Parameters
         load from the device_configs path
+        it will populate the following attributes for itself:
+        self.devices_and_tools_collection
+        self.configs_*specific_devices_and_tools
         ----------
         configs_path
 
