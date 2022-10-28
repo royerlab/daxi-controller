@@ -117,5 +117,5 @@ process configs:
     time per stack per view (s): 35.423
     time per time point (s): 141.692
     type: mode1
-  configs type: acquisition, mode 1
-process type: acquisition
+  process type: acquisition, mode 1
+process type: acquisition, mode 1

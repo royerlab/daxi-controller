@@ -33,7 +33,7 @@ class AcquisitionFcltr():
         """
         self.device_fcltr = device_fcltr
         self.configs = configs
-        if self.configs['acquisition mode'] == 'mode 1':
+        if self.configs['process configs']['process type'] == 'acquisition, mode 1':
             self.acquisition_mode1()
 
         return 0
@@ -55,4 +55,13 @@ class AcquisitionFcltr():
                     # pause daq card
         # todo need to check how to re-trigger camera acquisition with the same acquisition protocol.
         # think about the structure of the data here # todo 2022-10-25 item 1.
+        print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
+        print("will first get all the devices ready for the device facilitator, that is \n"
+              "appended in this class. we'll do something lide self.devcie_fcltr.receive_\n"
+              "device_configs() to make sure the configs is receivedwe'll then do \n "
+              "self.device_facilitators.\"prepare_everything_and_play_the_devices\" to make \n"
+              "sure all the devices are initiated and ready at the minimum level")
+        print("we will then go through the loop order shown above in the comments, to actually \n"
+              "perform this acquisition task\n")
+        print("stepped out of AcquisitionFacilitator.acquisition_mode1")
         return 0

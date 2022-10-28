@@ -57,10 +57,10 @@ alignment_records = \
 
 # composite the configs_dict dictionary
 configs_dict={
-        "process type": "acquisition",
+        "process type": "acquisition, mode 1",
         "process configs":
         {
-            "configs type": "acquisition, mode 1",
+            "process type": "acquisition, mode 1",
             "acquisition parameters": acquisition_parameters,
         },
         "device configurations":
