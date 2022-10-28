@@ -83,3 +83,16 @@ def save_process_configs(path: str, configs: dict):
     """
     with open(path, 'w') as outfile:
         yaml.dump(configs, outfile, default_flow_style=False)
+
+
+def load_process_configs(path: str):
+    """
+    save out the process configurations out to the path
+    :param path:  full path to the yaml file.
+    :param configs:  full path to the yaml file.
+    :return:
+    """
+    with open(path, 'r') as stream:
+        output = yaml.safe_load(stream)
+
+    return output
