@@ -103,13 +103,23 @@ def acquire(configs_path):
 
 
     """
-    # receiver
-    device_fcltr = DevicesFcltr()  # this is the receiver object
-    configs = get_configs(configs_path)  # this is the data that is delivered to the receiver through the command.
-    acquisition = AcquisitionFcltr()  # this is the command object. it does not create nor destroy the device_fcltr, it only access the device_fcltr. destroying
-    # acquisition do not destroy the device_fcltr instances.
+    # get the configuration files (that specifies the execution of the process)
+    configs = load_configs(configs_path)  # this is the data that will be delivered to the receiver through the command.
+
+    # create a DevicesFcltr (create the receiver)
+    device_fcltr = DevicesFcltr()
+
+    # create the AcquisitionFcltr that takes the DevicesFcltr
+    acquisition = AcquisitionFcltr(receiver=device_fcltr, data=configs)
+    # this is the command object. it does not create or destroy the device_fcltr,
+
+    # create an invoker
     invoker = CliInvoker()
-    invoker.invoke(concrete_command=acquisition(receiver=device_fcltr, data=configs))
+
+    # it only access the device_fcltr. destroying
+    # acquisition do not destroy the device_fcltr instances.
+    invoker.add_process(process=acquisition)
+    invoker.execute_process(process_configs=configs)
 
     # invoker takes a concrete command that takes a receiver with it, it invokes the method of a receiver through the
     # execute() method in the concrete command.
