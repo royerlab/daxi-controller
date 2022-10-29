@@ -31,13 +31,163 @@ def test_load_device_configs():
     assert 'beta_galvo_light_sheet_incident_angle' in df.devices_and_tools_collection['Physical Devices Section']
     assert 'O1' in df.devices_and_tools_collection['Physical Devices Section']
     assert 'O3' in df.devices_and_tools_collection['Physical Devices Section']
+    assert hasattr(df, 'description')
+    assert hasattr(df, 'subtask_ao_list')
+    assert hasattr(df, 'subtask_ao_configs_list')
+    assert hasattr(df, 'subtask_do_list')
+    assert hasattr(df, 'subtask_do_configs_list')
+    assert hasattr(df, 'metronome')
+    assert hasattr(df, 'devices_and_tools_collection')
+    assert hasattr(df, 'taskbundle_ao')
     assert hasattr(df, 'configs_metronome')
     assert hasattr(df, 'configs_counter')
     assert hasattr(df, 'configs_AO_task_bundle')
+    assert hasattr(df, 'configs_DO_task_bundle')
     assert hasattr(df, 'configs_scanning_galvo')
     assert hasattr(df, 'configs_view_switching_galvo_1')
     assert hasattr(df, 'configs_view_switching_galvo_2')
     assert hasattr(df, 'configs_gamma_galvo_strip_reduction')
     assert hasattr(df, 'configs_beta_galvo_light_sheet_incident_angle')
+    assert hasattr(df, 'configs_405_laser')
+    assert hasattr(df, 'configs_488_laser')
+    assert hasattr(df, 'configs_561_laser')
+    assert hasattr(df, 'configs_639_laser')
+    assert hasattr(df, 'configs_bright_field')
     assert hasattr(df, 'configs_O1')
     assert hasattr(df, 'configs_O3')
+
+
+def assert_configs_metronome(configs_metronome: dict):
+    assert list(configs_metronome.keys()) == \
+           ['name', 'task type', 'counter terminal', 'counting output terminal', 'idle state', 'frequency',
+            'sample mode', 'number of samples', 'trigger terminal', 'trigger edge', 'retriggerable', 'purpose']
+
+
+def assert_configs_counter(configs_counter: dict):
+    assert list(configs_counter.keys()) == \
+           ['name', 'task type', 'counter terminal', 'counting input terminal', 'counting edge', 'initial count',
+            'purpose', 'current count', 'verbose']
+
+
+def assert_configs_AO_task_bundle(configs_AO_task_bundle: dict):
+    assert list(configs_AO_task_bundle.keys()) == \
+           ['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode']
+
+
+def assert_configs_DO_task_bundle(configs_DO_task_bundle: dict):
+    assert list(configs_DO_task_bundle.keys()) == \
+           ['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode']
+
+
+def assert_configs_scanning_galvo(configs_scanning_galvo: dict):
+    assert list(configs_scanning_galvo.keys()) == \
+           ['device', 'name', 'task type', 'idle state', 'voltage output terminal',
+            'distance (um) to voltage (v) conversion factor (v/um)', 'data', 'data generator', 'data configs']
+
+
+def assert_configs_view_switching_galvo_1(configs_view_switching_galvo_1: dict):
+    assert list(configs_view_switching_galvo_1.keys()) == \
+           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+            'data configs']
+
+
+def assert_configs_view_switching_galvo_2(configs_view_switching_galvo_2: dict):
+    assert list(configs_view_switching_galvo_2.keys()) == \
+           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+            'data configs']
+
+
+def assert_configs_gamma_galvo_strip_reduction(configs_gamma_galvo_strip_reduction: dict):
+    assert list(configs_gamma_galvo_strip_reduction.keys()) == \
+           ['device', 'name', 'task type', 'idle state', 'trigger terminal', 'trigger edge', 'voltage output terminal',
+            'data', 'data generator', 'data configs']
+
+
+def assert_configs_beta_galvo_light_sheet_incident_angle(configs_beta_galvo_light_sheet_incident_angle:dict):
+    assert list(configs_beta_galvo_light_sheet_incident_angle.keys()) == \
+           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+            'data configs']
+
+
+def assert_configs_405_laser(configs_405_laser:dict):
+    assert list(configs_405_laser.keys()) == \
+           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+
+
+def assert_configs_488_laser(configs_488_laser:dict):
+    assert list(configs_488_laser.keys()) == \
+           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+
+
+def assert_configs_561_laser(configs_561_laser:dict):
+    assert list(configs_561_laser.keys()) == \
+            ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+
+
+def assert_configs_639_laser(configs_639_laser:dict):
+    assert list(configs_639_laser.keys()) == \
+            ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+
+
+def assert_configs_bright_field(configs_bright_field:dict):
+    assert list(configs_bright_field.keys()) == \
+           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+
+
+def assert_configs_O1(configs_O1:dict):
+    assert list(configs_O1.keys()) == \
+            ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+             'data configs']
+
+
+def assert_configs_O3(configs_O3:dict):
+    assert list(configs_O3.keys()) == \
+           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+            'data configs']
+
+
+def test_load_device_configs_contents():
+    df = DevicesFcltr()
+    df.load_device_configs(device_fcltr_configs_path)
+    assert_configs_metronome(df.configs_metronome)
+    assert_configs_counter(df.configs_counter)
+    assert_configs_AO_task_bundle(df.configs_AO_task_bundle)
+    assert_configs_DO_task_bundle(df.configs_DO_task_bundle)
+    assert_configs_scanning_galvo(df.configs_scanning_galvo)
+    assert_configs_view_switching_galvo_1(df.configs_view_switching_galvo_1)
+    assert_configs_view_switching_galvo_2(df.configs_view_switching_galvo_2)
+    assert_configs_gamma_galvo_strip_reduction(\
+        df.configs_gamma_galvo_strip_reduction)
+    assert_configs_beta_galvo_light_sheet_incident_angle(\
+        df.configs_beta_galvo_light_sheet_incident_angle)
+    assert_configs_405_laser(df.configs_405_laser)
+    assert_configs_488_laser(df.configs_488_laser)
+    assert_configs_561_laser(df.configs_561_laser)
+    assert_configs_639_laser(df.configs_639_laser)
+    assert_configs_bright_field(df.configs_bright_field)
+    assert_configs_O1(df.configs_O1)
+    assert_configs_O3(df.configs_O3)
+
+
+def test_receive_device_configs_contents():
+    df = DevicesFcltr()
+    df.receive_device_configs(device_fcltr_configs_path)
+    assert_configs_metronome(df.configs_metronome)
+    assert_configs_counter(df.configs_counter)
+    assert_configs_AO_task_bundle(df.configs_AO_task_bundle)
+    assert_configs_DO_task_bundle(df.configs_DO_task_bundle)
+    assert_configs_scanning_galvo(df.configs_scanning_galvo)
+    assert_configs_view_switching_galvo_1(df.configs_view_switching_galvo_1)
+    assert_configs_view_switching_galvo_2(df.configs_view_switching_galvo_2)
+    assert_configs_gamma_galvo_strip_reduction(\
+        df.configs_gamma_galvo_strip_reduction)
+    assert_configs_beta_galvo_light_sheet_incident_angle(\
+        df.configs_beta_galvo_light_sheet_incident_angle)
+    assert_configs_405_laser(df.configs_405_laser)
+    assert_configs_488_laser(df.configs_488_laser)
+    assert_configs_561_laser(df.configs_561_laser)
+    assert_configs_639_laser(df.configs_639_laser)
+    assert_configs_bright_field(df.configs_bright_field)
+    assert_configs_O1(df.configs_O1)
+    assert_configs_O3(df.configs_O3)
+

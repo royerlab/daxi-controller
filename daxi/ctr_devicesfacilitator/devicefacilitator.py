@@ -44,7 +44,6 @@ class DevicesFcltr:
         self.configs_561_laser = None
         self.configs_639_laser = None
         self.configs_bright_field = None
-
         self.configs_O1 = None
         self.configs_O3 = None
 
@@ -92,6 +91,8 @@ class DevicesFcltr:
         this should do things equivalent to load_device_configs, but instead of doing it from loading things from file,
         it receive from outside the dictionary - device_configs.
         #todo implement the specifics.
+        doubl echeck and makes ure the device configuration generators generates the correct devices configs as done
+        in the load* function shown above.
 
         :return: nothing
         """
