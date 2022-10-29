@@ -105,6 +105,7 @@ process configs:
     looping order: '[mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color]
       - [layer 4: slice]'
     mag-factor: 5
+    metronome frequency: 10000
     n slices: 354
     name: mode1
     pixel size in xy (um): 0.4
