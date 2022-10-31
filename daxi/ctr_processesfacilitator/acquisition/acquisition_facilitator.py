@@ -49,16 +49,17 @@ class AcquisitionFcltr():
             # loop over view
                 # loop over color
                     # move the filter wheel
-                    # write data to daq card again for the changed ones.
+                    # based on the view and color indexes, choose a daq data cycle index.
+                    # write data to daq card again for the changed cycle index.
                     # start daq card
                     # loop over slice
-                    # pause daq card
+                    # stop(pause) daq card
         # todo need to check how to re-trigger camera acquisition with the same acquisition protocol.
         # think about the structure of the data here # todo 2022-10-25 item 1.
         print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
         print("will first get all the devices ready for the device facilitator, that is \n"
-              "appended in this class. we'll do something lide self.devcie_fcltr.receive_\n"
-              "device_configs() to make sure the configs is receivedwe'll then do \n "
+              "appended in this class. we'll do something like self.devcie_fcltr.receive_\n"
+              "device_configs() to make sure the configs is received we'll then do \n "
               "self.device_facilitators.\"prepare_everything_and_play_the_devices\" to make \n"
               "sure all the devices are initiated and ready at the minimum level")
         print("we will then go through the loop order shown above in the comments, to actually \n"

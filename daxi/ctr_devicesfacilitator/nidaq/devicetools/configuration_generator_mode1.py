@@ -298,7 +298,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_o3
 
     def get_configs_405_laser(self, params):
-        self.configs_405_laser['data configs']['sample number'] = self.sample_number_total
+        self.configs_405_laser['data configs']['sample number'] = \
+            self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_405_laser['data generator'] == 'on-off sequence':
             self.configs_405_laser['data'] = \
@@ -309,7 +310,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_405_laser
 
     def get_configs_488_laser(self, params):
-        self.configs_488_laser['data configs']['sample number'] = self.sample_number_total
+        self.configs_488_laser['data configs']['sample number'] = \
+            self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_488_laser['data generator'] == 'on-off sequence':
             self.configs_488_laser['data'] = \
@@ -320,7 +322,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_488_laser
 
     def get_configs_561_laser(self, params):
-        self.configs_561_laser['data configs']['sample number'] = self.sample_number_total
+        self.configs_561_laser['data configs']['sample number'] = \
+            self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_561_laser['data generator'] == 'on-off sequence':
             self.configs_561_laser['data'] = \
@@ -331,7 +334,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_561_laser
 
     def get_configs_639_laser(self, params):
-        self.configs_639_laser['data configs']['sample number'] = self.sample_number_total
+        self.configs_639_laser['data configs']['sample number'] = \
+            self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_639_laser['data generator'] == 'on-off sequence':
             self.configs_639_laser['data'] = \
@@ -342,7 +346,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_639_laser
 
     def get_configs_bright_field(self, params):
-        self.configs_bright_field['data configs']['sample number'] = self.sample_number_total
+        self.configs_bright_field['data configs']['sample number'] = \
+            self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_bright_field['data generator'] == 'on-off sequence':
             self.configs_bright_field['data'] = \
@@ -351,3 +356,95 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                                    on_value=True,
                                    off_value=False)
         return self.configs_bright_field
+
+    def get_configs_single_cycle_dict(self, params):
+        configs_list = {}
+        for view in params['views']:
+            for color in params['colors']:
+                configs_list['view'+view + ' color' + color] = \
+                    self.get_configs_single_cycle(view=view, color=color)
+        return configs_list
+
+    def get_configs_single_cycle(self, view=None, color=None):
+        # now mask and pikc from the all cycle dicts, to return a singel cycle configs.
+        configs = {}
+        # go through every devices, and map the devices configs for a single cycle.
+        configs['configs_metronome'] = self.map_sc_configs_metronome(view=None, color=None)
+        configs['configs_counter'] = self.map_sc_configs_counter(view=None, color=color)
+        configs['configs_DO_task_bundle'] = self.map_sc_configs_DO_task_bundle(view=None, color=color)
+        configs['configs_AO_task_bundle'] = self.map_sc_configs_AO_task_bundle(view=None, color=color)
+        configs['configs_scanning_galvo'] = self.map_sc_configs_scanning_galvo(view=None, color=color)
+        configs['configs_view_switching_galvo_1'] = self.map_sc_configs_view_switching_galvo_1(view=None, color=color)
+        configs['configs_view_switching_galvo_2'] = self.map_sc_configs_view_switching_galvo_2(view=None, color=color)
+        configs['configs_gamma_galvo_strip_reduction'] = self.map_sc_configs_gamma_galvo_strip_reduction(view=None, color=color)
+        configs['configs_beta_galvo_light_sheet_incident_angle'] = self.map_sc_configs_beta_galvo_light_sheet_incident_angle(view=None, color=color)
+        configs['configs_O1'] = self.map_sc_configs_O1(view=None, color=color)
+        configs['configs_O3'] = self.map_sc_configs_O3(view=None, color=color)
+        configs['configs_405_laser'] = self.map_sc_configs_405_laser(view=None, color=color)
+        configs['configs_488_laser'] = self.map_sc_configs_488_laser(view=None, color=color)
+        configs['configs_561_laser'] = self.map_sc_configs_561_laser(view=None, color=color)
+        configs['configs_639_laser'] = self.map_sc_configs_639_laser(view=None, color=color)
+        configs['configs_bright_field'] = self.map_sc_configs_bright_field(view=None, color=color)
+        return configs
+
+    def map_sc_configs_metronome(self, view=None, color=None):
+        # {'name': 'metronome',
+        #  'task type': 'CO',
+        #  'counter terminal': '/cDAQ1/_ctr0',
+        #  'counting output terminal': '/cDAQ1/Ctr0InternalOutput',
+        #  'idle state': 'LOW',
+        #  'frequency': 10000,
+        #  'sample mode': 'FINITE',
+        #  'number of samples': 1000,
+        #  'trigger terminal': '/cDAQ1/PFI0',
+        #  'trigger edge': 'RISING',
+        #  'retriggerable': True,
+        #  'purpose': 'to provide a metronome to orchestrate all DAQ profiles for both AO and DO outputs'}
+        #
+        configs = self.configs_metronome
+        return configs
+
+    def map_sc_configs_counter(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_DO_task_bundle(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_AO_task_bundle(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_scanning_galvo(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_view_switching_galvo_1(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_view_switching_galvo_2(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_gamma_galvo_strip_reduction(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_beta_galvo_light_sheet_incident_angle(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_O1(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_O3(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_405_laser(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_488_laser(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_561_laser(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_639_laser(self, view=None, color=None):
+        return 0
+
+    def map_sc_configs_bright_field(self, view=None, color=None):
+        return 0

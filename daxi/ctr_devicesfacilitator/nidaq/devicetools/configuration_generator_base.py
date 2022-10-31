@@ -294,3 +294,5 @@ class NIDAQDevicesConfigsGeneratorBase:
     def get_configs_bright_field(self, params, nidaq_terminals):
         pass
 
+    def get_configs_single_cycle(self, params):
+        pass

@@ -289,3 +289,13 @@ def test_receive_device_configs_contents_all_cycles():
     assert_configs_O1_all_cycles(df.configs_all_cycles['configs_O1'])
     assert_configs_O3_all_cycles(df.configs_all_cycles['configs_O3'])
 
+
+def test_receive_device_configs_single_cycle_metronome():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_metronome(df.configs_single_cycle_dict[c]['configs_metronome'])
+

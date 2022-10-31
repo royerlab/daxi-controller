@@ -101,6 +101,9 @@ device configurations:
 process configs:
   acquisition parameters:
     camera read out time (ms): 10.0
+    colors:
+    - '488'
+    - '561'
     exposure time (ms): 90.0
     looping order: '[mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color]
       - [layer 4: slice]'
@@ -118,5 +121,8 @@ process configs:
     time per stack per view (s): 35.423
     time per time point (s): 141.692
     type: mode1
+    views:
+    - '1'
+    - '2'
   process type: acquisition, mode 1
 process type: acquisition, mode 1

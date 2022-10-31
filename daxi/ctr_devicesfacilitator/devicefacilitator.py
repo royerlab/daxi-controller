@@ -48,6 +48,7 @@ class DevicesFcltr:
         self.configs_bright_field = None
         self.configs_O1 = None
         self.configs_O3 = None
+        self.configs_single_cycle_dict = None
 
     def load_device_configs_one_cycle(self, device_configs_file, verbose=True):
         """
@@ -175,6 +176,8 @@ class DevicesFcltr:
             configs_generator.get_configs_639_laser(process_parameters)
         self.configs_all_cycles['configs_bright_field'] = \
             configs_generator.get_configs_bright_field(process_parameters)
+        self.configs_single_cycle_dict = \
+            configs_generator.get_configs_single_cycle_dict(process_parameters)
 
     def show_devices_configs(self):
         """
