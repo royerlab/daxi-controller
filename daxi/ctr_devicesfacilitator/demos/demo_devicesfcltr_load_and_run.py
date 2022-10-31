@@ -1,4 +1,4 @@
-# demo_devicefacilitator.py
+# demo_devicesfcltr_load_and_run.py
 from daxi.ctr_devicesfacilitator.devicefacilitator import DevicesFcltr
 from daxi.globals_configs_constants_general_tools_needbettername.constants import device_fcltr_configs_path
 from time import sleep
@@ -17,7 +17,7 @@ so to some extend the DevicesFcltr is working like a workflow.
 df = DevicesFcltr()
 
 # 1. get configurations
-df.load_device_configs(device_configs_file=device_fcltr_configs_path)
+df.load_device_configs_one_cycle(device_configs_file=device_fcltr_configs_path)
 
 # 2. prepare subtasks and calculate the data for all subtasks
 df.daq_prepare_subtasks_ao()

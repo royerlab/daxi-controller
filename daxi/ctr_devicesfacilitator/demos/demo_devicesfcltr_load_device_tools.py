@@ -5,4 +5,4 @@ from daxi.globals_configs_constants_general_tools_needbettername.constants impor
 df = DevicesFcltr()
 
 # 1. get configurations
-df.load_device_configs(device_configs_file=device_fcltr_configs_path)
+df.load_device_configs_one_cycle(device_configs_file=device_fcltr_configs_path)

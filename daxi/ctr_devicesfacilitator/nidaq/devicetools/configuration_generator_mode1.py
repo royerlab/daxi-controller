@@ -157,15 +157,17 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         # ahh should think about a design pattern here and update later.
         dg = DAQDataGenerator()
         if self.configs_scanning_galvo['data generator'] == 'linear_ramp_soft_retraction':
-            data_view1 = dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view1,
-                                                               v1=v_stop_view1,
-                                                               n_sample_ramp=self.sample_number_on_duty,
-                                                               n_sample_retraction=self.sample_number_off_duty)
+            data_view1 = \
+                dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view1,
+                                                      v1=v_stop_view1,
+                                                      n_sample_ramp=self.sample_number_on_duty,
+                                                      n_sample_retraction=self.sample_number_off_duty)
 
-            data_view2 = dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view2,
-                                                               v1=v_stop_view2,
-                                                               n_sample_ramp=self.sample_number_on_duty,
-                                                               n_sample_retraction=self.sample_number_off_duty)
+            data_view2 = \
+                dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view2,
+                                                      v1=v_stop_view2,
+                                                      n_sample_ramp=self.sample_number_on_duty,
+                                                      n_sample_retraction=self.sample_number_off_duty)
 
             self.configs_scanning_galvo['data for view 1'] = data_view1
             self.configs_scanning_galvo['data for view 2'] = data_view2
@@ -175,7 +177,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_scanning_galvo
 
     def get_configs_view_switching_galvo_1(self, params):
-        self.configs_view_switching_galvo_1['data configs']['sample number'] = self.sample_number_total
+        self.configs_view_switching_galvo_1['data configs']['sample number'] = \
+            self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_view_switching_galvo_1['data generator'] == 'constant':
             self.configs_view_switching_galvo_1['data for view 1'] = \
@@ -192,7 +195,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_view_switching_galvo_1
 
     def get_configs_view_switching_galvo_2(self, params):
-        self.configs_view_switching_galvo_2['data configs']['sample number'] = self.sample_number_total
+        self.configs_view_switching_galvo_2['data configs']['sample number'] = \
+            self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_view_switching_galvo_2['data generator'] == 'constant':
             self.configs_view_switching_galvo_2['data for view 1'] = \
@@ -245,7 +249,8 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_gamma_galvo_strip_reduction
 
     def get_configs_beta_galvo_light_sheet_incident_angle(self, params):
-        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['sample number'] = self.sample_number_total
+        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['sample number'] = \
+            self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_beta_galvo_light_sheet_incident_angle['data generator'] == 'constant':
             self.configs_beta_galvo_light_sheet_incident_angle['data for view 1'] = \

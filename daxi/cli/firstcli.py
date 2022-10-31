@@ -66,6 +66,9 @@ def acquire(configs_path):
     Here we are implementing with mode1 acquisition as a starting point. the process configurations would contain
     acquisition parameters (likewise, there should be calibration parameters, alignment parameters,
     inspection parameters, etc.), and device parameters. (16 pieces of physical and virtual devices).
+    This data would be passed to the receiver by the command upon request by the client, and the receiver will
+    translate and populate the specific configurations upon "receive configurations". the "receive configurations"
+    method should produce something identical to the method to load the configurations.
 
     These configurations should be pared with the device_configs_core (when generate I guess?), as well as the alignment
     and calibration records. configuration should not generate data, it should only store the configurations. unless the

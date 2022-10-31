@@ -30,7 +30,7 @@ alignment_records = configs['device configurations']['alignment_records']
 # yes it does feel intuitive here to have a data type as the interface to standardize these things above.
 # todo need a datatype for these configuraitons. wait until more is done so the format becomes clearer.
 
-# now get the configuration generator
+# now get the configuration generator object
 configs_generator = NIDAQDevicesConfigsGeneratorMode1(params=process_parameters,
                                                       nidaq_terminals=daq_terminal_configs,
                                                       calibration_records=calibration_records,
