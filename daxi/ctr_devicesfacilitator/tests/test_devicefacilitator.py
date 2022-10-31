@@ -190,13 +190,13 @@ def assert_configs_view_switching_galvo_1_all_cycles(configs):
 
 def assert_configs_view_switching_galvo_2_all_cycles(configs):
     assert set(configs.keys()) == \
-           (['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
             'home voltage offset for view 2', 'data for view 2', 'data for view 1', 'data generator', 'data configs'])
 
 
 def assert_configs_gamma_galvo_strip_reduction_all_cycles(configs):
     assert set(configs.keys()) == \
-           (['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
             'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs'])
 
 
@@ -352,14 +352,14 @@ def test_receive_device_single_cycle_configs_view_switching_galvo_1():
         assert_configs_view_switching_galvo_1(df.configs_single_cycle_dict[c]['configs_view_switching_galvo_1'])
 
 
-# def test_receive_device_single_cycle_configs_view_switching_galvo_2():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_view_switching_galvo_2(df.configs_single_cycle_dict[c]['configs_view_switching_galvo_2'])
+def test_receive_device_single_cycle_configs_view_switching_galvo_2():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_view_switching_galvo_2(df.configs_single_cycle_dict[c]['configs_view_switching_galvo_2'])
 
 
 # def test_receive_device_single_cycle_configs_gamma_galvo_strip_reduction():
