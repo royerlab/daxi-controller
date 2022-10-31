@@ -63,182 +63,184 @@ def test_load_device_configs():
 
 
 def assert_configs_metronome(configs_metronome: dict):
-    assert list(configs_metronome.keys()) == \
-           ['name', 'task type', 'counter terminal', 'counting output terminal', 'idle state', 'frequency',
-            'sample mode', 'number of samples', 'trigger terminal', 'trigger edge', 'retriggerable', 'purpose']
+    assert set(configs_metronome.keys()) == \
+           set(['name', 'task type', 'counter terminal', 'counting output terminal', 'idle state', 'frequency',
+            'sample mode', 'number of samples', 'trigger terminal', 'trigger edge', 'retriggerable', 'purpose'])
 
 
 def assert_configs_counter(configs_counter: dict):
-    assert list(configs_counter.keys()) == \
-           ['name', 'task type', 'counter terminal', 'counting input terminal', 'counting edge', 'initial count',
-            'purpose', 'current count', 'verbose']
+    assert set(configs_counter.keys()) == \
+           set(['name', 'task type', 'counter terminal', 'counting input terminal', 'counting edge', 'initial count',
+            'purpose', 'current count', 'verbose'])
 
 
 def assert_configs_AO_task_bundle(configs_AO_task_bundle: dict):
-    assert list(configs_AO_task_bundle.keys()) == \
-           ['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode']
+    assert set(configs_AO_task_bundle.keys()) == \
+           set(['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode'])
 
 
 def assert_configs_DO_task_bundle(configs_DO_task_bundle: dict):
-    assert list(configs_DO_task_bundle.keys()) == \
-           ['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode']
+    assert set(configs_DO_task_bundle.keys()) == \
+           set(['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode'])
 
 
 def assert_configs_scanning_galvo(configs_scanning_galvo: dict):
-    assert list(configs_scanning_galvo.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal',
-            'distance (um) to voltage (v) conversion factor (v/um)', 'data', 'data generator', 'data configs']
+    assert set(configs_scanning_galvo.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal',
+            'distance (um) to voltage (v) conversion factor (v/um)', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_view_switching_galvo_1(configs_view_switching_galvo_1: dict):
-    assert list(configs_view_switching_galvo_1.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
-            'data configs']
+    assert set(configs_view_switching_galvo_1.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+            'data configs'])
 
 
 def assert_configs_view_switching_galvo_2(configs_view_switching_galvo_2: dict):
-    assert list(configs_view_switching_galvo_2.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
-            'data configs']
+    assert set(configs_view_switching_galvo_2.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+            'data configs'])
 
 
 def assert_configs_gamma_galvo_strip_reduction(configs_gamma_galvo_strip_reduction: dict):
-    assert list(configs_gamma_galvo_strip_reduction.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'trigger terminal', 'trigger edge', 'voltage output terminal',
-            'data', 'data generator', 'data configs']
+    assert set(configs_gamma_galvo_strip_reduction.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'trigger terminal', 'trigger edge', 'voltage output terminal',
+            'data', 'data generator', 'data configs'])
 
 
 def assert_configs_beta_galvo_light_sheet_incident_angle(configs_beta_galvo_light_sheet_incident_angle: dict):
-    assert list(configs_beta_galvo_light_sheet_incident_angle.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
-            'data configs']
+    assert set(configs_beta_galvo_light_sheet_incident_angle.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+            'data configs'])
 
 
 def assert_configs_405_laser(configs_405_laser: dict):
-    assert list(configs_405_laser.keys()) == \
-           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs_405_laser.keys()) == \
+           set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_488_laser(configs_488_laser: dict):
-    assert list(configs_488_laser.keys()) == \
-           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs_488_laser.keys()) == \
+           set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_561_laser(configs_561_laser: dict):
-    assert list(configs_561_laser.keys()) == \
-            ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs_561_laser.keys()) == \
+            set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_639_laser(configs_639_laser: dict):
-    assert list(configs_639_laser.keys()) == \
-            ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs_639_laser.keys()) == \
+            set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_bright_field(configs_bright_field: dict):
-    assert list(configs_bright_field.keys()) == \
-           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs_bright_field.keys()) == \
+           set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_O1(configs_O1: dict):
-    assert list(configs_O1.keys()) == \
-            ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
-             'data configs']
+    assert set(configs_O1.keys()) == \
+            set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+             'data configs'])
 
 
 def assert_configs_O3(configs_O3: dict):
-    assert list(configs_O3.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
-            'data configs']
+    assert set(configs_O3.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'data', 'data generator',
+            'data configs'])
 
 
 def assert_configs_metronome_all_cycles(configs):
-    assert list(configs.keys()) == \
-        ['name', 'task type', 'counter terminal', 'counting output terminal', 'idle state', 'frequency', 'sample mode',
-         'number of samples', 'trigger terminal', 'trigger edge', 'retriggerable', 'purpose']
+    assert set(configs.keys()) == \
+        set(['name', 'task type', 'counter terminal', 'counting output terminal', 'idle state', 'frequency', 'sample mode',
+         'number of samples', 'trigger terminal', 'trigger edge', 'retriggerable', 'purpose'])
 
 
 def assert_configs_counter_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['name', 'task type', 'counter terminal', 'counting input terminal', 'counting edge', 'initial count',
-            'purpose', 'current count', 'verbose']
+    assert set(configs.keys()) == \
+           set(['name', 'task type', 'counter terminal', 'counting input terminal', 'counting edge', 'initial count',
+            'purpose', 'current count', 'verbose'])
 
 
 def assert_configs_AO_task_bundle_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode']
+    assert set(configs.keys()) == \
+           set(['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode'])
 
 
 def assert_configs_DO_task_bundle_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode']
+    assert set(configs.keys()) == \
+           set(['name', 'task type', 'trigger terminal', 'trigger edge', 'sample mode'])
 
 
 def assert_configs_scanning_galvo_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal',
+                'home voltage offset for view 1',
             'home voltage offset for view 2', 'distance (um) to voltage (v) conversion factor (v/um)',
-            'data for view 1', 'data for view 2', 'data generator', 'data configs']
+            'data for view 1', 'data for view 2', 'data generator', 'data configs'])
 
 
 def assert_configs_view_switching_galvo_1_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
-            'home voltage offset for view 2', 'data for view 2', 'data for view 1', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal',
+                'home voltage offset for view 1',
+            'home voltage offset for view 2', 'data for view 2', 'data for view 1', 'data generator', 'data configs'])
 
 
 def assert_configs_view_switching_galvo_2_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
-            'home voltage offset for view 2', 'data for view 2', 'data for view 1', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           (['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
+            'home voltage offset for view 2', 'data for view 2', 'data for view 1', 'data generator', 'data configs'])
 
 
 def assert_configs_gamma_galvo_strip_reduction_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
-            'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           (['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
+            'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs'])
 
 
 def assert_configs_beta_galvo_light_sheet_incident_angle_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
-            'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
+            'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs'])
 
 
 def assert_configs_405_laser_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+          set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_488_laser_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_561_laser_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_639_laser_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_bright_field_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'voltage output terminal', 'data', 'data generator', 'data configs'])
 
 
 def assert_configs_O1_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
-            'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
+            'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs'])
 
 
 def assert_configs_O3_all_cycles(configs):
-    assert list(configs.keys()) == \
-           ['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
-            'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs']
+    assert set(configs.keys()) == \
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal', 'home voltage offset for view 1',
+            'home voltage offset for view 2', 'data for view 1', 'data for view 2', 'data generator', 'data configs'])
 
 
 def test_load_device_configs_contents():
@@ -290,7 +292,7 @@ def test_receive_device_configs_contents_all_cycles():
     assert_configs_O3_all_cycles(df.configs_all_cycles['configs_O3'])
 
 
-def test_receive_device_configs_single_cycle_metronome():
+def test_receive_device_single_cycle_configs_metronome():
     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
@@ -298,4 +300,155 @@ def test_receive_device_configs_single_cycle_metronome():
                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
     for c in df.configs_single_cycle_dict.keys():
         assert_configs_metronome(df.configs_single_cycle_dict[c]['configs_metronome'])
+
+
+def test_receive_device_single_cycle_configs_counter():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_counter(df.configs_single_cycle_dict[c]['configs_counter'])
+
+
+def test_receive_device_single_cycle_configs_AO_task_bundle():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_AO_task_bundle(df.configs_single_cycle_dict[c]['configs_AO_task_bundle'])
+
+
+def test_receive_device_single_cycle_configs_DO_task_bundle():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_DO_task_bundle(df.configs_single_cycle_dict[c]['configs_DO_task_bundle'])
+
+
+def test_receive_device_single_cycle_configs_scanning_galvo():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_scanning_galvo(df.configs_single_cycle_dict[c]['configs_scanning_galvo'])
+
+
+def test_receive_device_single_cycle_configs_view_switching_galvo_1():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_view_switching_galvo_1(df.configs_single_cycle_dict[c]['configs_view_switching_galvo_1'])
+
+
+# def test_receive_device_single_cycle_configs_view_switching_galvo_2():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_view_switching_galvo_2(df.configs_single_cycle_dict[c]['configs_view_switching_galvo_2'])
+
+
+# def test_receive_device_single_cycle_configs_gamma_galvo_strip_reduction():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_gamma_galvo_strip_reduction(df.configs_single_cycle_dict[c]['configs_gamma_galvo_strip_reduction'])
+
+
+# def test_receive_device_single_cycle_configs_beta_galvo_light_sheet_incident_angle():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_beta_galvo_light_sheet_incident_angle(df.configs_single_cycle_dict[c]['configs_beta_galvo_light_sheet_incident_angle'])
+
+
+# def test_receive_device_single_cycle_configs_405_laser():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_405_laser(df.configs_single_cycle_dict[c]['configs_405_laser'])
+
+
+# def test_receive_device_single_cycle_configs_488_laser():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_488_laser(df.configs_single_cycle_dict[c]['configs_488_laser'])
+
+
+# def test_receive_device_single_cycle_configs_561_laser():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_561_laser(df.configs_single_cycle_dict[c]['configs_561_laser'])
+
+
+# def test_receive_device_single_cycle_configs_639_laser():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_639_laser(df.configs_single_cycle_dict[c]['configs_639_laser'])
+
+
+# def test_receive_device_single_cycle_configs_bright_field():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_bright_field(df.configs_single_cycle_dict[c]['configs_bright_field'])
+
+
+# def test_receive_device_single_cycle_configs_O1():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_O1(df.configs_single_cycle_dict[c]['configs_O1'])
+
+
+# def test_receive_device_single_cycle_configs_O3():
+#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+#     process_configs = load_process_configs(path=path)
+#     df = DevicesFcltr()
+#     df.receive_device_configs_all_cycles(process_configs=process_configs,
+#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+#     for c in df.configs_single_cycle_dict.keys():
+#         assert_configs_O3(df.configs_single_cycle_dict[c]['configs_O3'])
+
 
