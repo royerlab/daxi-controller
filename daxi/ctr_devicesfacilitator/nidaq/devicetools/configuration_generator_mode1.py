@@ -369,58 +369,119 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         # now mask and pikc from the all cycle dicts, to return a singel cycle configs.
         configs = {}
         # go through every devices, and map the devices configs for a single cycle.
-        configs['configs_metronome'] = self.map_sc_configs_metronome(view=None, color=None)
-        configs['configs_counter'] = self.map_sc_configs_counter(view=None, color=color)
-        configs['configs_DO_task_bundle'] = self.map_sc_configs_DO_task_bundle(view=None, color=color)
-        configs['configs_AO_task_bundle'] = self.map_sc_configs_AO_task_bundle(view=None, color=color)
-        configs['configs_scanning_galvo'] = self.map_sc_configs_scanning_galvo(view=None, color=color)
-        configs['configs_view_switching_galvo_1'] = self.map_sc_configs_view_switching_galvo_1(view=None, color=color)
-        configs['configs_view_switching_galvo_2'] = self.map_sc_configs_view_switching_galvo_2(view=None, color=color)
-        configs['configs_gamma_galvo_strip_reduction'] = self.map_sc_configs_gamma_galvo_strip_reduction(view=None, color=color)
-        configs['configs_beta_galvo_light_sheet_incident_angle'] = self.map_sc_configs_beta_galvo_light_sheet_incident_angle(view=None, color=color)
-        configs['configs_O1'] = self.map_sc_configs_O1(view=None, color=color)
-        configs['configs_O3'] = self.map_sc_configs_O3(view=None, color=color)
-        configs['configs_405_laser'] = self.map_sc_configs_405_laser(view=None, color=color)
-        configs['configs_488_laser'] = self.map_sc_configs_488_laser(view=None, color=color)
-        configs['configs_561_laser'] = self.map_sc_configs_561_laser(view=None, color=color)
-        configs['configs_639_laser'] = self.map_sc_configs_639_laser(view=None, color=color)
-        configs['configs_bright_field'] = self.map_sc_configs_bright_field(view=None, color=color)
+        configs['configs_metronome'] = self.map_sc_configs_metronome()
+        configs['configs_counter'] = self.map_sc_configs_counter()
+        configs['configs_DO_task_bundle'] = self.map_sc_configs_DO_task_bundle()
+        configs['configs_AO_task_bundle'] = self.map_sc_configs_AO_task_bundle()
+        configs['configs_scanning_galvo'] = self.map_sc_configs_scanning_galvo(view=view)
+        configs['configs_view_switching_galvo_1'] = self.map_sc_configs_view_switching_galvo_1(view=view, color=color)
+        configs['configs_view_switching_galvo_2'] = self.map_sc_configs_view_switching_galvo_2(view=view, color=color)
+        configs['configs_gamma_galvo_strip_reduction'] = \
+            self.map_sc_configs_gamma_galvo_strip_reduction(view=view, color=color)
+        configs['configs_beta_galvo_light_sheet_incident_angle'] = \
+            self.map_sc_configs_beta_galvo_light_sheet_incident_angle(view=view, color=color)
+        configs['configs_O1'] = self.map_sc_configs_O1(view=view, color=color)
+        configs['configs_O3'] = self.map_sc_configs_O3(view=view, color=color)
+        configs['configs_405_laser'] = self.map_sc_configs_405_laser(view=view, color=color)
+        configs['configs_488_laser'] = self.map_sc_configs_488_laser(view=view, color=color)
+        configs['configs_561_laser'] = self.map_sc_configs_561_laser(view=view, color=color)
+        configs['configs_639_laser'] = self.map_sc_configs_639_laser(view=view, color=color)
+        configs['configs_bright_field'] = self.map_sc_configs_bright_field(view=view, color=color)
         return configs
 
     def map_sc_configs_metronome(self, view=None, color=None):
-        # {'name': 'metronome',
-        #  'task type': 'CO',
-        #  'counter terminal': '/cDAQ1/_ctr0',
-        #  'counting output terminal': '/cDAQ1/Ctr0InternalOutput',
-        #  'idle state': 'LOW',
-        #  'frequency': 10000,
-        #  'sample mode': 'FINITE',
-        #  'number of samples': 1000,
-        #  'trigger terminal': '/cDAQ1/PFI0',
-        #  'trigger edge': 'RISING',
-        #  'retriggerable': True,
-        #  'purpose': 'to provide a metronome to orchestrate all DAQ profiles for both AO and DO outputs'}
-        #
         configs = self.configs_metronome
         return configs
 
     def map_sc_configs_counter(self, view=None, color=None):
-        return 0
+        configs = self.configs_counter
+        return configs
 
     def map_sc_configs_DO_task_bundle(self, view=None, color=None):
-        return 0
+        configs = self.configs_do_task_bundle
+        return configs
 
     def map_sc_configs_AO_task_bundle(self, view=None, color=None):
-        return 0
+        configs = self.configs_ao_task_bundle
+        return configs
 
     def map_sc_configs_scanning_galvo(self, view=None, color=None):
-        return 0
+        """
+
+        :param view:
+        :param color:
+        :return:
+        """
+        # configs={}
+        origin = self.configs_scanning_galvo
+        # configs['device'] = origin['devices']
+        configs =\
+            {'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'idle state': origin['idle state'],
+             'voltage output terminal': origin['voltage output terminal'],
+             'distance (um) to voltage (v) conversion factor (v/um)':
+                 origin['distance (um) to voltage (v) conversion factor (v/um)'],
+             'data': origin['data for view '+str(view)],
+             'data generator': origin['data generator'],
+             'data configs': {'type': origin['data configs']['type'],
+                              'linear ramp start': origin['data configs']['linear ramp start for view '+str(view)],
+                              'linear ramp stop': origin['data configs']['linear ramp stop for view '+str(view)],
+                              'linear ramp sample number': origin['data configs']['linear ramp sample number'],
+                              'soft retraction sample number': origin['data configs']['soft retraction sample number']}
+             }
+        return configs
 
     def map_sc_configs_view_switching_galvo_1(self, view=None, color=None):
-        return 0
+        """
+        desired:
+        {'data': None,
+         'data configs': {'acquisition mode': 1,
+                          'number of options for the sequence': 1,
+                          'off-duty sample number': 100,
+                          'on-duty sample number': 400,
+                          'type': 'ao subtask configuration',
+                          'voltage off': 0,
+                          'voltage on': 0},
+         'data generator': 'sequence',
+         'device': 'scanning_galvo',
+         'idle state': 'LOW',
+         'name': 'Scanning Galvo with linear ramp soft retraction',
+         'task type': 'AO subtask',
+         'voltage output terminal': 'cDAQ1AO/ao1'}
+
+
+        :param view:
+        :param color:
+        :return:
+        """
+        origin = self.configs_view_switching_galvo_1
+        configs={
+            'name': origin['name'],
+            'device': origin['device'],
+            'idle state': origin['idle state'],
+            'task type': origin['task type'],
+            'voltage output terminal': origin['voltage output terminal'],
+            'data': origin['data for view '+str(view)],
+            'data generator': origin['data generator'],
+            'data configs': origin['data configs'],
+        }
+        return configs
 
     def map_sc_configs_view_switching_galvo_2(self, view=None, color=None):
-        return 0
+        origin = self.configs_view_switching_galvo_2
+        configs={
+            'name': origin['name'],
+            'device': origin['device'],
+            'idle state': origin['idle state'],
+            'task type': origin['task type'],
+            'voltage output terminal': origin['voltage output terminal'],
+            'data': origin['data for view '+str(view)],
+            'data generator': origin['data generator'],
+            'data configs': origin['data configs'],
+        }
+        return configs
 
     def map_sc_configs_gamma_galvo_strip_reduction(self, view=None, color=None):
         return 0
