@@ -149,8 +149,8 @@ definition end.
 gamma_galvo_strip_reduction_galvo:
 definition start.
 {
-'device': 'scanning_galvo',
-'name': 'Scanning Galvo with linear ramp soft retraction',
+'device': 'gamma galvo',
+'name': 'Gamma Galvo with linear ramp soft retraction',
 'task type': 'AO subtask',
 'idle state': 'LOW',
 'voltage output terminal': None,
@@ -177,8 +177,8 @@ definition end.
 beta_galvo_light_sheet_incident_angle:
 definition start.
 {
-'device': 'scanning_galvo',
-'name': 'Scanning Galvo with linear ramp soft retraction',
+'device': 'beta galvo',
+'name': 'Beta Galvo with linear ramp soft retraction',
 'task type': 'AO subtask',
 'idle state': 'LOW',
 'voltage output terminal': None,
@@ -200,8 +200,8 @@ definition end.
 O1:
 definition start.
 {
-'device': 'scanning_galvo',
-'name': 'Scanning Galvo with linear ramp soft retraction',
+'device': 'O1',
+'name': 'O1',
 'task type': 'AO subtask',
 'idle state': 'LOW',
 'voltage output terminal': None,
@@ -223,8 +223,8 @@ definition end.
 O3:
 definition start.
 {
-'device': 'scanning_galvo',
-'name': 'Scanning Galvo with linear ramp soft retraction',
+'device': 'O3',
+'name': 'O3',
 'task type': 'AO subtask',
 'idle state': 'LOW',
 'voltage output terminal': None,

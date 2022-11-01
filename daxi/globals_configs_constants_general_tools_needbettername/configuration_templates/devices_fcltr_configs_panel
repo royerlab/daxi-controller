@@ -12,11 +12,11 @@ definition start.
                              'beta_galvo_light_sheet_incident_angle',\
                              'O1',\
                              'O3',\
-                             '405-laser',\
-                             '488-laser',\
-                             '561-laser',\
-                             '639-laser',\
-                             'bright-field',\
+                             '405_laser',\
+                             '488_laser',\
+                             '561_laser',\
+                             '639_laser',\
+                             'bright_field',\
                              ]
 }
 definition end.
@@ -162,11 +162,9 @@ gamma_galvo_strip_reduction_galvo:
 definition start.
 {
 'device': 'scanning_galvo',
-'name': 'Scanning Galvo with linear ramp soft retraction',
+'name': 'Gamma Galvo with linear ramp soft retraction',
 'task type': 'AO subtask',
 'idle state': 'LOW',
-'trigger terminal':"/cDAQ1/PFI0",
-'trigger edge': 'RISING',
 'voltage output terminal': "cDAQ1AO/ao3",
 'data': None,
 'data generator': 'linear_ramp_soft_retraction',
@@ -257,7 +255,7 @@ definition start.
 definition end.
 
 
------------------------------------- Physical Devices Section: 405-laser
+------------------------------------ Physical Devices Section: 405_laser
 405-laser:
 definition start.
 {
@@ -279,7 +277,7 @@ definition start.
 definition end.
 
 
------------------------------------- Physical Devices Section: 488-laser
+------------------------------------ Physical Devices Section: 488_laser
 488-laser:
 definition start.
 {
@@ -301,7 +299,7 @@ definition start.
 definition end.
 
 
------------------------------------- Physical Devices Section: 561-laser
+------------------------------------ Physical Devices Section: 561_laser
 561-laser:
 definition start.
 {
@@ -323,7 +321,7 @@ definition start.
 definition end.
 
 
------------------------------------- Physical Devices Section: 639-laser
+------------------------------------ Physical Devices Section: 639_laser
 639-laser:
 definition start.
 {
@@ -345,7 +343,7 @@ definition start.
 definition end.
 
 
------------------------------------- Physical Devices Section: bright-field
+------------------------------------ Physical Devices Section: bright_field
 bright-field:
 definition start.
 {

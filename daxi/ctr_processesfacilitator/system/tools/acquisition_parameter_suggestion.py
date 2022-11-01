@@ -236,6 +236,9 @@ class AcqParamBase:
                 "stage retraction time (ms)": self.t_stage_retraction,
                 "scanning galvo scan range per slice (um)": self.scanning_galvo_range_per_slice,
                 "scanning galvo scan range limit (um)": self.scanning_galvo_range_limit,
+                "metronome frequency": int(10000),
+                "views": self.views,
+                "colors": self.colors,
             }
 
 

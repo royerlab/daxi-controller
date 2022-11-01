@@ -16,6 +16,8 @@ from daxi.ctr_devicesfacilitator.nidaq.devicetools.generate_functions import DAQ
     Different types of task bundles shall be implemented as child classes of the TaskBundle class.
     Different types of sub tasks shall be implemented as child classes of the SubTask class.
     
+    # todo need a "swap data" method for the daq task bundles (think about it). so it changes 
+    with the change of [laser id, view id, acquisition mode]. but one set is one cycle.
 """
 
 
@@ -549,3 +551,4 @@ class Metronome:
         :return:
         """
         self.task_handle.close()
+

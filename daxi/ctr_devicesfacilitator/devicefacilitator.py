@@ -21,6 +21,7 @@ class DevicesFcltr:
     process facilitator) uses them through the receiver for the specific process.
 
     """
+
     def __init__(self):
         self.description = "This is the devices facilitator for DaXi microscope"
         self.subtask_ao_list = []
@@ -30,6 +31,7 @@ class DevicesFcltr:
         self.metronome = None
         self.devices_and_tools_collection = None
         self.taskbundle_ao = None
+        self.configs_all_cycles = {}
         self.configs_metronome = None
         self.configs_counter = None
         self.configs_AO_task_bundle = None
@@ -39,14 +41,23 @@ class DevicesFcltr:
         self.configs_view_switching_galvo_2 = None
         self.configs_gamma_galvo_strip_reduction = None
         self.configs_beta_galvo_light_sheet_incident_angle = None
+        self.configs_405_laser = None
+        self.configs_488_laser = None
+        self.configs_561_laser = None
+        self.configs_639_laser = None
+        self.configs_bright_field = None
         self.configs_O1 = None
         self.configs_O3 = None
+        self.configs_single_cycle_dict = None
 
-    def load_device_configs(self, device_configs_file, verbose=True):
+    def load_device_configs_one_cycle(self, device_configs_file, verbose=True):
         """
         It will take the configs_path as an input parameter, and load in all the configurations.
         Parameters
         load from the device_configs path
+        it will populate the following attributes for itself:
+        self.devices_and_tools_collection
+        self.configs_*specific_devices_and_tools
         ----------
         configs_path
 
@@ -73,19 +84,100 @@ class DevicesFcltr:
                     verbose=verbose
                 )
                 # assign the attributes
-                setattr(self, 'configs_'+device_tool, configs)
+                setattr(self, 'configs_' + device_tool, configs)
 
-    def receive_device_configs(self, device_configs):
+    def receive_device_configs_all_cycles(self, process_configs, device_configs_generator_class):
         """
 
-        :param device_configs: dict. It should be passed in by a command - a FocusedProcessFcltr type.
+        :param device_configs_generator_class: the class for device generator
+        :param process_configs: dict. It should be passed in by a command - a FocusedProcessFcltr type.
         (leave abstraction for future for now.)
         this should do things equivalent to load_device_configs, but instead of doing it from loading things from file,
         it receive from outside the dictionary - device_configs.
+        # pay attention to the difference between process_configs and devices configs.
         #todo implement the specifics.
+        doubl echeck and makes ure the device configuration generators generates the correct devices configs as done
+        in the load* function shown above.
+
+        there is process_configs, devices_configs, single_view_devices_configs
+        in this method, we receive a process_configs, a device_configs_generator.
+        we have to break it down into devices_configs, then break it down
+        into single_view_devices_configs, then generate the specific configs.
+        maybe the device configs generator class should break it down into single view configs generator.
+
+        the focused acquisiton fcltr should tell the device fcltr to map different sets of configurations, and tell the
+        devicesfcltr to update data without closing all devices. One cycle should be one pair of indexs that specifies
+        [light source index, view index].
+
+        think about what to receive in devicesfcltr, and how to do the update. all cycle will have all devices, and
+        mapping will be (blocking unused light source to be all off through out the sequence, and map the corresponding
+        view index, or synthesis based on the basic sequence through extension of metronome sequences, data, etc.)
+        For mode 1, we do picking and blocking. (so this requires awareness of acquisition mode specifics).
+        so perhaps this should be done by the process manager).
+
+        Should cycle mapping be done in devicesfcltr, or focused acquisition process fcltr? think about it.
+        if it is done in devicesfcltr: advantage is all deviced configurations are at the device level... disadvantage
+        is that hte device facilitator need to understand different focused acquisition processes.
+        if it is done in the focused acquisition process fcltr, then this fcltr has to understand a bit on the data
+        configuraitons.
+        OK it makes more sense to have it in the focused processes fcltr.
 
         :return: nothing
         """
+        # synthesize the configurations - process_parameter
+        process_parameters = process_configs['process configs']['acquisition parameters']
+
+        # synthesize the configurations - daq_terminal_configs
+        daq_terminal_configs = process_configs['device configurations']['nidaq_terminals']
+
+        # synthesize the configurations - calibration_records
+        calibration_records = process_configs['device configurations']['calibration_records']
+
+        # synthesize the configurations - alignment_records
+        alignment_records = process_configs['device configurations']['alignment_records']
+
+        # now get the configuration generator
+        configs_generator = \
+            device_configs_generator_class(params=process_parameters,
+                                           nidaq_terminals=daq_terminal_configs,
+                                           calibration_records=calibration_records,
+                                           alignment_records=alignment_records)
+
+        # now generate all device configurations
+        self.configs_all_cycles['configs_metronome'] = \
+            configs_generator.get_configs_for_metronome()
+        self.configs_all_cycles['configs_counter'] = \
+            configs_generator.get_configs_for_counter()
+        self.configs_all_cycles['configs_DO_task_bundle'] = \
+            configs_generator.get_configs_do_task_bundle()
+        self.configs_all_cycles['configs_AO_task_bundle'] = \
+            configs_generator.get_configs_ao_task_bundle()
+        self.configs_all_cycles['configs_scanning_galvo'] = \
+            configs_generator.get_configs_scanning_galvo(params=process_parameters)
+        self.configs_all_cycles['configs_view_switching_galvo_1'] = \
+            configs_generator.get_configs_view_switching_galvo_1(params=process_parameters)
+        self.configs_all_cycles['configs_view_switching_galvo_2'] = \
+            configs_generator.get_configs_view_switching_galvo_2(params=process_parameters)
+        self.configs_all_cycles['configs_gamma_galvo_strip_reduction'] = \
+            configs_generator.get_configs_gamma_galvo_strip_reduction(params=process_parameters)
+        self.configs_all_cycles['configs_beta_galvo_light_sheet_incident_angle'] = \
+            configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(process_parameters)
+        self.configs_all_cycles['configs_O1'] = \
+            configs_generator.get_configs_o1(process_parameters)
+        self.configs_all_cycles['configs_O3'] = \
+            configs_generator.get_configs_o3(process_parameters)
+        self.configs_all_cycles['configs_405_laser'] = \
+            configs_generator.get_configs_405_laser(process_parameters)
+        self.configs_all_cycles['configs_488_laser'] = \
+            configs_generator.get_configs_488_laser(process_parameters)
+        self.configs_all_cycles['configs_561_laser'] = \
+            configs_generator.get_configs_561_laser(process_parameters)
+        self.configs_all_cycles['configs_639_laser'] = \
+            configs_generator.get_configs_639_laser(process_parameters)
+        self.configs_all_cycles['configs_bright_field'] = \
+            configs_generator.get_configs_bright_field(process_parameters)
+        self.configs_single_cycle_dict = \
+            configs_generator.get_configs_single_cycle_dict(process_parameters)
 
     def show_devices_configs(self):
         """
@@ -147,7 +239,7 @@ class DevicesFcltr:
         # 2. make the subtasks objects, and generate data for each one of them.
         for st_configs in self.subtask_ao_configs_list:
             st = SubTaskAO(st_configs)
-            st.generate_data()         # todo - write data generators for all ao task types
+            st.generate_data()  # todo - write data generators for all ao task types
             self.subtask_ao_list.append(st)
 
     def daq_prepare_taskbundle_do(self):
@@ -179,7 +271,7 @@ class DevicesFcltr:
         # 2. make the subtasks objects, and generate data for each one of them.
         for st_configs in self.subtask_do_configs_list:
             st = SubTaskDO(st_configs)
-            st.generate_data()         # todo - write data generators for all ao task types
+            st.generate_data()  # todo - write data generators for all ao task types
             self.subtask_do_list.append(st)
 
     def daq_check_compatibility(self):

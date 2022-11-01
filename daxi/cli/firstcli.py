@@ -1,22 +1,18 @@
 import click
 from daxi.ctr_processesfacilitator.acquisition.acquisition_facilitator import AcquisitionFcltr
 from daxi.ctr_devicesfacilitator.devicefacilitator import DevicesFcltr
+from daxi.ctr_processesfacilitator.processes_facilitator import load_process_configs
 
-# todo figure out how to do the following later.
 """
 eventually, would want to run the command line as:
 >>> daxi -c [configs file path] to perform a process pre-defined in a configuration file.
 
 but now, implement in a simple way just so we can use it.
 python cli/firstcli.py -c [path-to-configs] 
-
+# todo figure out how to do the following later.
 """
 
 
-@click.command()
-@click.option('--process', '-p', default='rconfigs', help='choose "rconfigs" to run from configuration file')
-@click.option('--configs_path', '-c', prompt='the full path of the configuration file',
-              help='input the full path of the process configuration file')
 class CliInvoker:
     """
     this is the invoker type in the command pattern.
@@ -39,14 +35,18 @@ class CliInvoker:
         """
         self.history.append(process)
         self.process = process
+        assert self.process is not None
 
-    def execute_process(self, process_configs):
+    def execute_process(self, device_fcltr, process_configs):
         """ this will execute the command with the configurations specified in configs """
-        self.process.execute(process_configs)
+        self.process.execute(device_fcltr=device_fcltr, configs=process_configs)
         # the focused process facilitators all should have an execute method. develop the abstraction
         # when many focused process facilitators are implemented.
 
 
+@click.command()
+@click.option('--configs_path', '-c', prompt='the full path of the configuration file',
+              help='input the full path of the process configuration file')
 def acquire(configs_path):
     """
     familiarize with with "command pattern" before you re-start implementing this module.
@@ -66,6 +66,9 @@ def acquire(configs_path):
     Here we are implementing with mode1 acquisition as a starting point. the process configurations would contain
     acquisition parameters (likewise, there should be calibration parameters, alignment parameters,
     inspection parameters, etc.), and device parameters. (16 pieces of physical and virtual devices).
+    This data would be passed to the receiver by the command upon request by the client, and the receiver will
+    translate and populate the specific configurations upon "receive configurations". the "receive configurations"
+    method should produce something identical to the method to load the configurations.
 
     These configurations should be pared with the device_configs_core (when generate I guess?), as well as the alignment
     and calibration records. configuration should not generate data, it should only store the configurations. unless the
@@ -103,13 +106,25 @@ def acquire(configs_path):
 
 
     """
-    # receiver
-    device_fcltr = DevicesFcltr()  # this is the receiver object
-    configs = get_configs(configs_path)  # this is the data that is delivered to the receiver through the command.
-    acquisition = AcquisitionFcltr()  # this is the command object. it does not create nor destroy the device_fcltr, it only access the device_fcltr. destroying
-    # acquisition do not destroy the device_fcltr instances.
+    print('will perform acquisition specified in' + configs_path)
+    # get the configuration files (that specifies the execution of the process). it is the data that will be delivered
+    # to the receiver through the command
+    configs = load_process_configs(path=configs_path)
+
+    # create a DevicesFcltr (create the receiver)
+    device_fcltr = DevicesFcltr()
+
+    # create the AcquisitionFcltr that takes the DevicesFcltr
+    acquisition = AcquisitionFcltr()
+    # this is the command object. it does not create or destroy the device_fcltr,
+
+    # create an invoker
     invoker = CliInvoker()
-    invoker.invoke(concrete_command=acquisition(receiver=device_fcltr, data=configs))
+
+    # it only access the device_fcltr. destroying
+    # acquisition do not destroy the device_fcltr instances.
+    invoker.add_process(process=acquisition)  # log the process after execute.
+    invoker.execute_process(device_fcltr=device_fcltr, process_configs=configs)
 
     # invoker takes a concrete command that takes a receiver with it, it invokes the method of a receiver through the
     # execute() method in the concrete command.
