@@ -33,6 +33,8 @@ df.receive_device_configs_all_cycles(process_configs=configs,
 # should have an extra step to choose a view/color, and map it to the
 # single cycle configs, then move on.
 
+df.checkout_single_cycle_configs(key='view1 color488')
+
 # 2. prepare subtasks and calculate the data for all subtasks
 df.daq_prepare_subtasks_ao()
 df.daq_prepare_subtasks_do()

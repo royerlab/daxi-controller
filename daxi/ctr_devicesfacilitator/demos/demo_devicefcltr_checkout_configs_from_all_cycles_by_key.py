@@ -1,5 +1,3 @@
-
-
 # first load and receive all configurations from tempalte
 # check demo_devicesfcltr_receive_and_map_configs.py for details
 
@@ -28,7 +26,7 @@ def demo_devicefcltr_checkout_configs_from_all_cycles_by_key(verbose=True):
 
     # mapping
     if verbose:
-        print('mapping')
+        print('mapping/checking out a configuration for a single cycle')
     df.checkout_single_cycle_configs(key='view1 color488')
     assert df.configs_405_laser is not None
 
@@ -38,6 +36,7 @@ def demo_devicefcltr_checkout_configs_from_all_cycles_by_key(verbose=True):
         pprint(df.configs_405_laser)
 
     return 'success'
+
 
 if __name__ == "__main__":
     demo_devicefcltr_checkout_configs_from_all_cycles_by_key(verbose=False)
