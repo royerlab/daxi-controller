@@ -402,53 +402,53 @@ def test_receive_device_single_cycle_configs_O3():
         assert_configs_O3(df.configs_single_cycle_dict[c]['configs_O3'])
 
 
-# def test_receive_device_single_cycle_configs_405_laser():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_405_laser(df.configs_single_cycle_dict[c]['configs_405_laser'])
+def test_receive_device_single_cycle_configs_405_laser():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_405_laser(df.configs_single_cycle_dict[c]['configs_405_laser'])
 
 
-# def test_receive_device_single_cycle_configs_488_laser():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_488_laser(df.configs_single_cycle_dict[c]['configs_488_laser'])
+def test_receive_device_single_cycle_configs_488_laser():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_488_laser(df.configs_single_cycle_dict[c]['configs_488_laser'])
 
 
-# def test_receive_device_single_cycle_configs_561_laser():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_561_laser(df.configs_single_cycle_dict[c]['configs_561_laser'])
+def test_receive_device_single_cycle_configs_561_laser():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_561_laser(df.configs_single_cycle_dict[c]['configs_561_laser'])
 
 
-# def test_receive_device_single_cycle_configs_639_laser():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_639_laser(df.configs_single_cycle_dict[c]['configs_639_laser'])
+def test_receive_device_single_cycle_configs_639_laser():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_639_laser(df.configs_single_cycle_dict[c]['configs_639_laser'])
 
 
-# def test_receive_device_single_cycle_configs_bright_field():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_bright_field(df.configs_single_cycle_dict[c]['configs_bright_field'])
+def test_receive_device_single_cycle_configs_bright_field():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_bright_field(df.configs_single_cycle_dict[c]['configs_bright_field'])
 
 

@@ -30,7 +30,7 @@ configs = load_process_configs(path=path)
 df2.receive_device_configs_all_cycles(process_configs=configs,
                                       device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
-print(df2.configs_all_cycles['configs_O1'].keys())
+print(df2.configs_all_cycles['configs_405_laser'].keys())
 
-pprint.pprint(df.configs_O1)
+pprint.pprint(df.configs_405_laser)
 # pprint.pprint(df2.configs_all_cycles['configs_beta_galvo_light_sheet_incident_angle'])

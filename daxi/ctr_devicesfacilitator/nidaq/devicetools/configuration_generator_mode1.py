@@ -570,16 +570,96 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return configs
 
     def map_sc_configs_405_laser(self, view=None, color=None):
-        return 0
+        origin=self.configs_405_laser
+        if color == '405':
+            data405=origin['data']
+        else:
+            data405=[False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data405,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
 
     def map_sc_configs_488_laser(self, view=None, color=None):
-        return 0
+        origin = self.configs_488_laser
+        if color == '488':
+            data488 = origin['data']
+        else:
+            data488 = [False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data488,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
 
     def map_sc_configs_561_laser(self, view=None, color=None):
-        return 0
+        origin = self.configs_561_laser
+        if color == '561':
+            data561 = origin['data']
+        else:
+            data561 = [False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data561,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
 
     def map_sc_configs_639_laser(self, view=None, color=None):
-        return 0
+        origin = self.configs_639_laser
+        if color == '639':
+            data639 = origin['data']
+        else:
+            data639 = [False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data639,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
 
     def map_sc_configs_bright_field(self, view=None, color=None):
-        return 0
+        origin = self.configs_bright_field
+        if color == 'bright_field':
+            data_bright_field = origin['data']
+        else:
+            data_bright_field = [False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data_bright_field,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
