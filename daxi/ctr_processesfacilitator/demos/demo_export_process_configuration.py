@@ -16,7 +16,7 @@ m = AcqParamMode1(dx=0.4,
                   colors=['488', '561'],
                   number_of_scans_per_timepoint=1,
                   slice_color_list=None,
-                  positions=None,
+                  positions={'position name 1': {'x': 1, 'y': 10}, 'position name 2': {'x': 23, 'y': 12}},
                   views=['1', '2'],
                   positions_views_list=None,
                   )

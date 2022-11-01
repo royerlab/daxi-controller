@@ -24,7 +24,11 @@ definition start.
  'slice distance (um)': 2.0,
  'stage retraction time (ms)': 23,
  'time per stack per view (s)': 35.423,
- 'time per time point (s)': 141.692
+ 'time per time point (s)': 141.692,
+ 'positions':{
+                "position name 1": {'x': 1, 'y': 10},
+                "position name 2": {'x': 2, 'y': 11},
+             }
 }
 definition end.
 

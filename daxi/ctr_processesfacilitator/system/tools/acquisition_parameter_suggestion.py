@@ -239,6 +239,7 @@ class AcqParamBase:
                 "metronome frequency": int(10000),
                 "views": self.views,
                 "colors": self.colors,
+                "positions": self.positions,
             }
 
 

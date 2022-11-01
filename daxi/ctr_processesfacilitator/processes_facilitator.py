@@ -56,7 +56,13 @@ class ProcessesFcltr(ProcessesFcltrGUI):
         (the gui can generate the parameter dictionary from all fileds configurations, or load from a file, etc.).
         :return:
         """
-        self.configs_asistage = None
+        configs = {
+            "speed": 100,
+            "position name 1": {'x': 1, 'y': 10},
+            "position name 2": {'x': 2, 'y': 11},
+        }  # this is a place holder, should expand in the future. this is currently in the parameter selection and it is
+        # part of the acquisition_configs. the information should be extracted from the GUI.
+        self.configs_asistage = configs
 
     def get_configs_hamamatsu(self):
         """
@@ -64,7 +70,10 @@ class ProcessesFcltr(ProcessesFcltrGUI):
         (the gui can generate the parameter dictionary from all fileds configurations, or load from a file, etc.).
         :return:
         """
-        self.configs_hamamatsu = None
+        configs = {
+            "camera name": 'hamamatsu orca flash 4',
+        }  # this is a placeholder.
+        self.configs_hamamatsu = configs
 
     def get_configs_save_data(self):
         """
