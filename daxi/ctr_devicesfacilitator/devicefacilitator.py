@@ -176,8 +176,16 @@ class DevicesFcltr:
             configs_generator.get_configs_639_laser(process_parameters)
         self.configs_all_cycles['configs_bright_field'] = \
             configs_generator.get_configs_bright_field(process_parameters)
+        # all the configurations are mapped to a dictionary that stores different cycle types,
+        # specified by its own dictionary keys with acquisition-mode specific name patterns.
         self.configs_single_cycle_dict = \
             configs_generator.get_configs_single_cycle_dict(process_parameters)
+
+    def checkout_single_cycle_configs(self, key=None):
+        configs = self.configs_single_cycle_dict[key]
+        # now map all the attributes in configs into this object
+        for k in configs.keys():
+            setattr(self, k, configs[k])
 
     def show_devices_configs(self):
         """
@@ -233,13 +241,14 @@ class DevicesFcltr:
         for key in self.__dict__.keys():
             if key.startswith('configs_'):
                 config = getattr(self, key)
-                if config['task type'] == 'AO subtask':
-                    self.subtask_ao_configs_list.append(config)
+                if config is not None and 'task type' in config.keys():
+                    if config['task type'] == 'AO subtask':
+                        self.subtask_ao_configs_list.append(config)
 
         # 2. make the subtasks objects, and generate data for each one of them.
         for st_configs in self.subtask_ao_configs_list:
             st = SubTaskAO(st_configs)
-            st.generate_data()  # todo - write data generators for all ao task types
+            # st.generate_data()  # todo - write data generators for all ao task types. so data genrator is done upon configuration generations. try comment this out.
             self.subtask_ao_list.append(st)
 
     def daq_prepare_taskbundle_do(self):
@@ -265,13 +274,14 @@ class DevicesFcltr:
         for key in self.__dict__.keys():
             if key.startswith('configs_'):
                 config = getattr(self, key)
-                if config['task type'] == 'DO subtask':
-                    self.subtask_do_configs_list.append(config)
+                if config is not None and 'task type' in config.keys():
+                    if config['task type'] == 'DO subtask':
+                        self.subtask_do_configs_list.append(config)
 
         # 2. make the subtasks objects, and generate data for each one of them.
         for st_configs in self.subtask_do_configs_list:
             st = SubTaskDO(st_configs)
-            st.generate_data()  # todo - write data generators for all ao task types
+            # st.generate_data()  # todo - write data generators for all ao task types so data genrator is done upon configuration generations. try comment this out.
             self.subtask_do_list.append(st)
 
     def daq_check_compatibility(self):

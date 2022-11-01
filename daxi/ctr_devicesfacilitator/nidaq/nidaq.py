@@ -190,7 +190,10 @@ class TaskBundleAO(TaskBundle):
 
         # 5, write data of all ao sub_task to the device
         for sub_task in self.sub_tasks:
-            self.data_list.append(sub_task.generate_data())
+            # if sub_task.data is not None:
+            self.data_list.append(sub_task.data)
+
+            # self.data_list.append(sub_task.generate_data())
 
         if len(self.data_list) == 1:
             self.task_handle.write(self.data_list[0])
@@ -228,7 +231,8 @@ class TaskBundleDO(TaskBundle):
 
         # 5. write data of all do subtasks to the device (same with ao)
         for sub_task in self.sub_tasks:
-            self.data_list.append(sub_task.generate_data())
+            # self.data_list.append(sub_task.generate_data())
+            self.data_list.append(sub_task.data)
 
         if len(self.data_list) == 1:
             self.task_handle.write(self.data_list[0])
@@ -265,6 +269,8 @@ class SubTaskAO(SubTask):
         self.data_generator = subtask_configs['data generator']
         self.data_configs = subtask_configs['data configs']
         self.data = None
+        if subtask_configs['data'] is not None:
+            self.data = subtask_configs['data']
         self.name = subtask_configs['name']
         self.device = subtask_configs['device']
 
@@ -336,6 +342,8 @@ class SubTaskDO(SubTask):
         self.data_generator = subtask_configs['data generator']
         self.data_configs = subtask_configs['data configs']
         self.data = None
+        if subtask_configs['data'] is not None:
+            self.data = subtask_configs['data']
         self.name = subtask_configs['name']
         self.device = subtask_configs['device']
 

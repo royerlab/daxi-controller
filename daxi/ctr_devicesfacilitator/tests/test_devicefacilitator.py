@@ -450,5 +450,3 @@ def test_receive_device_single_cycle_configs_bright_field():
                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
     for c in df.configs_single_cycle_dict.keys():
         assert_configs_bright_field(df.configs_single_cycle_dict[c]['configs_bright_field'])
-
-
