@@ -1,4 +1,4 @@
-from daxi.ctr_devicesfacilitator.demos.demo_devicefcltr_checkout_configs_from_all_cycles_by_key import \
+from daxi.ctr_devicesfacilitator.demos.demo_devicesfcltr_checkout_configs_from_all_cycles_by_key import \
     demo_devicefcltr_checkout_configs_from_all_cycles_by_key
 
 

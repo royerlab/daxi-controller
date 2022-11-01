@@ -2,7 +2,6 @@
 This facilitator should interact with the main gui, comsolidate all the configurations and send it to
 the device and data tools facilitators.
 """
-from daxi.ctr_devicesfacilitator.devicefacilitator import DevicesFcltr
 
 
 class AcquisitionFcltr():
@@ -23,7 +22,7 @@ class AcquisitionFcltr():
         # advantage of making the receiver and data as attributes of the command: it will be logged by the invoker, so
         # there is a record of all the specifics.
 
-    def execute(self, device_fcltr, configs):
+    def execute(self, device_fcltr, process_configs):
         """
         look at the configurations and perform the acquisition for all devices.
         this object serves as a command.
@@ -32,7 +31,7 @@ class AcquisitionFcltr():
         :return:
         """
         self.device_fcltr = device_fcltr
-        self.configs = configs
+        self.configs = process_configs
         if self.configs['process configs']['process type'] == 'acquisition, mode 1':
             self.acquisition_mode1()
 
@@ -41,9 +40,14 @@ class AcquisitionFcltr():
     def acquisition_mode1(self):
         # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
 
-        # ASI stage get ready (handle the receivers)
-        # camera get ready
-        # daq card configure and everybody get ready
+        # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a working daq is done)
+        # copy/organize from the previous ad-hoc in the old_workbench
+        # demo - indevelopment -set raster scanning speed.py
+        # think:
+        # this should be in device facilitator
+
+        # camera get ready (for now, display an image to prompt the user to run the HCI)
+        # daq card configure and everybody get ready (do it through the DevicesFcilitator, map, chekcout 1 configuration and start everything)
         # loop over positions
             # move the stage to the position
             # loop over view

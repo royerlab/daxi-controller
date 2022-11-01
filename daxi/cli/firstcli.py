@@ -39,14 +39,14 @@ class CliInvoker:
 
     def execute_process(self, device_fcltr, process_configs):
         """ this will execute the command with the configurations specified in configs """
-        self.process.execute(device_fcltr=device_fcltr, configs=process_configs)
+        self.process.execute(device_fcltr=device_fcltr, process_configs=process_configs)
         # the focused process facilitators all should have an execute method. develop the abstraction
         # when many focused process facilitators are implemented.
 
 
 @click.command()
 @click.option('--configs_path', '-c', prompt='the full path of the configuration file',
-              help='input the full path of the process configuration file')
+              help='please type in the full path of the process configuration file')
 def acquire(configs_path):
     """
     familiarize with with "command pattern" before you re-start implementing this module.
