@@ -104,7 +104,7 @@ def assert_configs_view_switching_galvo_2(configs_view_switching_galvo_2: dict):
 
 def assert_configs_gamma_galvo_strip_reduction(configs_gamma_galvo_strip_reduction: dict):
     assert set(configs_gamma_galvo_strip_reduction.keys()) == \
-           set(['device', 'name', 'task type', 'idle state', 'trigger terminal', 'trigger edge', 'voltage output terminal',
+           set(['device', 'name', 'task type', 'idle state', 'voltage output terminal',
             'data', 'data generator', 'data configs'])
 
 
@@ -362,24 +362,44 @@ def test_receive_device_single_cycle_configs_view_switching_galvo_2():
         assert_configs_view_switching_galvo_2(df.configs_single_cycle_dict[c]['configs_view_switching_galvo_2'])
 
 
-# def test_receive_device_single_cycle_configs_gamma_galvo_strip_reduction():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_gamma_galvo_strip_reduction(df.configs_single_cycle_dict[c]['configs_gamma_galvo_strip_reduction'])
+def test_receive_device_single_cycle_configs_gamma_galvo_strip_reduction():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_gamma_galvo_strip_reduction(df.configs_single_cycle_dict[c]['configs_gamma_galvo_strip_reduction'])
 
 
-# def test_receive_device_single_cycle_configs_beta_galvo_light_sheet_incident_angle():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_beta_galvo_light_sheet_incident_angle(df.configs_single_cycle_dict[c]['configs_beta_galvo_light_sheet_incident_angle'])
+def test_receive_device_single_cycle_configs_beta_galvo_light_sheet_incident_angle():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_beta_galvo_light_sheet_incident_angle(df.configs_single_cycle_dict[c]['configs_beta_galvo_light_sheet_incident_angle'])
+
+
+def test_receive_device_single_cycle_configs_O1():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_O1(df.configs_single_cycle_dict[c]['configs_O1'])
+
+
+def test_receive_device_single_cycle_configs_O3():
+    path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+    process_configs = load_process_configs(path=path)
+    df = DevicesFcltr()
+    df.receive_device_configs_all_cycles(process_configs=process_configs,
+                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_single_cycle_dict.keys():
+        assert_configs_O3(df.configs_single_cycle_dict[c]['configs_O3'])
 
 
 # def test_receive_device_single_cycle_configs_405_laser():
@@ -430,25 +450,5 @@ def test_receive_device_single_cycle_configs_view_switching_galvo_2():
 #                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 #     for c in df.configs_single_cycle_dict.keys():
 #         assert_configs_bright_field(df.configs_single_cycle_dict[c]['configs_bright_field'])
-
-
-# def test_receive_device_single_cycle_configs_O1():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_O1(df.configs_single_cycle_dict[c]['configs_O1'])
-
-
-# def test_receive_device_single_cycle_configs_O3():
-#     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
-#     process_configs = load_process_configs(path=path)
-#     df = DevicesFcltr()
-#     df.receive_device_configs_all_cycles(process_configs=process_configs,
-#                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-#     for c in df.configs_single_cycle_dict.keys():
-#         assert_configs_O3(df.configs_single_cycle_dict[c]['configs_O3'])
 
 

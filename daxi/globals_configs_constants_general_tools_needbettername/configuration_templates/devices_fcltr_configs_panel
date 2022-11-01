@@ -162,11 +162,9 @@ gamma_galvo_strip_reduction_galvo:
 definition start.
 {
 'device': 'scanning_galvo',
-'name': 'Scanning Galvo with linear ramp soft retraction',
+'name': 'Gamma Galvo with linear ramp soft retraction',
 'task type': 'AO subtask',
 'idle state': 'LOW',
-'trigger terminal':"/cDAQ1/PFI0",
-'trigger edge': 'RISING',
 'voltage output terminal': "cDAQ1AO/ao3",
 'data': None,
 'data generator': 'linear_ramp_soft_retraction',
