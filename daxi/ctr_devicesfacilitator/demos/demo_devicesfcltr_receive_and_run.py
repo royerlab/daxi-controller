@@ -30,8 +30,8 @@ configs = load_process_configs(path=path)
 df.receive_device_configs_all_cycles(process_configs=configs,
                                      device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
-## should have an extra step to choose a view/color, and map it to the
-# single cylce configs, then move on.
+# should have an extra step to choose a view/color, and map it to the
+# single cycle configs, then move on.
 
 # 2. prepare subtasks and calculate the data for all subtasks
 df.daq_prepare_subtasks_ao()

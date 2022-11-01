@@ -176,8 +176,16 @@ class DevicesFcltr:
             configs_generator.get_configs_639_laser(process_parameters)
         self.configs_all_cycles['configs_bright_field'] = \
             configs_generator.get_configs_bright_field(process_parameters)
+        # all the configurations are mapped to a dictionary that stores different cycle types,
+        # specified by its own dictionary keys with acquisition-mode specific name patterns.
         self.configs_single_cycle_dict = \
             configs_generator.get_configs_single_cycle_dict(process_parameters)
+
+    def checkout_single_cycle_configs(self, key=None):
+        configs = self.configs_single_cycle_dict[key]
+        # now map all the attributes in configs into this object
+        for k in configs.keys():
+            setattr(self, k, configs[k])
 
     def show_devices_configs(self):
         """
