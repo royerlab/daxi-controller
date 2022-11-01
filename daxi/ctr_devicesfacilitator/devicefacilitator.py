@@ -241,8 +241,9 @@ class DevicesFcltr:
         for key in self.__dict__.keys():
             if key.startswith('configs_'):
                 config = getattr(self, key)
-                if config['task type'] == 'AO subtask':
-                    self.subtask_ao_configs_list.append(config)
+                if config is not None and 'task type' in config.keys():
+                    if config['task type'] == 'AO subtask':
+                        self.subtask_ao_configs_list.append(config)
 
         # 2. make the subtasks objects, and generate data for each one of them.
         for st_configs in self.subtask_ao_configs_list:
@@ -273,8 +274,9 @@ class DevicesFcltr:
         for key in self.__dict__.keys():
             if key.startswith('configs_'):
                 config = getattr(self, key)
-                if config['task type'] == 'DO subtask':
-                    self.subtask_do_configs_list.append(config)
+                if config is not None and 'task type' in config.keys():
+                    if config['task type'] == 'DO subtask':
+                        self.subtask_do_configs_list.append(config)
 
         # 2. make the subtasks objects, and generate data for each one of them.
         for st_configs in self.subtask_do_configs_list:
