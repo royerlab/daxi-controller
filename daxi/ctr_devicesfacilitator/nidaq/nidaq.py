@@ -152,16 +152,10 @@ class TaskBundle:
             self.task_handle['status'] = 'closed'
 
     def update_data(self):
-        if self.devices_connected:
-            self.task_handle.update_data()
-        else:
-            self.task_handle['update data:'] = 'done'
-
-    def write_data(self):
-        if self.devices_connected:
-            self.write_data()
-        else:
-            self.task_handle['write data'] = 'wrote data'
+        print('          this update the data_list for both ao and do, in the same format.')
+        for sub_task in self.sub_tasks:
+            # if sub_task.data is not None:
+            self.data_list.append(sub_task.data)
 
     def checkout_a_task(self):
         if self.devices_connected:
@@ -209,9 +203,6 @@ class TaskBundle:
     def write_data(self):
         if self.devices_connected:
             # 5, write data of all ao sub_task to the device
-            for sub_task in self.sub_tasks:
-                # if sub_task.data is not None:
-                self.data_list.append(sub_task.data)
 
                 # self.data_list.append(sub_task.generate_data())
 
@@ -291,6 +282,7 @@ class TaskBundleAO(TaskBundle):
         #     self.write_data()
         # else:
         #     self.task_handle['write data'] = 'wrote data'
+        self.update_data()
         self.write_data()
 
     def update_subtasks_data(self):

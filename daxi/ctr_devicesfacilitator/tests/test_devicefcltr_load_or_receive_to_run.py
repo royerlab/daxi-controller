@@ -13,6 +13,11 @@ def test_devicefcltr_load_and_run():
 
 
 @pytest.mark.skipif(devices_connected is False, reason="This test requires daq cards to be connected.")
-def test_devicefcltr_load_and_run():
+def test_devicefcltr_receive_map_checkout_and_run():
     msg = demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=False)
+    assert msg is 'success'
+
+
+def test_devicefcltr_receive_map_checkout_and_run():
+    msg = demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=False,devices_connected=False)
     assert msg is 'success'

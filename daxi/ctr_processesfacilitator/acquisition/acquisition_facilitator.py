@@ -95,10 +95,10 @@ class AcquisitionFcltr():
 
             # loop over views
             for view in view_list:
-                print(' --- now going to this view' + str(view))
+                print(' --- now going to this view: view' + str(view))
                 # loop over colors
                 for color in color_list:
-                    print(' --- --- now switching to this color ' + str(color))
+                    print(' --- --- now switching to this color: color' + str(color))
                     # move the filter wheel
                     # think about it:
                     # this should be done under devices facilitator and should be calling the serial devices.

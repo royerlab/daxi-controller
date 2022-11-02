@@ -185,7 +185,7 @@ class DevicesFcltr:
 
     def checkout_single_cycle_configs(self, key=None, verbose=False):
         if verbose:
-            print('checking out a singel cycle configuration for '+str(key))
+            print('          checking out a single  cycle configuration for '+str(key))
         configs = self.configs_single_cycle_dict[key]
         # now map all the attributes in configs into this object
         for k in configs.keys():
@@ -413,7 +413,8 @@ class DevicesFcltr:
         :param color:
         :return:
         """
-        print("        Move Filter Wheel: we will move the filter will to the following color: "+str(color))
+        print("          Move Filter Wheel: we will move the filter wheel to the following color: "+str(color))
+        # need to have a configuration file of filters in the configs.
         pass
 
     def direct_device_placeholder(self):
@@ -425,9 +426,9 @@ class DevicesFcltr:
         """
 
     def camera_start(self):
-        print("this will start the camera, leave it out for now. will implement in the future.")
+        print("          this will start the camera, leave it out for now. will implement in the future.")
         pass
 
     def stage_start(self):
-        print("this will start the stage, leave it out for now. will implement in the future.")
+        print("          this will start the stage, leave it out for now. will implement in the future.")
         pass
