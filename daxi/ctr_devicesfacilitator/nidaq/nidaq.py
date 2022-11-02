@@ -204,7 +204,7 @@ class TaskBundleAO(TaskBundle):
 
 class TaskBundleDO(TaskBundle):
     """
-    This is a class for configuring the DO task bundls.
+    This is a class for configuring the DO task bundles.
     note that for DO task bundles, there is no need for
     configuring the trigger in the 'get_ready' method
 

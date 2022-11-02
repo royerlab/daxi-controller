@@ -61,6 +61,9 @@ class AcquisitionFcltr():
         for position in position_list:
             print('\n moving to this position: ' + str(position))
             # move the stage to the position
+
+            # need to get devices ready before looping
+
             # loop over views
             for view in view_list:
                 print(' --- now going to this view' + str(view))
@@ -74,10 +77,12 @@ class AcquisitionFcltr():
 
                     # based on the view and color indexes, choose a daq data cycle index. (This is actually implemented
                     # in DevicesFcltr)
-                    self.devices_fcltr.checkout_single_cycle_configs(key=['view'+str(view)+' color'+str(color)],
+                    self.devices_fcltr.checkout_single_cycle_configs(key='view'+str(view)+' color'+str(color),
                                                                      verbose=True)
                     # write data to daq card again for the changed cycle index.
-                    # start daq card
+                    # start daq card (waiting for the trigger)
+                    # start camera (waiting for the trigger)
+                    # start raster scan of asi-stage (will send out the trigger)
                     # loop over slice›
                     # stop(pause) daq card
 
