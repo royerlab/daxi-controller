@@ -15,7 +15,7 @@ af = AcquisitionFcltr()  # checkout an acquisition facilitator.
 # the acquisition facilitator is a type of "focused process facilitator", that is intended to serve as a command invoked
 # by a client that is either a cli, or the general purpose process facilitator ProcessesFcltr class.
 # it's receiver is a device facilitator, and the data it passes are the configurations (of type process_configs ->
-# todo should standardize and document the configuration types at somepoint).
+# todo should standardize and document the configuration types at some point).
 
 # checkout a device facilitator
 # 0.  checkout a devices facilitator

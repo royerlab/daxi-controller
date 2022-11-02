@@ -22,7 +22,8 @@ class DevicesFcltr:
 
     """
 
-    def __init__(self):
+    def __init__(self, devices_connected=True):
+        self.devices_connected = devices_connected
         self.description = "This is the devices facilitator for DaXi microscope"
         self.subtask_ao_list = []
         self.subtask_ao_configs_list = []
@@ -31,6 +32,7 @@ class DevicesFcltr:
         self.metronome = None
         self.devices_and_tools_collection = None
         self.taskbundle_ao = None
+        self.taskbundle_do = None
         self.configs_all_cycles = {}
         self.configs_metronome = None
         self.configs_counter = None
@@ -209,7 +211,7 @@ class DevicesFcltr:
         -------
 
         """
-        self.metronome = Metronome()
+        self.metronome = Metronome(devices_connected=self.devices_connected)
         self.metronome.set_configurations(self.configs_metronome)
 
     def daq_prepare_counter(self):
@@ -228,7 +230,7 @@ class DevicesFcltr:
         -------
 
         """
-        self.taskbundle_ao = TaskBundleAO()
+        self.taskbundle_ao = TaskBundleAO(devices_connected=self.devices_connected)
         self.taskbundle_ao.set_configurations(self.configs_AO_task_bundle)
 
     def daq_prepare_subtasks_ao(self):
@@ -238,7 +240,7 @@ class DevicesFcltr:
         -------
 
         """
-        # 1. make a list of AO subtasks
+        # 1. make a list of AO subtasks configurations.
         self.subtask_ao_configs_list = []
         for key in self.__dict__.keys():
             if key.startswith('configs_'):
@@ -260,7 +262,7 @@ class DevicesFcltr:
         -------
 
         """
-        self.taskbundle_do = TaskBundleDO()
+        self.taskbundle_do = TaskBundleDO(devices_connected=self.devices_connected)
         self.taskbundle_do.set_configurations(self.configs_DO_task_bundle)
         pass
 
@@ -367,6 +369,30 @@ class DevicesFcltr:
         self.taskbundle_ao.close()
         self.taskbundle_do.close()
         self.metronome.close()
+        # todo add counter channels.
+
+    def daq_update_data(self):
+        """
+        close all devices
+        Returns
+        -------
+
+        """
+        self.taskbundle_ao.update_data()
+        self.taskbundle_do.update_data()
+        # todo add counter channels.
+
+    def daq_write_data(self):
+        """
+        close all devices
+        Returns
+        -------
+
+        """
+        self.taskbundle_ao.write_data()
+        self.taskbundle_do.write_data()
+        self.metronome.write_data()
+        # todo add counter channels.
 
     def serial_placeholder(self):
         """
@@ -397,3 +423,11 @@ class DevicesFcltr:
         -------
 
         """
+
+    def camera_start(self):
+        print("this will start the camera, leave it out for now. will implement in the future.")
+        pass
+
+    def stage_start(self):
+        print("this will start the stage, leave it out for now. will implement in the future.")
+        pass
