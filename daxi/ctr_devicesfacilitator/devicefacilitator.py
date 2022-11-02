@@ -181,7 +181,9 @@ class DevicesFcltr:
         self.configs_single_cycle_dict = \
             configs_generator.get_configs_single_cycle_dict(process_parameters)
 
-    def checkout_single_cycle_configs(self, key=None):
+    def checkout_single_cycle_configs(self, key=None, verbose=False):
+        if verbose:
+            print('checking out a singel cycle configuration for '+str(key))
         configs = self.configs_single_cycle_dict[key]
         # now map all the attributes in configs into this object
         for k in configs.keys():
@@ -373,6 +375,20 @@ class DevicesFcltr:
         -------
 
         """
+
+    def serial_move_filter_wheel(self, color):
+        """
+        should implement this in the future....
+        start by looking in old_workbench asistage serialpot.py or something...
+
+        # todo - should implement move filter wheel...
+        OK now start to see the logic of the "empty skeleton" like style in coPylot :P
+
+        :param color:
+        :return:
+        """
+        print("        Move Filter Wheel: we will move the filter will to the following color: "+str(color))
+        pass
 
     def direct_device_placeholder(self):
         """

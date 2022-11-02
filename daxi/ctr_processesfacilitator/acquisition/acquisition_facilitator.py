@@ -15,7 +15,7 @@ class AcquisitionFcltr():
         virtual devices in DaXi.
         :param data: [dict] configurations for the entire process
         """
-        self.device_fcltr = None
+        self.devices_fcltr = None
         self.configs = None
         # make sure the receiver and data is passed into the execute method, so the same command cna perform different
         # command once the configurations are changed in the client. (may not be the case in cli, but will be in gui.)
@@ -28,9 +28,11 @@ class AcquisitionFcltr():
         this object serves as a command.
 
         based on the receiver and the data, perform the process.
+        should do checkout and mapping of devices configs for all cycle types somwhere.
+        think about it s hould be execute levle, or acquisition_mode1 level.
         :return:
         """
-        self.device_fcltr = device_fcltr
+        self.devices_fcltr = device_fcltr
         self.configs = process_configs
         if self.configs['process configs']['process type'] == 'acquisition, mode 1':
             self.acquisition_mode1()
@@ -39,28 +41,48 @@ class AcquisitionFcltr():
 
     def acquisition_mode1(self):
         # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
+        print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
 
-        # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a working daq is done)
+        position_list = self.configs['process configs']['acquisition parameters']['positions']
+        view_list = self.configs['process configs']['acquisition parameters']['views']
+        color_list = self.configs['process configs']['acquisition parameters']['colors']
+
+        # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a
+        # working daq is done)
         # copy/organize from the previous ad-hoc in the old_workbench
         # demo - indevelopment -set raster scanning speed.py
         # think:
         # this should be in device facilitator
 
         # camera get ready (for now, display an image to prompt the user to run the HCI)
-        # daq card configure and everybody get ready (do it through the DevicesFcilitator, map, chekcout 1 configuration and start everything)
+        # daq card configure and everybody get ready (do it through the DevicesFcilitator, map, chekcout 1
+        # configuration and start everything)
         # loop over positions
+        for position in position_list:
+            print('\n moving to this position: ' + str(position))
             # move the stage to the position
-            # loop over view
-                # loop over color
+            # loop over views
+            for view in view_list:
+                print(' --- now going to this view' + str(view))
+                # loop over colors
+                for color in color_list:
+                    print(' --- --- now switching to this color ' + str(color))
                     # move the filter wheel
-                    # based on the view and color indexes, choose a daq data cycle index.
+                    # think about it:
+                    # this should be done under devices facilitator and should be calling the serial devices.
+                    self.devices_fcltr.serial_move_filter_wheel(color)  # manual for now XD.. sigh. - well, tolerable.
+
+                    # based on the view and color indexes, choose a daq data cycle index. (This is actually implemented
+                    # in DevicesFcltr)
+                    self.devices_fcltr.checkout_single_cycle_configs(key=['view'+str(view)+' color'+str(color)],
+                                                                     verbose=True)
                     # write data to daq card again for the changed cycle index.
                     # start daq card
-                    # loop over slice
+                    # loop over slice›
                     # stop(pause) daq card
+
         # todo need to check how to re-trigger camera acquisition with the same acquisition protocol.
         # think about the structure of the data here # todo 2022-10-25 item 1.
-        print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
         print("will first get all the devices ready for the device facilitator, that is \n"
               "appended in this class. we'll do something like self.devcie_fcltr.receive_\n"
               "device_configs() to make sure the configs is received we'll then do \n "

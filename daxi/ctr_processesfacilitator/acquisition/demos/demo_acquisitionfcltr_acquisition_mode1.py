@@ -30,6 +30,7 @@ process_configs = load_process_configs(path=path)
 #                                                device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
 
-af.device_fcltr = df
+
+af.devices_fcltr = df
 af.configs = process_configs
 af.acquisition_mode1()
