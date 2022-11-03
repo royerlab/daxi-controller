@@ -153,6 +153,7 @@ class TaskBundle:
 
     def update_data(self):
         print('          this update the data_list for both ao and do, in the same format.')
+        self.data_list=[]
         for sub_task in self.sub_tasks:
             # if sub_task.data is not None:
             self.data_list.append(sub_task.data)
@@ -175,7 +176,7 @@ class TaskBundle:
     def add_all_subtasks_do(self):
         if self.devices_connected:
             for sub_task in self.sub_tasks:
-                self.task_handle.do_channels.add_do_voltage_chan(
+                self.task_handle.do_channels.add_do_chan(
                 sub_task.configs['voltage output terminal']
             )
         else:
@@ -334,6 +335,7 @@ class TaskBundleDO(TaskBundle):
         #
         # if len(self.data_list) > 1:
         #     self.task_handle.write(self.data_list)
+        self.update_data()
         self.write_data()
 
 
