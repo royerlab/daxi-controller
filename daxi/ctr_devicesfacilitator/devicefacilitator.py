@@ -391,7 +391,7 @@ class DevicesFcltr:
         """
         self.taskbundle_ao.write_data()
         self.taskbundle_do.write_data()
-        self.metronome.write_data()
+        # self.metronome.write_data()
         # todo add counter channels.
 
     def serial_placeholder(self):
