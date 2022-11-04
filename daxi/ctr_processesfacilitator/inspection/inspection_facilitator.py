@@ -220,6 +220,10 @@ class InspectionFcltr:
         return 0
 
     def inspect_view_switching_galvo1(self):
+        """
+        this inspection insures the view switching galvo 1 can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect view switching galvo 1')
         self.inspect_single_ao_device(devices_configs_key=
                                       'configs_view_switching_galvo_1')
@@ -227,6 +231,10 @@ class InspectionFcltr:
         return 0
 
     def inspect_view_switching_galvo2(self):
+        """
+        this inspection insures the view switching galvo 2 can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect view switching galvo 2')
         self.inspect_single_ao_device(devices_configs_key=
                                       'configs_view_switching_galvo_2')
@@ -234,6 +242,10 @@ class InspectionFcltr:
         return 0
 
     def inspect_gamma_galvo_strip_reduction(self):
+        """
+        this inspection insures the gamma galvo can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect gamma galvo strip reduction')
         self.inspect_single_ao_device(devices_configs_key=
                                       'configs_gamma_galvo_strip_reduction')
