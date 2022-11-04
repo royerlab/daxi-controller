@@ -11,4 +11,5 @@ def demo_firstcli_acquire(process_configs_path):
 
 
 if __name__ == 'main':
+    print('called as a main:')
     demo_firstcli_acquire(process_configs_path=process_configs_yaml_path)

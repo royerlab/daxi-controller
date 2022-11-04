@@ -8,7 +8,7 @@ if platform.system() == 'Darwin':
 
 configs_templates_path = daxi_path + "/globals_configs_constants_general_tools_needbettername/" \
                              "configuration_templates"
-process_templates = configs_templates_path + '/process_templates'
+process_templates: str = configs_templates_path + '/process_templates'
 
 virtual_tools_configs_path = configs_templates_path+"/devices_configs"
 

@@ -24,7 +24,7 @@ class AcquisitionFcltr():
         # advantage of making the receiver and data as attributes of the command: it will be logged by the invoker, so
         # there is a record of all the specifics.
 
-    def execute(self, device_fcltr, process_configs):
+    def execute(self, devices_fcltr=None, data_fcltr=None, process_configs=None):
         """
         look at the configurations and perform the acquisition for all devices.
         this object serves as a command.
@@ -34,8 +34,9 @@ class AcquisitionFcltr():
         think about it s hould be execute levle, or acquisition_mode1 level.
         :return:
         """
-        self.devices_fcltr = device_fcltr
+        self.devices_fcltr = devices_fcltr
         self.configs = process_configs
+        self.data_fcltr = data_fcltr
         if self.configs['process configs']['process type'] == 'acquisition, mode 1':
             self.acquisition_mode1()
 
