@@ -129,6 +129,10 @@ class InspectionFcltr:
         return 0
 
     def inspect_scanning_galvo(self):
+        """
+        this inspection insures the scanning galvo can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect scanning galvo')
         # 0.  checkout a devices facilitator (already passed in by the command)
         # 1. receive configurations and checkout a singel configuration.
