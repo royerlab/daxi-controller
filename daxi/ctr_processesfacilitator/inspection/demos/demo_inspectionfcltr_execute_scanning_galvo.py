@@ -21,6 +21,7 @@ def demo_inspectionfcltr_execute_scanning_galvo():
 
     inspection = InspectionFcltr()
     inspection.execute(devices_fcltr=d, process_configs=process_configs)
+    assert inspection.status_scanning_galvo == "good"
     return "successful"
 
 

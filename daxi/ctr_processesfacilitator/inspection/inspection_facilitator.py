@@ -128,6 +128,49 @@ class InspectionFcltr:
         self.status_counter = 'good'
         return 0
 
+    def inspect_single_ao_device(self, devices_configs_key=None):
+        print('AcquisitionFcltr - this will inspect a single AO device with the following key:')
+        print(devices_configs_key)
+        # 0.  checkout a devices facilitator (already passed in by the command)
+        # 1. receive configurations and checkout a singel configuration.
+        self.devices_fcltr.receive_device_configs_all_cycles(
+            process_configs=self.process_configs,
+            device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
+                                                         verbose=True)
+
+        # 2. prepare the VSG1 as an ao subtask
+        config = getattr(self.devices_fcltr, devices_configs_key)
+        self.devices_fcltr.subtask_ao_configs_list = [config]
+        st = SubTaskAO(config)
+        if st.data is None:
+            st.generate_data()
+        self.devices_fcltr.subtask_ao_list = [st]
+
+        # 3. prepare metronome
+        self.devices_fcltr.daq_prepare_metronome()
+
+        # 4. prepare AO task bundle
+        self.devices_fcltr.daq_prepare_taskbundle_ao()
+
+        # 5. add metronome to the ao task bundle
+        self.devices_fcltr.taskbundle_ao.add_metronome(self.devices_fcltr.metronome)
+
+        # 6. add sub-tasks for ao task bundle
+        self.devices_fcltr.daq_add_subtasks_ao()
+
+        # 7. get ready, start, stop and close
+        self.devices_fcltr.taskbundle_ao.get_ready()
+        self.devices_fcltr.metronome.get_ready()
+
+        self.devices_fcltr.taskbundle_ao.stop()
+        self.devices_fcltr.metronome.stop()
+
+        self.devices_fcltr.taskbundle_ao.close()
+        self.devices_fcltr.metronome.close()
+        return 0
+
     def inspect_scanning_galvo(self):
         """
         this inspection insures the scanning galvo can connect to daq, start, stop and close correctly.
@@ -173,22 +216,27 @@ class InspectionFcltr:
         self.devices_fcltr.taskbundle_ao.close()
         self.devices_fcltr.metronome.close()
 
-
         self.status_scanning_galvo = 'good'
         return 0
 
     def inspect_view_switching_galvo1(self):
         print('AcquisitionFcltr - this will inspect view switching galvo 1')
+        self.inspect_single_ao_device(devices_configs_key=
+                                      'configs_view_switching_galvo_1')
         self.status_view_switching_galvo1 = 'good'
         return 0
 
     def inspect_view_switching_galvo2(self):
         print('AcquisitionFcltr - this will inspect view switching galvo 2')
+        self.inspect_single_ao_device(devices_configs_key=
+                                      'configs_view_switching_galvo_2')
         self.status_view_switching_galvo2 = 'good'
         return 0
 
     def inspect_gamma_galvo_strip_reduction(self):
         print('AcquisitionFcltr - this will inspect gamma galvo strip reduction')
+        self.inspect_single_ao_device(devices_configs_key=
+                                      'configs_gamma_galvo_strip_reduction')
         self.status_gamma_galvo_strip_reduction = 'good'
         return 0
 

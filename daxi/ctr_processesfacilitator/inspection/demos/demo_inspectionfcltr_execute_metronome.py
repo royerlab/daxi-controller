@@ -21,6 +21,7 @@ def demo_inspectionfcltr_execute_metronome():
 
     inspection = InspectionFcltr()
     inspection.execute(devices_fcltr=d, process_configs=process_configs)
+    assert inspection.status_metronome == 'good'
     return "successful"
 
 
