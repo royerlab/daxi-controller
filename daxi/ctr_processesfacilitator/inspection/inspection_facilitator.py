@@ -1,3 +1,5 @@
+from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
+    NIDAQDevicesConfigsGeneratorMode1
 
 
 class InspectionFcltr:
@@ -101,6 +103,25 @@ class InspectionFcltr:
         :return:
         """
         print('AcquisitionFcltr - this will inspect metronome')
+        self.devices_fcltr.receive_device_configs_all_cycles(
+                                    process_configs=self.process_configs,
+                                    device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
+                                                         verbose=True)
+        # 2. prepare subtasks and calculate the data for all subtasks
+        self.devices_fcltr.daq_prepare_subtasks_ao()
+        self.devices_fcltr.daq_prepare_subtasks_do()
+
+        # 3. prepare metronome
+        self.devices_fcltr.daq_prepare_metronome()
+
+        # 4. get ready, start, stop and close the metronome.
+        self.devices_fcltr.metronome.get_ready()
+        self.devices_fcltr.metronome.start()
+        self.devices_fcltr.metronome.stop()
+        self.devices_fcltr.metronome.close()
+
         self.status_metronome = 'good'
         return 0
 

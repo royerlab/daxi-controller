@@ -216,7 +216,7 @@ class DevicesFcltr:
 
     def daq_prepare_counter(self):
         """
-        prepare the metronome for the device.
+        prepare a counter for the device.
         Returns
         -------
 
