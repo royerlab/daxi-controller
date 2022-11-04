@@ -10,16 +10,16 @@ from daxi.globals_configs_constants_general_tools_needbettername.constants impor
 from time import sleep
 
 
-def demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=True):
+def demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=True, devices_connected=True):
 
     # 0.  checkout a devices facilitator
-    df = DevicesFcltr()
+    df = DevicesFcltr(devices_connected=devices_connected)
 
     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
     configs = load_process_configs(path=path)
 
 
-    # 1. get configurations
+    # 1. receive configurations
     df.receive_device_configs_all_cycles(process_configs=configs,
                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
@@ -68,5 +68,5 @@ def demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=Tru
 
 
 if __name__ == "__main__":
-    demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=True)
+    demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=True, devices_connected=True)
 

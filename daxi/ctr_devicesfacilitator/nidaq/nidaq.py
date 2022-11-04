@@ -87,7 +87,7 @@ class SubTask:
 
 
 class TaskBundle:
-    def __init__(self):
+    def __init__(self, devices_connected=True):
         self.name = None, str  # name of the AO or DO task (a bundle)
         self.task_handle = None
         self.sub_tasks = []  # a list of SubTask objects.
@@ -96,6 +96,7 @@ class TaskBundle:
         self.trigger_edge = None
         self.metronome = None
         self.sample_mode = None
+        self.devices_connected = devices_connected
 
     def set_configurations(self, task_bundle_configs):
         self.name = task_bundle_configs['name']
@@ -133,13 +134,86 @@ class TaskBundle:
         pass
 
     def start(self):
-        self.task_handle.start()
+        if self.devices_connected:
+            self.task_handle.start()
+        else:
+            self.task_handle['status'] = 'started'
 
     def stop(self):
-        self.task_handle.stop()
+        if self.devices_connected:
+            self.task_handle.stop()
+        else:
+            self.task_handle['status'] = 'stopped'
 
     def close(self):
-        self.task_handle.close()
+        if self.devices_connected:
+            self.task_handle.close()
+        else:
+            self.task_handle['status'] = 'closed'
+
+    def update_data(self):
+        print('          this update the data_list for both ao and do, in the same format.')
+        self.data_list=[]
+        for sub_task in self.sub_tasks:
+            # if sub_task.data is not None:
+            self.data_list.append(sub_task.data)
+
+    def checkout_a_task(self):
+        if self.devices_connected:
+            self.task_handle = nidaqmx.Task(self.name)
+        else:
+            self.task_handle = {'virtual task handle with name: ': self.name}
+
+    def add_all_subtasks_ao(self):
+        if self.devices_connected:
+            for sub_task in self.sub_tasks:
+                self.task_handle.ao_channels.add_ao_voltage_chan(
+                sub_task.configs['voltage output terminal']
+            )
+        else:
+            self.task_handle['added ao voltage channel with output terminal:'] = 'added subtasks voltage output terminals.'
+
+    def add_all_subtasks_do(self):
+        if self.devices_connected:
+            for sub_task in self.sub_tasks:
+                self.task_handle.do_channels.add_do_chan(
+                sub_task.configs['voltage output terminal']
+            )
+        else:
+            self.task_handle['added do voltage channel with output terminal:'] = 'added subtasks voltage output terminals.'
+
+    def implement_metronome(self):
+        if self.devices_connected:
+            self.task_handle.timing.cfg_samp_clk_timing(
+                rate=self.metronome.frequency,
+                source=self.metronome.counting_output_terminal,  #
+                sample_mode=_get_nidaqmx_constants(type='sample mode', value=self.sample_mode),  #
+            )
+        else:
+            self.task_handle['timing'] = 'implement metronome'
+
+    def implement_trigger(self):
+        if self.devices_connected:
+            self.task_handle.triggers.start_trigger.cfg_dig_edge_start_trig(
+                trigger_source=self.trigger_terminal,
+                trigger_edge=_get_nidaqmx_constants(type='trigger edge', value=self.trigger_edge)
+            )
+        else:
+            self.task_handle['trigger'] = 'terminal is' + self.trigger_terminal
+
+    def write_data(self):
+        if self.devices_connected:
+            # 5, write data of all ao sub_task to the device
+
+                # self.data_list.append(sub_task.generate_data())
+
+            if len(self.data_list) == 1:
+                self.task_handle.write(self.data_list[0])
+
+            if len(self.data_list) > 1:
+                self.task_handle.write(self.data_list)
+        else:
+            self.task_handle['write_data'] = 'data written'
 
 
 class TaskBundleAO(TaskBundle):
@@ -152,8 +226,8 @@ class TaskBundleAO(TaskBundle):
         1. prepare the task bundle task object
         2. configure timing, triggering ,etc. (check the correct order)
         3. add channels
-        4. calculate data
-        5. writes data.
+        4. calculate data # todo - remove this - or perhaps keep it, but we getready only once.
+        5. writes data. # todo - decouple this - or perhaps keep it, but we getready only once. keep thinking about it.
         % should subtask calculate the data? Or should the manger
         call the data generator to calculate the data?
         it would be better when the manager says go, the data is already
@@ -165,46 +239,62 @@ class TaskBundleAO(TaskBundle):
 
         """
         # 1, checkout a task
-        self.task_handle = nidaqmx.Task(self.name)
+        # if self.devices_connected:
+        #     self.task_handle = nidaqmx.Task(self.name)
+        # else:
+        #     self.task_handle = {'virtual task handle with name: ': self.name}
+        self.checkout_a_task()
 
         # 2, decorate the ao task bundle with its subtasks
-        for sub_task in self.sub_tasks:
-            self.task_handle.ao_channels.add_ao_voltage_chan(
-                sub_task.configs['voltage output terminal']
-            )
+        # for sub_task in self.sub_tasks:
+        #     if self.devices_connected:
+        #         self.task_handle.ao_channels.add_ao_voltage_chan(
+        #             sub_task.configs['voltage output terminal']
+        #         )
+        #     else:
+        #         self.task_handle['added ao voltage channel with output terminal:'] = sub_task.configs['voltage output terminal']
+        self.add_all_subtasks_ao()
 
         # 3, implement the metronome to the ao task bundle
         # todo - check if the following is true, metronome has to be FINITE,
         #  but taskbundle has to be continuous
-        self.task_handle.timing.cfg_samp_clk_timing(
-            rate=self.metronome.frequency,
-            source=self.metronome.counting_output_terminal,  #
-            sample_mode=_get_nidaqmx_constants(type='sample mode', value=self.sample_mode),  #
-        )
+        # if self.devices_connected:
+        #     self.task_handle.timing.cfg_samp_clk_timing(
+        #         rate=self.metronome.frequency,
+        #         source=self.metronome.counting_output_terminal,  #
+        #         sample_mode=_get_nidaqmx_constants(type='sample mode', value=self.sample_mode),  #
+        #     )
+        # else:
+        #     self.task_handle['timing'] = 'added metronome'
+        self.implement_metronome()
 
         # 4, implement trigger to the ao task bundle (this is specific to ao)
-        self.task_handle.triggers.start_trigger.cfg_dig_edge_start_trig(
-            trigger_source=self.trigger_terminal,
-            trigger_edge=_get_nidaqmx_constants(type='trigger edge', value=self.trigger_edge)
-        )
+        # if self.devices_connected:
+        #     self.task_handle.triggers.start_trigger.cfg_dig_edge_start_trig(
+        #         trigger_source=self.trigger_terminal,
+        #         trigger_edge=_get_nidaqmx_constants(type='trigger edge', value=self.trigger_edge)
+        #     )
+        # else:
+        #     self.task_handle['trigger'] = 'terminal is' + self.trigger_terminal
+        self.implement_trigger()
 
         # 5, write data of all ao sub_task to the device
-        for sub_task in self.sub_tasks:
-            # if sub_task.data is not None:
-            self.data_list.append(sub_task.data)
+        # if self.devices_connected:
+        #     self.write_data()
+        # else:
+        #     self.task_handle['write data'] = 'wrote data'
+        self.update_data()
+        self.write_data()
 
-            # self.data_list.append(sub_task.generate_data())
+    def update_subtasks_data(self):
+        # update the self.sub_tasks[:].data fields for all subtasks.
 
-        if len(self.data_list) == 1:
-            self.task_handle.write(self.data_list[0])
-
-        if len(self.data_list) > 1:
-            self.task_handle.write(self.data_list)
+        pass
 
 
 class TaskBundleDO(TaskBundle):
     """
-    This is a class for configuring the DO task bundls.
+    This is a class for configuring the DO task bundles.
     note that for DO task bundles, there is no need for
     configuring the trigger in the 'get_ready' method
 
@@ -212,33 +302,41 @@ class TaskBundleDO(TaskBundle):
 
     def get_ready(self):
         # 1. checkout a task (same with ao)
-        self.task_handle = nidaqmx.Task(self.name)
+        # if self.devices_connected:
+        #     self.task_handle = nidaqmx.Task(self.name)
+        # else:
+        #     self.task_handle = {'virtual task handle with name: ': self.name}
+        self.checkout_a_task()
 
         # 2, decorate the do task bundle with its subtasks (special for do)
-        for sub_task in self.sub_tasks:
-            self.task_handle.do_channels.add_do_chan(
-                sub_task.configs['voltage output terminal']
-            )
+        # for sub_task in self.sub_tasks:
+        #     self.task_handle.do_channels.add_do_chan(
+        #         sub_task.configs['voltage output terminal']
+        #     )
+        self.add_all_subtasks_do()
 
         # 3, implement the metronome to the do task bundle (same with ao)
-        self.task_handle.timing.cfg_samp_clk_timing(
-            rate=self.metronome.frequency,
-            source=self.metronome.counting_output_terminal,  #
-            sample_mode=_get_nidaqmx_constants(type='sample mode', value=self.sample_mode),  #
-        )
+        # self.task_handle.timing.cfg_samp_clk_timing(
+        #     rate=self.metronome.frequency,
+        #     source=self.metronome.counting_output_terminal,  #
+        #     sample_mode=_get_nidaqmx_constants(type='sample mode', value=self.sample_mode),  #
+        # )
+        self.implement_metronome()
 
         # Note! DO task do not need trigger.
 
         # 5. write data of all do subtasks to the device (same with ao)
-        for sub_task in self.sub_tasks:
-            # self.data_list.append(sub_task.generate_data())
-            self.data_list.append(sub_task.data)
-
-        if len(self.data_list) == 1:
-            self.task_handle.write(self.data_list[0])
-
-        if len(self.data_list) > 1:
-            self.task_handle.write(self.data_list)
+        # for sub_task in self.sub_tasks:
+        #     # self.data_list.append(sub_task.generate_data())
+        #     self.data_list.append(sub_task.data)
+        #
+        # if len(self.data_list) == 1:
+        #     self.task_handle.write(self.data_list[0])
+        #
+        # if len(self.data_list) > 1:
+        #     self.task_handle.write(self.data_list)
+        self.update_data()
+        self.write_data()
 
 
 class SubTaskAO(SubTask):
@@ -456,7 +554,7 @@ class Metronome:
     This is a Metronome class.
     """
 
-    def __init__(self):
+    def __init__(self, devices_connected=True):
         self.name = None, str  # this should be the name of the metronome
         self.counter_terminal = None, str  # this should be a counter terminal string from the DAQ card.
         self.counting_output_terminal = None, str  # this is the internal output terminal for other objects to use.
@@ -469,6 +567,8 @@ class Metronome:
         self.trigger_edge = None, str  # 'RISING' or 'FALLING'
         self.retriggerable = None, bool  #
         self.purpose = None, str  # should provide a description of the purpose of this counter.
+        self.devices_connected = devices_connected
+        self.status = 'metronome initiated'
 
     def set_configurations(self, metronome_configs):
         """
@@ -497,46 +597,49 @@ class Metronome:
         """
         # figure out constantsL
         # parse the configuration settings to the corresponding nimxdaq constants.
-        if self.idle_state == 'LOW':
-            idle_state_const = nidaqmx.constants.Level.LOW
-        elif self.idle_state == 'HIGH':
-            idle_state_const = nidaqmx.constants.Level.HIGH
+        if self.devices_connected:
+            if self.idle_state == 'LOW':
+                idle_state_const = nidaqmx.constants.Level.LOW
+            elif self.idle_state == 'HIGH':
+                idle_state_const = nidaqmx.constants.Level.HIGH
 
-        if self.sample_mode == 'FINITE':
-            # FINITE tells the metronome to acquire or generate a finite number of ticks."
-            sample_mode_const = nidaqmx.constants.AcquisitionType.FINITE
-        elif self.sample_mode == 'CONTINUOUS':
-            # CONTINUOUS tells the metronome to acquire or generate ticks until you tell it to stop."
-            sample_mode_const = nidaqmx.constants.AcquisitionType.CONTINUOUS
+            if self.sample_mode == 'FINITE':
+                # FINITE tells the metronome to acquire or generate a finite number of ticks."
+                sample_mode_const = nidaqmx.constants.AcquisitionType.FINITE
+            elif self.sample_mode == 'CONTINUOUS':
+                # CONTINUOUS tells the metronome to acquire or generate ticks until you tell it to stop."
+                sample_mode_const = nidaqmx.constants.AcquisitionType.CONTINUOUS
 
-        if self.trigger_edge == 'RISING':
-            trigger_edge_const = nidaqmx.constants.Slope.RISING
-        elif self.trigger_edge == 'FALLING':
-            trigger_edge_const = nidaqmx.constants.Slope.FALLING
+            if self.trigger_edge == 'RISING':
+                trigger_edge_const = nidaqmx.constants.Slope.RISING
+            elif self.trigger_edge == 'FALLING':
+                trigger_edge_const = nidaqmx.constants.Slope.FALLING
 
-        # checkout a counter task for this metronome
-        self.task_handle = nidaqmx.Task(self.name)
+            # checkout a counter task for this metronome
+            self.task_handle = nidaqmx.Task(self.name)
 
-        # add the channel to the metronome
-        self.task_handle.co_channels.add_co_pulse_chan_freq(
-            self.counter_terminal,
-            idle_state=idle_state_const,
-            freq=self.frequency
-        )
+            # add the channel to the metronome
+            self.task_handle.co_channels.add_co_pulse_chan_freq(
+                self.counter_terminal,
+                idle_state=idle_state_const,
+                freq=self.frequency
+            )
 
-        # configure metronome timing:
-        self.task_handle.timing.cfg_implicit_timing(
-            sample_mode=sample_mode_const,
-            samps_per_chan=self.number_of_samples,
-        )
+            # configure metronome timing:
+            self.task_handle.timing.cfg_implicit_timing(
+                sample_mode=sample_mode_const,
+                samps_per_chan=self.number_of_samples,
+            )
 
-        # configure metronome trigger
-        self.task_handle.triggers.start_trigger.cfg_dig_edge_start_trig(
-            trigger_source=self.trigger_terminal,
-            trigger_edge=trigger_edge_const,
-        )
-        # self.task_handle.triggers.start_trigger.retriggerable = self.retriggerable
-        self.task_handle.triggers.start_trigger.retriggerable = True
+            # configure metronome trigger
+            self.task_handle.triggers.start_trigger.cfg_dig_edge_start_trig(
+                trigger_source=self.trigger_terminal,
+                trigger_edge=trigger_edge_const,
+            )
+            # self.task_handle.triggers.start_trigger.retriggerable = self.retriggerable
+            self.task_handle.triggers.start_trigger.retriggerable = True
+        else:
+            self.status = 'metronome started'
 
     def start(self):
         """
@@ -544,19 +647,27 @@ class Metronome:
         :return:
         it returns 0 when the process is successful.
         """
-        self.task_handle.start()
+        if self.devices_connected:
+            self.task_handle.start()
+        else:
+            self.status = 'metronome started'
 
     def stop(self):
         """
         this stops the metronome.
         :return:
         """
-        self.task_handle.stop()
+        if self.devices_connected:
+            self.task_handle.stop()
+        else:
+            self.status = 'metronome stopped'
 
     def close(self):
         """
         this closes the metronome
         :return:
         """
-        self.task_handle.close()
-
+        if self.devices_connected:
+            self.task_handle.close()
+        else:
+            self.status = 'metronome closed'

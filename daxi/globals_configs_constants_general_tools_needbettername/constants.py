@@ -8,7 +8,7 @@ if platform.system() == 'Darwin':
 
 configs_templates_path = daxi_path + "/globals_configs_constants_general_tools_needbettername/" \
                              "configuration_templates"
-process_templates = configs_templates_path + '/process_templates'
+process_templates: str = configs_templates_path + '/process_templates'
 
 virtual_tools_configs_path = configs_templates_path+"/devices_configs"
 
@@ -19,3 +19,5 @@ params_test_selected_params = configs_templates_path+"/params_test_selected_para
 configs_daq_terminals = configs_templates_path+"/wiring_alignment_and_calibration"
 
 configs_core_daq_devices = configs_templates_path+"/devices_configs_core"
+
+process_configs_yaml_path = process_templates + '/template_acquisition_mode1-dev.yaml'
