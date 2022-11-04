@@ -253,7 +253,13 @@ class InspectionFcltr:
         return 0
 
     def inspect_beta_galvo_lightsheet_incident_angle(self):
+        """
+        this inspection insures the beta galvo can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect beta galvo light sheet incident angle')
+        self.inspect_single_ao_device(devices_configs_key=
+                                      'configs_beta_galvo_light_sheet_incident_angle')
         self.status_beta_galvo_lightsheet_incident_angle = 'good'
         return 0
 
@@ -283,13 +289,27 @@ class InspectionFcltr:
         return 0
 
     def inspect_O1(self):
+        """
+        this inspection insures the O1 can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect O1')
+        self.inspect_single_ao_device(devices_configs_key=
+                                      'configs_O1')
+
         self.status_O1 = 'good'
         return 0
 
     def inspect_O3(self):
+        """
+        this inspection insures the O3 can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect O3')
-        self.status_O3 = 'good'
+        self.inspect_single_ao_device(devices_configs_key=
+                                      'configs_O3')
+
+        self.status_O1 = 'good'
         return 0
 
     def inspect_filter_wheel(self):
