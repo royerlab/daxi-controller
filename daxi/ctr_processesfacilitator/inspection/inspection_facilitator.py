@@ -1,5 +1,6 @@
 from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
+from daxi.ctr_devicesfacilitator.nidaq.nidaq import SubTaskAO
 
 
 class InspectionFcltr:
@@ -109,9 +110,6 @@ class InspectionFcltr:
         first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
-        # 2. prepare subtasks and calculate the data for all subtasks
-        self.devices_fcltr.daq_prepare_subtasks_ao()
-        self.devices_fcltr.daq_prepare_subtasks_do()
 
         # 3. prepare metronome
         self.devices_fcltr.daq_prepare_metronome()
@@ -132,6 +130,46 @@ class InspectionFcltr:
 
     def inspect_scanning_galvo(self):
         print('AcquisitionFcltr - this will inspect scanning galvo')
+        # 0.  checkout a devices facilitator (already passed in by the command)
+        # 1. receive configurations and checkout a singel configuration.
+        self.devices_fcltr.receive_device_configs_all_cycles(
+            process_configs=self.process_configs,
+            device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
+                                                         verbose=True)
+
+        # 2. prepare the SG as an ao subtask
+        config = getattr(self.devices_fcltr, 'configs_scanning_galvo')
+        self.devices_fcltr.subtask_ao_configs_list = [config]
+        st = SubTaskAO(config)
+        if st.data is None:
+            st.generate_data()
+        self.devices_fcltr.subtask_ao_list = [st]
+
+        # 3. prepare metronome
+        self.devices_fcltr.daq_prepare_metronome()
+
+        # 4. prepare AO task bundle
+        self.devices_fcltr.daq_prepare_taskbundle_ao()
+
+        # 5. add metronome to the ao task bundle
+        self.devices_fcltr.taskbundle_ao.add_metronome(self.devices_fcltr.metronome)
+
+        # 6. add sub-tasks for ao task bundle
+        self.devices_fcltr.daq_add_subtasks_ao()
+
+        # 7. get ready, start, stop and close
+        self.devices_fcltr.taskbundle_ao.get_ready()
+        self.devices_fcltr.metronome.get_ready()
+
+        self.devices_fcltr.taskbundle_ao.stop()
+        self.devices_fcltr.metronome.stop()
+
+        self.devices_fcltr.taskbundle_ao.close()
+        self.devices_fcltr.metronome.close()
+
+
         self.status_scanning_galvo = 'good'
         return 0
 

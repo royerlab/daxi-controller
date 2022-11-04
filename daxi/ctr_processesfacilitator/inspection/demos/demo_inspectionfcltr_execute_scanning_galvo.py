@@ -24,5 +24,5 @@ def demo_inspectionfcltr_execute_scanning_galvo():
     return "successful"
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     demo_inspectionfcltr_execute_scanning_galvo()
