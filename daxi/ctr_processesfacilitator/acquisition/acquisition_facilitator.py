@@ -76,6 +76,8 @@ class AcquisitionFcltr():
 
         # 7. get ready
         self.devices_fcltr.daq_get_ready()
+        self.devices_fcltr.daq_start()
+        self.devices_fcltr.daq_stop()
 
         # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a
         # working daq is done)
@@ -111,6 +113,7 @@ class AcquisitionFcltr():
                                                                      verbose=True)
                     # write data to daq card again for the changed cycle index.
                     self.devices_fcltr.daq_update_data()
+                    self.devices_fcltr.daq_write_data()
                     # start daq card (waiting for the trigger)
                     self.devices_fcltr.daq_start()
                     # start camera (waiting for the trigger)
