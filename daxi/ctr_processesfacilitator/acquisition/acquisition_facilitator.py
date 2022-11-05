@@ -122,6 +122,12 @@ class AcquisitionFcltr():
                     self.devices_fcltr.stage_start()
                     # loop over slice›
                     # stop(pause) daq card
+                    self.devices_fcltr.daq_stop()
+                    self.devices_fcltr.camera_stop()
+                    self.devices_fcltr.stage_stop()
+        self.devices_fcltr.daq_close()
+        self.devices_fcltr.camera_close()
+        self.devices_fcltr.stage_close()
 
         # todo need to check how to re-trigger camera acquisition with the same acquisition protocol.
         # think about the structure of the data here # todo 2022-10-25 item 1.

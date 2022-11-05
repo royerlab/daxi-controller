@@ -216,7 +216,7 @@ class DevicesFcltr:
 
     def daq_prepare_counter(self):
         """
-        prepare the metronome for the device.
+        prepare a counter for the device.
         Returns
         -------
 
@@ -252,7 +252,8 @@ class DevicesFcltr:
         # 2. make the subtasks objects, and generate data for each one of them.
         for st_configs in self.subtask_ao_configs_list:
             st = SubTaskAO(st_configs)
-            # st.generate_data()  # todo - write data generators for all ao task types. so data genrator is done upon configuration generations. try comment this out.
+            if st.data is None:
+                st.generate_data()  # todo - now this data generator is used in the receiving method. organize it.
             self.subtask_ao_list.append(st)
 
     def daq_prepare_taskbundle_do(self):
@@ -285,7 +286,8 @@ class DevicesFcltr:
         # 2. make the subtasks objects, and generate data for each one of them.
         for st_configs in self.subtask_do_configs_list:
             st = SubTaskDO(st_configs)
-            # st.generate_data()  # todo - write data generators for all ao task types so data genrator is done upon configuration generations. try comment this out.
+            if st.data is None:
+                st.generate_data()  # todo - now this data generator is used in the receiving method. organize it.
             self.subtask_do_list.append(st)
 
     def daq_check_compatibility(self):
@@ -431,4 +433,20 @@ class DevicesFcltr:
 
     def stage_start(self):
         print("          this will start the stage, leave it out for now. will implement in the future.")
+        pass
+
+    def camera_stop(self):
+        print("          this will stop the camera, leave it out for now. will implement in the future.")
+        pass
+
+    def stage_stop(self):
+        print("          this will stop the stage, leave it out for now. will implement in the future.")
+        pass
+
+    def camera_close(self):
+        print("          this will close the camera, leave it out for now. will implement in the future.")
+        pass
+
+    def stage_close(self):
+        print("          this will close the stage, leave it out for now. will implement in the future.")
         pass
