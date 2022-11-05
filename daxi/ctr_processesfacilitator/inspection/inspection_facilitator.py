@@ -1,6 +1,6 @@
 from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
-from daxi.ctr_devicesfacilitator.nidaq.nidaq import SubTaskAO
+from daxi.ctr_devicesfacilitator.nidaq.nidaq import SubTaskAO, SubTaskDO
 
 
 class InspectionFcltr:
@@ -140,7 +140,7 @@ class InspectionFcltr:
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
 
-        # 2. prepare the VSG1 as an ao subtask
+        # 2. prepare the single ao subtask
         config = getattr(self.devices_fcltr, devices_configs_key)
         self.devices_fcltr.subtask_ao_configs_list = [config]
         st = SubTaskAO(config)
@@ -168,6 +168,49 @@ class InspectionFcltr:
         self.devices_fcltr.metronome.stop()
 
         self.devices_fcltr.taskbundle_ao.close()
+        self.devices_fcltr.metronome.close()
+        return 0
+
+    def inspect_single_do_device(self, devices_configs_key=None):
+        print('AcquisitionFcltr - this will inspect a single DO device with the following key:')
+        print(devices_configs_key)
+        # 0.  checkout a devices facilitator (already passed in by the command)
+        # 1. receive configurations and checkout a singel configuration.
+        self.devices_fcltr.receive_device_configs_all_cycles(
+            process_configs=self.process_configs,
+            device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
+                                                         verbose=True)
+
+        # 2. prepare the single do subtask
+        config = getattr(self.devices_fcltr, devices_configs_key)
+        self.devices_fcltr.subtask_do_configs_list = [config]
+        st = SubTaskDO(config)
+        if st.data is None:
+            st.generate_data()
+        self.devices_fcltr.subtask_do_list = [st]
+
+        # 3. prepare metronome
+        self.devices_fcltr.daq_prepare_metronome()
+
+        # 4. prepare DO task bundle
+        self.devices_fcltr.daq_prepare_taskbundle_do()
+
+        # 5. add metronome to the ao task bundle
+        self.devices_fcltr.taskbundle_do.add_metronome(self.devices_fcltr.metronome)
+
+        # 6. add sub-tasks for ao task bundle
+        self.devices_fcltr.daq_add_subtasks_do()
+
+        # 7. get ready, start, stop and close
+        self.devices_fcltr.taskbundle_do.get_ready()
+        self.devices_fcltr.metronome.get_ready()
+
+        self.devices_fcltr.taskbundle_do.stop()
+        self.devices_fcltr.metronome.stop()
+
+        self.devices_fcltr.taskbundle_do.close()
         self.devices_fcltr.metronome.close()
         return 0
 
@@ -264,27 +307,57 @@ class InspectionFcltr:
         return 0
 
     def inspect_405_laser(self):
+        """
+        this inspection insures the 405 laser can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect 405 laser')
+        self.inspect_single_do_device(devices_configs_key=
+                                      'configs_405_laser')
         self.status_405_laser = 'good'
         return 0
 
     def inspect_488_laser(self):
+        """
+        this inspection insures the 488 laser can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect 488 laser')
+        self.inspect_single_do_device(devices_configs_key=
+                                      'configs_488_laser')
         self.status_488_laser = 'good'
         return 0
 
     def inspect_561_laser(self):
+        """
+        this inspection insures the 561 laser can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect 561 laser')
+        self.inspect_single_do_device(devices_configs_key=
+                                      'configs_561_laser')
         self.status_561_laser = 'good'
         return 0
 
     def inspect_639_laser(self):
+        """
+        this inspection insures the 639 laser can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect 639 laser')
+        self.inspect_single_do_device(devices_configs_key=
+                                      'configs_639_laser')
         self.status_639_laser = 'good'
         return 0
 
     def inspect_bright_field(self):
+        """
+        this inspection insures the bright field led can connect to daq, start, stop and close correctly.
+        :return:
+        """
         print('AcquisitionFcltr - this will inspect bright field')
+        self.inspect_single_do_device(devices_configs_key=
+                                      'configs_bright_field')
         self.status_bright_field = 'good'
         return 0
 
