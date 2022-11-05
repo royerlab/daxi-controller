@@ -18,7 +18,6 @@ def demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=Tru
     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
     configs = load_process_configs(path=path)
 
-
     # 1. receive configurations
     df.receive_device_configs_all_cycles(process_configs=configs,
                                          device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
