@@ -8,7 +8,7 @@ import pprint
 
 m = AcqParamMode1(dx=0.4,
                   length=1000,
-                  t_exposure=90,
+                  t_exposure=490,
                   t_readout=10,
                   t_stage_retraction=23,
                   scanning_galvo_range_limit=0.8,
