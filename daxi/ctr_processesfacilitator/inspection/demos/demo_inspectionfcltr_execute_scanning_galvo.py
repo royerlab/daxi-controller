@@ -1,4 +1,6 @@
-# get a device facilitator object
+# get a device facilitator object.
+# here we demonstrate how to use an InspectionFcltr to inspect the scanning galvo (turn on, start, stop, close).
+
 import os
 
 from daxi.ctr_devicesfacilitator.devicefacilitator import DevicesFcltr
@@ -15,7 +17,7 @@ def demo_inspectionfcltr_execute_scanning_galvo():
     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
     process_configs = load_process_configs(path=path)
 
-    # set the process to be inspecting metronome
+    # set the process to be inspecting scanning galvo
     process_configs['process type'] = 'inspection, inspect_scanning_galvo'
     process_configs['process configs']['process type'] = 'inspection, inspect_scanning_galvo'
 

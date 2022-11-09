@@ -179,7 +179,7 @@ definition start.
 {
     'scanning galvo':
     {
-    'distance (um) to voltage (v) conversion factor (v/um)': float(0.008),
+    'distance (um) to voltage (v) conversion factor (v/um)': float(0.004),
     },
 
     'gamma galvo strip reduction':
