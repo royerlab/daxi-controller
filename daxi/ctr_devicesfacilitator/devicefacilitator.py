@@ -1,5 +1,5 @@
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
-from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO
+from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO, Counter
 
 
 class DevicesFcltr:
@@ -30,6 +30,7 @@ class DevicesFcltr:
         self.subtask_do_list = []
         self.subtask_do_configs_list = []
         self.metronome = None
+        self.counter = None
         self.devices_and_tools_collection = None
         self.taskbundle_ao = None
         self.taskbundle_do = None
@@ -221,7 +222,8 @@ class DevicesFcltr:
         -------
 
         """
-        pass
+        self.counter = Counter(devices_connected=self.devices_connected)
+        self.counter.set_configurations(self.configs_counter)
 
     def daq_prepare_taskbundle_ao(self):
         """
@@ -332,10 +334,18 @@ class DevicesFcltr:
         -------
 
         """
-        self.taskbundle_ao.get_ready()
-        self.taskbundle_do.get_ready()
-        self.metronome.get_ready()
-        # todo add counter channels.
+        # all the if statements are added so we can choose to get_ready/start/stop/close configured devices.
+        if self.taskbundle_ao is not None:
+            self.taskbundle_ao.get_ready()
+
+        if self.taskbundle_do is not None:
+            self.taskbundle_do.get_ready()
+
+        if self.metronome is not None:
+            self.metronome.get_ready()
+
+        if self.counter is not None:
+            self.counter.get_ready()
 
     def daq_start(self):
         """
@@ -344,10 +354,18 @@ class DevicesFcltr:
         -------
 
         """
-        self.metronome.start()
-        self.taskbundle_ao.start()
-        self.taskbundle_do.start()
-        # todo add counter channels.
+        # all the if statements are added so we can choose to get_ready/start/stop/close configured devices.
+        if self.metronome is not None:
+            self.metronome.start()
+
+        if self.taskbundle_ao is not None:
+            self.taskbundle_ao.start()
+
+        if self.taskbundle_do is not None:
+            self.taskbundle_do.start()
+
+        if self.counter is not None:
+            self.counter.start()
 
     def daq_stop(self):
         """
@@ -356,10 +374,18 @@ class DevicesFcltr:
         -------
 
         """
-        self.taskbundle_ao.stop()
-        self.taskbundle_do.stop()
-        self.metronome.stop()
-        # todo add counter channels.
+        # all the if statements are added so we can choose to get_ready/start/stop/close configured devices.
+        if self.taskbundle_ao is not None:
+            self.taskbundle_ao.stop()
+
+        if self.taskbundle_do is not None:
+            self.taskbundle_do.stop()
+
+        if self.metronome is not None:
+            self.metronome.stop()
+
+        if self.counter is not None:
+            self.counter.stop()
 
     def daq_close(self):
         """
@@ -368,10 +394,18 @@ class DevicesFcltr:
         -------
 
         """
-        self.taskbundle_ao.close()
-        self.taskbundle_do.close()
-        self.metronome.close()
-        # todo add counter channels.
+        # all the if statements are added so we can choose to get_ready/start/stop/close configured devices.
+        if self.taskbundle_ao is not None:
+            self.taskbundle_ao.close()
+
+        if self.taskbundle_do is not None:
+            self.taskbundle_do.close()
+
+        if self.metronome is not None:
+            self.metronome.close()
+
+        if self.counter is not None:
+            self.counter.close()
 
     def daq_update_data(self):
         """
@@ -382,7 +416,6 @@ class DevicesFcltr:
         """
         self.taskbundle_ao.update_data()
         self.taskbundle_do.update_data()
-        # todo add counter channels.
 
     def daq_write_data(self):
         """
@@ -393,8 +426,6 @@ class DevicesFcltr:
         """
         self.taskbundle_ao.write_data()
         self.taskbundle_do.write_data()
-        # self.metronome.write_data()
-        # todo add counter channels.
 
     def serial_placeholder(self):
         """
@@ -403,6 +434,7 @@ class DevicesFcltr:
         -------
 
         """
+        pass
 
     def serial_move_filter_wheel(self, color):
         """
