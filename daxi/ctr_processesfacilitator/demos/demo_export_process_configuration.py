@@ -7,7 +7,7 @@ import os
 import pprint
 
 m = AcqParamMode1(dx=0.4,
-                  length=1000,
+                  length=100,
                   t_exposure=490,
                   t_readout=10,
                   t_stage_retraction=23,
@@ -19,7 +19,7 @@ m = AcqParamMode1(dx=0.4,
                   positions={'position name 1': {'x': 1, 'y': 10}, 'position name 2': {'x': 23, 'y': 12}},
                   views=['1', '2'],
                   positions_views_list=None,
-                  number_of_time_points=10,
+                  number_of_time_points=2,
                   )
 m.adapt()
 m.get_parameter_combination(magnification_factor=5)

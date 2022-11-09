@@ -329,8 +329,7 @@ class DevicesFcltr:
 
     def daq_get_ready(self):
         """
-        all the devices get ready.
-        Returns
+          Returns
         -------
 
         """

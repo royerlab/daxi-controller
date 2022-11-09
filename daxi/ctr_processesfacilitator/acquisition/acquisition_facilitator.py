@@ -2,6 +2,9 @@
 This facilitator should interact with the main gui, comsolidate all the configurations and send it to
 the device and data tools facilitators.
 """
+import os
+from time import sleep
+
 import numpy as np
 from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
@@ -57,14 +60,23 @@ class AcquisitionFcltr():
         view_list = self.configs['process configs']['acquisition parameters']['views']
         color_list = self.configs['process configs']['acquisition parameters']['colors']
         number_of_time_points = self.configs['process configs']['acquisition parameters']['number of time points']
+        slice_number = self.configs['process configs']['acquisition parameters']['n slices'] + 1
+
+        os.system('echo test system output')
+        os.system('echo number of positions: ' + str(len(position_list)))
+        os.system('echo viess: ' + str(view_list))
+        os.system('echo colors: ' + str(color_list))
+        os.system('echo number of time points: ' + str(number_of_time_points))
+        os.system('echo number of slices: ' + str(slice_number))
         # 2. prepare subtasks and calculate the data for all subtasks
         self.devices_fcltr.daq_prepare_subtasks_ao()
         self.devices_fcltr.daq_prepare_subtasks_do()
 
-        # 3. prepare metronome
+        # 3. prepare metronome and counter
         self.devices_fcltr.daq_prepare_metronome()
+        self.devices_fcltr.daq_prepare_counter()
 
-        # 4. prepare AO task bundle
+        # 4. prepare AO and DO task bundle
         self.devices_fcltr.daq_prepare_taskbundle_ao()
         self.devices_fcltr.daq_prepare_taskbundle_do()
 
@@ -75,7 +87,7 @@ class AcquisitionFcltr():
         self.devices_fcltr.daq_add_subtasks_ao()
         self.devices_fcltr.daq_add_subtasks_do()
 
-        # 7. get ready
+        # 7. get ready, and start/stop.
         self.devices_fcltr.daq_get_ready()
         self.devices_fcltr.daq_start()
         self.devices_fcltr.daq_stop()
@@ -92,25 +104,30 @@ class AcquisitionFcltr():
         # configuration and start everything)
         # loop over positions
         for time_point_index in np.arange(number_of_time_points):
+            os.system('echo ')
+            os.system('echo starting time point: ' + str(time_point_index))
             for position in position_list:
-                print('\n moving to this position: ' + str(position))
+                os.system('echo moving to this position: ' + str(position))
                 # move the stage to the position
 
                 # need to get devices ready before looping
 
-                # loop over views
+                # loop over views.
                 for view in view_list:
-                    print(' --- now going to this view: view' + str(view))
-                    # loop over colors
+                    os.system('echo --- going to this view: view' + str(view))
+                    # loop over colors.
                     for color in color_list:
-                        print(' --- --- now switching to this color: color' + str(color))
-                        # move the filter wheel
+                        os.system('echo --- --- switching to this color: color' + str(color))
+                        os.system('echo --- --- --- current: time point: ' + str(time_point_index) + ', position: ' + str(position) +
+                                  ', view' + str(view) + ', color' + str(color))
+                        # move the filter wheel.
                         # think about it:
                         # this should be done under devices facilitator and should be calling the serial devices.
-                        self.devices_fcltr.serial_move_filter_wheel(color)  # manual for now XD.. sigh. - well, tolerable.
+                        self.devices_fcltr.serial_move_filter_wheel(color)
+                        # manual for now XD.. sigh. - well, tolerable.
 
-                        # based on the view and color indexes, choose a daq data cycle index. (This is actually implemented
-                        # in DevicesFcltr)
+                        # based on the view and color indexes, choose a daq data cycle index. (This is
+                        # actually implemented in DevicesFcltr)
                         self.devices_fcltr.checkout_single_cycle_configs(key='view'+str(view)+' color'+str(color),
                                                                          verbose=True)
                         # write data to daq card again for the changed cycle index.
@@ -122,11 +139,21 @@ class AcquisitionFcltr():
                         self.devices_fcltr.camera_start()
                         # start raster scan of asi-stage (will send out the trigger)
                         self.devices_fcltr.stage_start()
-                        # loop over slice›
+
+                        # loop over slices for the stack:
+                        counter = 0
+                        os.system('echo single stack acquisition starts ...')
+                        while counter <= slice_number - 1:
+                            counter = self.devices_fcltr.counter.read()
+                            sleep(0.003)
+                        os.system('echo counted number of slices: '+str(counter))
+
                         # stop(pause) daq card
                         self.devices_fcltr.daq_stop()
                         self.devices_fcltr.camera_stop()
                         self.devices_fcltr.stage_stop()
+                        os.system('echo single stack acquisition ends.')
+                        os.system('echo .')
 
         self.devices_fcltr.daq_close()
         self.devices_fcltr.camera_close()
