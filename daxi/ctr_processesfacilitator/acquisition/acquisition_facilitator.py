@@ -2,6 +2,7 @@
 This facilitator should interact with the main gui, comsolidate all the configurations and send it to
 the device and data tools facilitators.
 """
+import numpy as np
 from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 
@@ -55,7 +56,7 @@ class AcquisitionFcltr():
         position_list = self.configs['process configs']['acquisition parameters']['positions']
         view_list = self.configs['process configs']['acquisition parameters']['views']
         color_list = self.configs['process configs']['acquisition parameters']['colors']
-
+        number_of_time_points = self.configs['process configs']['acquisition parameters']['number of time points']
         # 2. prepare subtasks and calculate the data for all subtasks
         self.devices_fcltr.daq_prepare_subtasks_ao()
         self.devices_fcltr.daq_prepare_subtasks_do()
@@ -90,41 +91,43 @@ class AcquisitionFcltr():
         # daq card configure and everybody get ready (do it through the DevicesFcilitator, map, chekcout 1
         # configuration and start everything)
         # loop over positions
-        for position in position_list:
-            print('\n moving to this position: ' + str(position))
-            # move the stage to the position
+        for time_point_index in np.arange(number_of_time_points):
+            for position in position_list:
+                print('\n moving to this position: ' + str(position))
+                # move the stage to the position
 
-            # need to get devices ready before looping
+                # need to get devices ready before looping
 
-            # loop over views
-            for view in view_list:
-                print(' --- now going to this view: view' + str(view))
-                # loop over colors
-                for color in color_list:
-                    print(' --- --- now switching to this color: color' + str(color))
-                    # move the filter wheel
-                    # think about it:
-                    # this should be done under devices facilitator and should be calling the serial devices.
-                    self.devices_fcltr.serial_move_filter_wheel(color)  # manual for now XD.. sigh. - well, tolerable.
+                # loop over views
+                for view in view_list:
+                    print(' --- now going to this view: view' + str(view))
+                    # loop over colors
+                    for color in color_list:
+                        print(' --- --- now switching to this color: color' + str(color))
+                        # move the filter wheel
+                        # think about it:
+                        # this should be done under devices facilitator and should be calling the serial devices.
+                        self.devices_fcltr.serial_move_filter_wheel(color)  # manual for now XD.. sigh. - well, tolerable.
 
-                    # based on the view and color indexes, choose a daq data cycle index. (This is actually implemented
-                    # in DevicesFcltr)
-                    self.devices_fcltr.checkout_single_cycle_configs(key='view'+str(view)+' color'+str(color),
-                                                                     verbose=True)
-                    # write data to daq card again for the changed cycle index.
-                    self.devices_fcltr.daq_update_data()
-                    self.devices_fcltr.daq_write_data()
-                    # start daq card (waiting for the trigger)
-                    self.devices_fcltr.daq_start()
-                    # start camera (waiting for the trigger)
-                    self.devices_fcltr.camera_start()
-                    # start raster scan of asi-stage (will send out the trigger)
-                    self.devices_fcltr.stage_start()
-                    # loop over slice›
-                    # stop(pause) daq card
-                    self.devices_fcltr.daq_stop()
-                    self.devices_fcltr.camera_stop()
-                    self.devices_fcltr.stage_stop()
+                        # based on the view and color indexes, choose a daq data cycle index. (This is actually implemented
+                        # in DevicesFcltr)
+                        self.devices_fcltr.checkout_single_cycle_configs(key='view'+str(view)+' color'+str(color),
+                                                                         verbose=True)
+                        # write data to daq card again for the changed cycle index.
+                        self.devices_fcltr.daq_update_data()
+                        self.devices_fcltr.daq_write_data()
+                        # start daq card (waiting for the trigger)
+                        self.devices_fcltr.daq_start()
+                        # start camera (waiting for the trigger)
+                        self.devices_fcltr.camera_start()
+                        # start raster scan of asi-stage (will send out the trigger)
+                        self.devices_fcltr.stage_start()
+                        # loop over slice›
+                        # stop(pause) daq card
+                        self.devices_fcltr.daq_stop()
+                        self.devices_fcltr.camera_stop()
+                        self.devices_fcltr.stage_stop()
+
         self.devices_fcltr.daq_close()
         self.devices_fcltr.camera_close()
         self.devices_fcltr.stage_close()

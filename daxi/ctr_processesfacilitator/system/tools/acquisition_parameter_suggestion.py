@@ -60,6 +60,7 @@ class AcqParamBase:
                  positions=None,
                  views=['1'],
                  positions_views_list=None,
+                 number_of_time_points=None,
                  ):
         """
         This tool is expected to make the process of selecting imaging parameters easy.
@@ -113,6 +114,7 @@ class AcqParamBase:
         self.name = 'base class'
         self.type = 'base'
         self.looping_order = None
+        self.number_of_time_points = number_of_time_points
 
     def find_parameter_combinations(self):
         """
@@ -205,7 +207,8 @@ class AcqParamBase:
                   # todo should implement based on the constraints of the scanning stage.
                   ', SG range per slice (um): ' + str(sgr) +
                   ', time per datapoint (s): ' + str(tpd/1000) +
-                  ', scan duration (s): ' + str(sd/1000)
+                  ', scan duration (s): ' + str(sd/1000) +
+                  ', number of time points: ' + str(self.number_of_time_points)
                   )
 
     def get_parameter_combination(self, magnification_factor=5):
@@ -240,6 +243,7 @@ class AcqParamBase:
                 "views": self.views,
                 "colors": self.colors,
                 "positions": self.positions,
+                "number of time points": self.number_of_time_points,
             }
 
 

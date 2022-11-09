@@ -111,6 +111,7 @@ process configs:
     metronome frequency: 10000
     n slices: 354
     name: mode1
+    number of time points: 10
     pixel size in xy (um): 0.4
     positions:
       position name 1:
