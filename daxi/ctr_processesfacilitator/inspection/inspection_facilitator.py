@@ -125,6 +125,25 @@ class InspectionFcltr:
 
     def inspect_counter(self):
         print('AcquisitionFcltr - this will inspect counter')
+        # receive configs
+        self.devices_fcltr.receive_device_configs_all_cycles(
+                                    process_configs=self.process_configs,
+                                    device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        # map first cycle configurations
+        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        # map out first cycle configurations
+        self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
+                                                         verbose=True)
+
+        # prepare counter
+        self.devices_fcltr.daq_prepare_counter()
+        # counter get ready, start, read, stop and close
+        self.devices_fcltr.counter.get_ready()
+        self.devices_fcltr.counter.start()
+        self.devices_fcltr.counter.read()
+        self.devices_fcltr.counter.stop()
+        self.devices_fcltr.counter.close()
+
         self.status_counter = 'good'
         return 0
 
