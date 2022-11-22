@@ -45,6 +45,8 @@ a.raster_scan_go()
 input('now we are moving to p2')
 a.move_to('p2')
 
-input('now we are performing scanning at p2')
+input('now we are going to get ready at p2 for raster scan, press any key to continue...')
 a.raster_scan_ready(position_name='p2')
+
+input('press any key to start the raster scan at p2...')
 a.raster_scan_go()
