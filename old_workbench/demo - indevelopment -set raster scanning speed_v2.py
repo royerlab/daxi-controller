@@ -9,7 +9,7 @@ pos = a.define_explicit_position(name='p1')
 print('pos:')
 print(pos)
 pos['scan configurations']['encoder divide'] = 24
-pos['scan configurations']['scan speed'] = 3  # 0.528
+pos['scan configurations']['scan speed'] = 5  # 0.528
 
 
 a.stored_positions['p1'] = pos
