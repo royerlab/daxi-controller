@@ -1,4 +1,6 @@
 # get a device facilitator object
+# here we demonstrate how to use an InspectionFcltr to inspect counter (turn on, start, stop, close).
+
 import os
 
 from daxi.control.device.facilitator.devicefacilitator import DevicesFcltr
@@ -24,5 +26,5 @@ def demo_inspectionfcltr_execute_counter():
     return "successful"
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     demo_inspectionfcltr_execute_counter()

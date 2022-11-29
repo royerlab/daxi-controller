@@ -28,7 +28,7 @@ device configurations:
       linear ramp stop for view 1: 0.3
       linear ramp stop for view 2: 0.4
     scanning galvo:
-      distance (um) to voltage (v) conversion factor (v/um): 0.008
+      distance (um) to voltage (v) conversion factor (v/um): 0.004
   nidaq_terminals:
     405 laser:
       device name: 405 laser
@@ -104,13 +104,14 @@ process configs:
     colors:
     - '488'
     - '561'
-    exposure time (ms): 90.0
+    exposure time (ms): 490.0
     looping order: '[mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color]
       - [layer 4: slice]'
     mag-factor: 5
     metronome frequency: 10000
-    n slices: 354
+    n slices: 36
     name: mode1
+    number of time points: 2
     pixel size in xy (um): 0.4
     positions:
       position name 1:
@@ -120,13 +121,13 @@ process configs:
         x: 23
         y: 12
     scanning galvo scan range limit (um): 0.8
-    scanning galvo scan range per slice (um): 2.545584412271571
-    scanning range (um): 1001.2632021601514
-    scanning speed (nm/ms): 28.284271247461902
+    scanning galvo scan range per slice (um): 2.7718585822512667
+    scanning range (um): 101.82337649086287
+    scanning speed (nm/ms): 5.656854249492381
     slice distance (um): 2.0
     stage retraction time (ms): 23.0
-    time per stack per view (s): 35.423
-    time per time point (s): 141.692
+    time per stack per view (s): 18.023
+    time per time point (s): 72.092
     type: mode1
     views:
     - '1'

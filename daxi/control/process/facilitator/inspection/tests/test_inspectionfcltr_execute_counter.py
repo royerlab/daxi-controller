@@ -5,4 +5,3 @@ from daxi.control.process.facilitator.inspection.demos.demo_inspectionfcltr_exec
 def test_inspectionfcltr_execute_counter():
     msg = demo_inspectionfcltr_execute_counter()
     assert msg == 'successful'
-

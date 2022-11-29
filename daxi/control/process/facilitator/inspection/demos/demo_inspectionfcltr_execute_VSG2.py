@@ -1,4 +1,7 @@
 # get a device facilitator object
+# # here we demonstrate how to use an InspectionFcltr to inspect the view switching galvo 2
+# (turn on, start, stop, close).
+
 import os
 
 from daxi.control.device.facilitator.devicefacilitator import DevicesFcltr

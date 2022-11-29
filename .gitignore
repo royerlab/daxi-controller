@@ -7,3 +7,4 @@ old_workbench/asistage/__pycache__/
 .ipynb_checkpoints
 *scratch*
 daxi.egg-info/
+dependencies/

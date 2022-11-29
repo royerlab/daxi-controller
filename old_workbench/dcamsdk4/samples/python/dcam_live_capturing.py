@@ -15,6 +15,9 @@ from dcam import *
 
 # pip install opencv-python
 import cv2
+import numpy as np
+
+from old_workbench.hamamatsu.dcamapi_helpers import Dcamapi
 
 
 def dcamtest_show_framedata(data, windowtitle, iShown):

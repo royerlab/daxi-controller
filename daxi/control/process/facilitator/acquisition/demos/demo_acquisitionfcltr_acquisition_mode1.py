@@ -28,14 +28,8 @@ process_configs = load_process_configs(path=path)
 df.receive_device_configs_all_cycles(process_configs=process_configs,
                                      device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
-# should have an extra step to choose a view/color, and map it to the
-# single cycle configs, then move on.
-
+# checkout a single config from the loop
 df.checkout_single_cycle_configs(key='view1 color488')
-
-# receive the configurations (this should be done inside the command)
-# device_fcltr.receive_device_configs_all_cycles(process_configs=configs,
-#                                                device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
 af.devices_fcltr = df
 af.configs = process_configs

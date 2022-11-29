@@ -464,7 +464,7 @@ class Counter:
     you can use it to count the number of slices, volumes, loops, etc.
     """
 
-    def __init__(self):
+    def __init__(self, devices_connected=True):
         self.name = None, str  # this should be the name of this counter
         self.counter_terminal = None, str  # this should be a counter terminal string from the DAQ card.
         self.task_handle = None  # this should be an nidaqmx.task.Task object
@@ -474,6 +474,8 @@ class Counter:
         self.purpose = None, str  # should provide a description of the purpose of this counter.
         self.current_count = None, int  # this will be
         self.verbose = None, bool  # display output message or not.
+        self.devices_connected = devices_connected
+        self.status = 'counter initiated'
 
     def set_configurations(self, counter_configs):
         """
@@ -499,21 +501,24 @@ class Counter:
         it returns 0 when the process is successful.
         """
         # checkout a task
-        self.task_handle = nidaqmx.Task(self.name)
+        if self.devices_connected:
+            self.task_handle = nidaqmx.Task(self.name)
 
-        # configure counter and the counting edge type
-        if self.counting_edge == 'RISING':
-            ctr = self.task_handle.ci_channels.add_ci_count_edges_chan(
-                self.counter_terminal, edge=nidaqmx.constants.Edge.RISING
-            )
+            # configure counter and the counting edge type
+            if self.counting_edge == 'RISING':
+                ctr = self.task_handle.ci_channels.add_ci_count_edges_chan(
+                    self.counter_terminal, edge=nidaqmx.constants.Edge.RISING
+                )
 
-        if self.counting_edge == 'FALLING':
-            ctr = self.task_handle.ci_channels.add_ci_count_edges_chan(
-                self.counter_terminal, edge=nidaqmx.constants.Edge.FALLING
-            )
+            if self.counting_edge == 'FALLING':
+                ctr = self.task_handle.ci_channels.add_ci_count_edges_chan(
+                    self.counter_terminal, edge=nidaqmx.constants.Edge.FALLING
+                )
 
-        # configure the input signal to count
-        ctr.ci_count_edges_term = self.counting_input_terminal
+            # configure the input signal to count
+            ctr.ci_count_edges_term = self.counting_input_terminal
+        else:
+            self.status = 'counter ready'
 
     def start(self):
         """
@@ -521,7 +526,10 @@ class Counter:
         :return:
         it returns 0 when the process was successful.
         """
-        self.task_handle.start()
+        if self.devices_connected:
+            self.task_handle.start()
+        else:
+            self.status = 'counter started'
 
     def read(self):
         """
@@ -529,7 +537,11 @@ class Counter:
         :return:
         returns the current count, int.
         """
-        self.current_count = self.task_handle.read()
+        if self.devices_connected:
+            self.current_count = self.task_handle.read()
+        else:
+            self.current_count + 1
+
         return self.current_count
 
     def stop(self):
@@ -538,7 +550,10 @@ class Counter:
         :return:
         it returns 0 when the process is successful.
         """
-        self.task_handle.stop()
+        if self.devices_connected:
+            self.task_handle.stop()
+        else:
+            self.status = 'counter stopped'
 
     def close(self):
         """
@@ -546,7 +561,10 @@ class Counter:
         it returns 0 when the process is successful.
         :return:
         """
-        self.task_handle.close()
+        if self.devices_connected:
+            self.task_handle.close()
+        else:
+            self.status = 'counter closed'
 
 
 class Metronome:

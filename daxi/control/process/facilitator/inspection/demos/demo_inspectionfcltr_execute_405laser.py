@@ -1,4 +1,6 @@
 # get a device facilitator object
+# here we demonstrate how to use an InspectionFcltr to inspect 405 galvo (turn on, start, stop, close).
+
 import os
 
 from daxi.control.device.facilitator.devicefacilitator import DevicesFcltr
