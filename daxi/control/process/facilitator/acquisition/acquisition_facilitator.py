@@ -6,7 +6,9 @@ import os
 from time import sleep
 
 import numpy as np
-from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
+# from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
+#     NIDAQDevicesConfigsGeneratorMode1
+from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 
 
