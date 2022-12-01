@@ -1,4 +1,5 @@
 from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO, Counter
+from daxi.control.device.pool.oara_flashv4 import OrcaFlashV4
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 # from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO, Counter
 
@@ -21,6 +22,13 @@ class DevicesFcltr:
     the receiver contains all the methods (things they can do and they know how to do), and the command (focused
     process facilitator) uses them through the receiver for the specific process.
 
+    for levels of actions for each category of devices:
+    prepare - these are the preparation work that do not require availability of the hardware.
+    get_ready  - this will start to interact with the hardware level API and requires the hardware
+    start - start the operation of the hardware
+    stop - stop the operation of the hardware (without closing it)
+    close - close the the hardware.
+
     """
 
     def __init__(self, devices_connected=True):
@@ -35,6 +43,8 @@ class DevicesFcltr:
         self.devices_and_tools_collection = None
         self.taskbundle_ao = None
         self.taskbundle_do = None
+        self.camera = None
+        self.asi_stage = None
         self.configs_all_cycles = {}
         self.configs_metronome = None
         self.configs_counter = None
@@ -53,6 +63,8 @@ class DevicesFcltr:
         self.configs_O1 = None
         self.configs_O3 = None
         self.configs_single_cycle_dict = None
+        self.configs_camera = None
+        self.configs_asi_stage = None
 
     def load_device_configs_one_cycle(self, device_configs_file, verbose=True):
         """
@@ -459,24 +471,37 @@ class DevicesFcltr:
 
         """
 
+    def camera_prepare_camera(self):
+        self.camera = OrcaFlashV4()
+
+    def camera_get_ready(self):
+        self.camera.get_ready(camera_ids=self.configs_camera['camera ids'])
+        self.camera.set_configurations(camera_ids=self.configs_camera['camera ids'],
+                                       camera_configs=self.configs_camera)
+
     def camera_start(self):
         print("          this will start the camera, leave it out for now. will implement in the future.")
+        pass
+        self.camera.start(camera_ids=self.configs_camera['camera ids'])
+
+    def camera_stop(self):
+        print("          this will stop the camera, leave it out for now. will implement in the future.")
+        self.camera.stop(camera_ids=self.configs_camera['camera ids'])
+
+    def camera_close(self):
+        print("          this will close the camera, leave it out for now. will implement in the future.")
+        self.camera.release_buffer(camera_ids=self.configs_camera['camera ids'])
+        self.camera.close(camera_ids=self.configs_camera['camera ids'])
+
+    def stage_get_ready(self):
         pass
 
     def stage_start(self):
         print("          this will start the stage, leave it out for now. will implement in the future.")
         pass
 
-    def camera_stop(self):
-        print("          this will stop the camera, leave it out for now. will implement in the future.")
-        pass
-
     def stage_stop(self):
         print("          this will stop the stage, leave it out for now. will implement in the future.")
-        pass
-
-    def camera_close(self):
-        print("          this will close the camera, leave it out for now. will implement in the future.")
         pass
 
     def stage_close(self):

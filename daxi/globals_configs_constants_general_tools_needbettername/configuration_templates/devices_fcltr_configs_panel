@@ -17,6 +17,8 @@ definition start.
                              '561_laser',\
                              '639_laser',\
                              'bright_field',\
+                             'camera',\
+                             'asi_stage',\
                              ]
 }
 definition end.
@@ -361,6 +363,37 @@ definition start.
     'acquisition mode': 1,
     'number of options for the sequence': 1,
     },
+}
+definition end.
+
+------------------------------------ Physical Devices Section: camera
+camera:
+definition start.
+{
+    'camera ids': [0],
+    'device': 'Hamamtsu Orca Flash V4',
+    'name': 'camera',
+    'exposure time (ms)': 100,
+    'frame number': 100,
+    'trigger source': 'MASTER PULSE',
+    'trigger mode': 'NORMAL',
+    'trigger polarity': 'POSITIVE',
+    'trigger times': 1,
+    'output trigger kind': 'TRIGGER READY',
+    'output trigger polarity': 'POSITIVE',
+    'master pulse mode': 'START',
+    'burst times': 1,
+    'master pulse interval': 0.01,
+    'master pulse trigger': 'EXTERNAL',
+    'buffer size (frame number)': 200,
+}
+definition end.
+
+------------------------------------ Physical Devices Section: asi_stage
+asi_stage:
+definition start.
+{
+    'name': 'placeholder'
 }
 definition end.
 

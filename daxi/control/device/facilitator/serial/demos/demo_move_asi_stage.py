@@ -9,7 +9,7 @@ if __name__ == '__main__':
     a.store_current_position()
 
     # define an explicit position
-    pos = a.define_explicit_position(name='p1')
+    pos = a.define_explicit_position()
     print('pos:')
     print(pos)
     pos['scan configurations']['encoder divide'] = 24
