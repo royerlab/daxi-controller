@@ -1,7 +1,7 @@
 # demo_devicesfcltr_load_and_run.py
 import os
 
-from daxi.control.device.facilitator.devicefacilitator import DevicesFcltr
+from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
 from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs

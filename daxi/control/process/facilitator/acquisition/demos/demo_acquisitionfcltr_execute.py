@@ -1,6 +1,6 @@
 import os
 
-from daxi.control.device.facilitator.devicefacilitator import DevicesFcltr
+from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
 from daxi.control.process.facilitator.acquisition.acquisition_facilitator import AcquisitionFcltr
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates

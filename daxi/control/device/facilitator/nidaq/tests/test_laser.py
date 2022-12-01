@@ -1,6 +1,6 @@
 # test_laser.py
 
-from daxi.control.device.facilitator.devicefacilitator import DevicesFcltr
+from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
 from daxi.control.device.facilitator.nidaq.laser import LaserBase
 from daxi.control.device.facilitator.nidaq.tests.assert_laser import assert_laser
 

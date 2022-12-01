@@ -4,11 +4,12 @@ from time import sleep
 from matplotlib import pyplot as plt
 import numpy as np
 
-from daxi.ctr_devicesfacilitator.devicefacilitator import DevicesFcltr
-from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
+
+from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
+from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
-from daxi.ctr_devicesfacilitator.nidaq.nidaq import SubTaskAO
-from daxi.ctr_processesfacilitator.processes_facilitator import load_process_configs
+from daxi.control.device.facilitator.nidaq.nidaq import SubTaskAO
+from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
@@ -29,19 +30,46 @@ first_cycle_key = next(iter(devices_fcltr.configs_single_cycle_dict))
 devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                             verbose=True)
 
+# prepare a list of names of the devices configurations attributes.
+sg = 'configs_scanning_galvo'
+vsg1 = 'configs_view_switching_galvo_1'
+vsg2 = 'configs_view_switching_galvo_2'
+beta = 'configs_beta_galvo_light_sheet_incident_angle'
+gamma = 'configs_gamma_galvo_strip_reduction'
+# metronome = 'configs_metronome'
+# counter = 'counter'
+# l405 = 'configs_405_laser'
+# l488 = 'configs_488_laser'
+# l561 = 'configs_561_laser'
+# l639 = 'configs_639_laser'
+# bfled = 'configs_bright_field'
+O1 = 'configs_O1'
+O3 = 'configs_O3'
+
+device_name = O3
+
 # 2. prepare the SG as an ao subtask
-config = getattr(devices_fcltr, 'configs_scanning_galvo')
+config_SG = getattr(devices_fcltr, 'configs_scanning_galvo')
+
+config = getattr(devices_fcltr, device_name)
 devices_fcltr.subtask_ao_configs_list = [config]
+
+# get the data for SG galvo so it is a scanning curve.
+st_sg = SubTaskAO(config_SG)
+if st_sg.data is None:
+    st_sg.generate_data()
+
+# copy the SG data to the vsg1 so we can see it scans.
 st = SubTaskAO(config)
-if st.data is None:
-    st.generate_data()
+st.data = st_sg.data
+
 devices_fcltr.subtask_ao_list = [st]
 
 # plot voltage profiles together with the metronome ticks.
 metronome_frequency = devices_fcltr.configs_metronome['frequency']
-scanning_galvo_data = devices_fcltr.configs_scanning_galvo['data']
-time_ticks = np.arange(len(scanning_galvo_data))/metronome_frequency  # unit: seconds.
-plt.plot(time_ticks, scanning_galvo_data)
+data = st.data
+time_ticks = np.arange(len(data))/metronome_frequency  # unit: seconds.
+plt.plot(time_ticks, data)
 plt.show()
 
 # 3. prepare metronome
