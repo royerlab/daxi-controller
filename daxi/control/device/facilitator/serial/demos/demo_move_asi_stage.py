@@ -7,6 +7,8 @@ if __name__ == '__main__':
 
     # store the current position of the stage.
     a.store_current_position()
+
+    # define an explicit position
     pos = a.define_explicit_position(name='p1')
     print('pos:')
     print(pos)

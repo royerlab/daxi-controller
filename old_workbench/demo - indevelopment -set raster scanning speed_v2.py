@@ -5,7 +5,7 @@ a = DaxiMs2kStage("COM6", 9600)
 # store the current position of the stage.
 a.store_current_position()
 
-pos = a.define_explicit_position(name='p1')
+pos = a.define_explicit_position()
 print('pos:')
 print(pos)
 pos['scan configurations']['encoder divide'] = 24

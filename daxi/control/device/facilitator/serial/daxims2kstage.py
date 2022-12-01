@@ -51,7 +51,7 @@ class DaxiMs2kStage(SerialPort):
         if not self.is_open():
             print("daxims2k is not open.")
 
-        self.default_raster_scan_configs = {'scan speed': 0.001,
+        self.default_raster_scan_configs = {'scan speed': 5,
                                             'scan range': 2.0,
                                             'start position': None,
                                             'end position': None,
@@ -195,7 +195,7 @@ class DaxiMs2kStage(SerialPort):
         pos = self.get_current_position(unit)
         self.stored_positions[name] = pos
 
-    def define_explicit_position(self, name:str, unit:str = 'mm', x:float = 1.0, y:float = 1.0):
+    def define_explicit_position(self, unit:str = 'mm', x:float = 1.0, y:float = 1.0):
         pos= {'unit': unit,
               'X': x,
               'Y': y,
