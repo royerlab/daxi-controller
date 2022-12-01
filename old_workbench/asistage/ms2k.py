@@ -6,7 +6,7 @@
 # Note - I'm keeping it consistent with the offical API example codes. - Xiyu Yi, 2022-08-05
 #
 
-from old_workbench.asistage.serialport import SerialPort
+from daxi.control.device.facilitator.serial.serialport import SerialPort
 
 
 class MS2000(SerialPort):
