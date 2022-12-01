@@ -8,6 +8,7 @@
 # Note - I'm trying tp keep it consistent with the offical API example codes. - Xiyu Yi, 2022-08-10
 
 from daxi.control.device.facilitator.serial.serialport import SerialPort
+
 from time import sleep
 import copy
 
