@@ -10,6 +10,6 @@ def demo_firstcli_acquire(process_configs_path):
   return 'successful'
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     print('called as a main:')
     demo_firstcli_acquire(process_configs_path=process_configs_yaml_path)

@@ -109,9 +109,9 @@ process configs:
       - [layer 4: slice]'
     mag-factor: 5
     metronome frequency: 10000
-    n slices: 354
+    n slices: 36
     name: mode1
-    number of time points: 10
+    number of time points: 2
     pixel size in xy (um): 0.4
     positions:
       position name 1:
@@ -122,12 +122,12 @@ process configs:
         y: 12
     scanning galvo scan range limit (um): 0.8
     scanning galvo scan range per slice (um): 2.7718585822512667
-    scanning range (um): 1001.2632021601514
+    scanning range (um): 101.82337649086287
     scanning speed (nm/ms): 5.656854249492381
     slice distance (um): 2.0
     stage retraction time (ms): 23.0
-    time per stack per view (s): 177.023
-    time per time point (s): 708.092
+    time per stack per view (s): 18.023
+    time per time point (s): 72.092
     type: mode1
     views:
     - '1'

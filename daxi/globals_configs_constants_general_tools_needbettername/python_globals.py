@@ -8,3 +8,4 @@ if platform.system() == 'Darwin':
 
 development_mode = True
 sphinx_build = False
+long_test = False
