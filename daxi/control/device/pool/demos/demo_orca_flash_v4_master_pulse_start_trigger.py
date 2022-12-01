@@ -1,3 +1,5 @@
+from time import sleep
+
 from copylot.hardware.orca_camera.camera import OrcaCamera
 
 from daxi.control.device.pool.oara_flashv4 import OrcaFlashV4
@@ -37,4 +39,3 @@ if __name__ == '__main__':
     camera.release_buffer(camera_ids=[0])
 
     camera.close(camera_ids=[0])
-
