@@ -393,7 +393,12 @@ definition end.
 asi_stage:
 definition start.
 {
-    'name': 'placeholder'
+    'name': 'ASI STAGE',
+    'COM Port': 'COM6',
+    'BAUD RATE': 9600,
+    'scan speed': 5,
+    'encoder divide': 24,
+    'scan range': 10,
 }
 definition end.
 

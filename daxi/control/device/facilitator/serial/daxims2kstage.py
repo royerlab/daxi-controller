@@ -46,10 +46,6 @@ class DaxiMs2kStage(SerialPort):
         # define some container attribute
         self.stored_positions = {'current position': {'unit': 'mm', 'X': 0.0,
                                                       'Y': 0.0}}  # may want some structure to these positions.
-        # in the stored positions, store X, Y, unit, and scanning configurations.
-        self.connect_to_serial()
-        if not self.is_open():
-            print("daxims2k is not open.")
 
         self.default_raster_scan_configs = {'scan speed': 5,
                                             'scan range': 2.0,
@@ -62,12 +58,12 @@ class DaxiMs2kStage(SerialPort):
     #     MS2000 Serial Commands to be used when controlling a DaXi microscope     #
     # ---------------------------------------------------------------------------- #
 
-    def is_device_busy(self) -> bool:
+    def _is_device_busy(self) -> bool:
         """Returns True if any axis is busy."""
         self.send_command("/")
         return "B" in self.read_response()
 
-    def wait_for_device(self, report: bool = False) -> None:
+    def _wait_for_device(self, report: bool = False) -> None:
         """Waits for the all motors to stop moving."""
         if not report:
             print("Waiting for device...")
@@ -75,7 +71,7 @@ class DaxiMs2kStage(SerialPort):
         self.report = report
         busy = True
         while busy:
-            busy = self.is_device_busy()
+            busy = self._is_device_busy()
         self.report = temp
 
     def config_speed(self, scan_configs=None, speed: float = 0.00528):
@@ -98,7 +94,7 @@ class DaxiMs2kStage(SerialPort):
         print('setting the raster scanning speed to be ' + str(scan_configs['scan speed']) + ' from scan_configs')
         self.send_command(msg_speed)
         self.read_response()
-        self.wait_for_device()
+        self._wait_for_device()
 
     def config_raster_scan(self,
                            scan_configs: dict,
@@ -158,7 +154,7 @@ class DaxiMs2kStage(SerialPort):
 
         self.send_command(msg_raster_scan)
         self.read_response()
-        self.wait_for_device()
+        self._wait_for_device()
 
     def get_current_position(self, unit: str = 'mm'):
         """
@@ -169,7 +165,9 @@ class DaxiMs2kStage(SerialPort):
         pos = {'unit': unit}  # store the axis positions
         for axis_tag in ['X', 'Y']:
             self.send_command(f"WHERE " + axis_tag + "\r")  # send a serial command to get the X axis position
+            # self._wait_for_device()
             resp = self.read_response()  # receive the responses with position information expressed in a string
+            # self._wait_for_device()
             print('now print resp')
             print(resp)
             pos_str = resp.split(" ")[1]  # parse the string to obtain the position substring in ASI unit (10 um).
@@ -177,7 +175,8 @@ class DaxiMs2kStage(SerialPort):
             pos[axis_tag] = pos_str2num(pos_str, unit)
             # wait for the device
             # self.wait_for_device() # this doesn't work. hold.
-            sleep(0.1)  # todo - should replace this into some proper waiting time. leave it for now.
+            sleep(0.01)
+            self._wait_for_device()
 
         pos['scan configurations'] = copy.deepcopy(self.default_raster_scan_configs)
         pos['scan configurations']['start position'] = pos['X']
@@ -187,12 +186,27 @@ class DaxiMs2kStage(SerialPort):
         print(pos)
         return pos
 
-    def append_current_position(self, name: str, unit: str = 'mm'):
+    def connect(self):
+        self.connect_to_serial()
+        if not self.is_open():
+            print("daxims2k is not open.")
+        self._wait_for_device()
+
+    def add_current_position_to_list(self, name: str, unit: str = 'mm'):
         """
         store the current position to the stored positions
         store om unit of mm. -- need to somehow standardize the format of this position attribute.
         """
         pos = self.get_current_position(unit)
+        self.stored_positions[name] = pos
+
+    def add_position_to_list(self, name:str, unit: str = 'mm', pos_in=None):
+        if unit == 'mm':
+            pos = pos_2mm(pos_in)
+
+        if unit == 'asi':
+            pos = pos_2asi(pos_in)
+
         self.stored_positions[name] = pos
 
     def define_explicit_position(self, unit:str = 'mm', x:float = 1.0, y:float = 1.0):
@@ -227,9 +241,9 @@ class DaxiMs2kStage(SerialPort):
         self.read_response()
 
     def store_current_position(self):
-        self.append_current_position(name='current position')
+        self.add_current_position_to_list(name='current position')
 
-    def raster_scan_get_configs(self, position_name: str = 'current position', scan_range: float = 10,
+    def raster_scan_set_configs(self, position_name: str = 'current position', scan_range: float = 10,
                                 encoder_divide: int = 24, scan_speed: float = 0.528):
         """
         this method prepares the configuration for a scanning.

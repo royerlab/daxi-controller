@@ -1,7 +1,7 @@
 from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO, Counter
+from daxi.control.device.facilitator.serial.daxims2kstage import DaxiMs2kStage
 from daxi.control.device.pool.oara_flashv4 import OrcaFlashV4
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
-# from daxi.ctr_devicesfacilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO, Counter
 
 
 class DevicesFcltr:
@@ -471,7 +471,7 @@ class DevicesFcltr:
 
         """
 
-    def camera_prepare_camera(self):
+    def camera_prepare(self):
         self.camera = OrcaFlashV4()
 
     def camera_get_ready(self):
@@ -493,17 +493,71 @@ class DevicesFcltr:
         self.camera.release_buffer(camera_ids=self.configs_camera['camera ids'])
         self.camera.close(camera_ids=self.configs_camera['camera ids'])
 
+    def stage_prepare(self):
+        self.asi_stage = DaxiMs2kStage(self.configs_asi_stage['COM Port'],
+                                       self.configs_asi_stage['BAUD RATE'])
+
     def stage_get_ready(self):
-        pass
+        if self.asi_stage is not None:
+            self.asi_stage.connect()
+            self.asi_stage.get_current_position()
+        else:
+            raise ValueError('the stage is note prepared. run .stage_prepare() first.')
 
-    def stage_start(self):
+    def stage_start_raster_scan(self):
         print("          this will start the stage, leave it out for now. will implement in the future.")
-        pass
+        if self.asi_stage is not None:
+            self.asi_stage.raster_scan_go()
+        else:
+            raise ValueError('the stage is note prepared. run .stage_prepare() first.')
 
-    def stage_stop(self):
-        print("          this will stop the stage, leave it out for now. will implement in the future.")
-        pass
+    def stage_raster_scan_get_ready_at_position(self, position_name):
+        if self.asi_stage is not None:
+            self.asi_stage.raster_scan_ready(position_name=position_name)
+        else:
+            raise ValueError('the stage is note prepared. run .stage_prepare() first.')
 
-    def stage_close(self):
-        print("          this will close the stage, leave it out for now. will implement in the future.")
-        pass
+    def stage_move_to(self, position_name='current position'):
+        if self.asi_stage is not None:
+            self.asi_stage.move_to(position_name)
+        else:
+            raise ValueError('the stage is note prepared. run .stage_prepare() first.')
+
+    def stage_get_current_position(self):
+        """this will take the current position and return it"""
+        current_position = None
+        if self.asi_stage is not None:
+            current_position = self.asi_stage.get_current_position()
+        else:
+            raise ValueError('the stage is note prepared. run .stage_prepare() first.')
+        return current_position
+
+    def stage_define_explicit_position(self, unit:str = 'mm', x:float = 1.0, y:float = 1.0):
+        """this funciton allows the user to explicitly define a position"""
+        if self.asi_stage is not None:
+            pos = self.asi_stage.define_explicit_position(unit=unit,
+                                                          x=x,
+                                                          y=y)
+        else:
+            raise ValueError('the stage is note prepared. run .stage_prepare() first.')
+
+        return pos
+
+    def stage_add_position(self, name, pos):
+        if self.asi_stage is not None:
+            self.asi_stage.add_position_to_list(name=name, pos_in=pos, unit='mm')
+        else:
+            raise ValueError('the stage is note prepared. run .stage_prepare() first.')
+
+    def stage_raster_scan_set_configs(self,
+                                      position_name: str = 'current position',
+                                      scan_range: float = 10,
+                                      encoder_divide: int = 24,
+                                      scan_speed: float = 0.528):
+        if self.asi_stage is not None:
+            self.asi_stage.raster_scan_set_configs(position_name=position_name,
+                                                   scan_range=scan_range,
+                                                   encoder_divide=encoder_divide,
+                                                   scan_speed=scan_speed)
+        else:
+            raise ValueError('asi stage is not initialized yet.')

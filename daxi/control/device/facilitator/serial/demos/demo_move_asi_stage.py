@@ -1,9 +1,9 @@
 from daxi.control.device.facilitator.serial.daxims2kstage import DaxiMs2kStage
 
-
-if __name__ == '__main__':
+def move_asi_stage():
     # conect to the asi stage used on the DaXi microscope. We are using a MS2000 stage from ASI.
     a = DaxiMs2kStage("COM6", 9600)
+    a.connect()
 
     # store the current position of the stage.
     a.store_current_position()
@@ -23,3 +23,8 @@ if __name__ == '__main__':
     a.raster_scan_ready(position_name='p1')
     a.raster_scan_go()
     print()
+
+
+if __name__ == '__main__':
+    move_asi_stage()
+

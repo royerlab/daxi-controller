@@ -5,7 +5,7 @@ from daxi.control.device.facilitator.serial.daxims2kstage import DaxiMs2kStage
 # prepare the asi stage object
 
 a = DaxiMs2kStage("COM6", 9600)
-
+a.connect()
 # store a series of positions
 p1 = a.get_current_position()
 p2 = a.define_explicit_position(x=1.0, y=1.0)
