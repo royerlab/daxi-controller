@@ -1,4 +1,4 @@
-from daxi.control.device.facilitator.devicefacilitator import DevicesFcltr
+from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
 from daxi.globals_configs_constants_general_tools_needbettername.constants import device_fcltr_configs_path
 
 # 0.  checkout a devices facilitator

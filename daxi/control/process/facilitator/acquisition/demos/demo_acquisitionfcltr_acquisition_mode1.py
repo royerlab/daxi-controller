@@ -1,6 +1,6 @@
 import os
 
-from daxi.control.device.facilitator.devicefacilitator import DevicesFcltr
+from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
 from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.process.facilitator.acquisition.acquisition_facilitator import AcquisitionFcltr
