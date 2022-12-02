@@ -2,7 +2,7 @@ from time import sleep
 
 from copylot.hardware.orca_camera.camera import OrcaCamera
 
-from daxi.control.device.pool.oara_flashv4 import OrcaFlashV4
+from daxi.control.device.pool.oara_flash4 import OrcaFlash4
 
 if __name__ == '__main__':
     # first define a camera configuration dictionary
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     camera_configs['buffer size (frame number)'] = 200
 
     # now prepare the camera
-    camera = OrcaFlashV4()
+    camera = OrcaFlash4()
 
     camera.get_ready(camera_ids=[0])
 
