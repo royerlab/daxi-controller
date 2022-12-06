@@ -20,9 +20,9 @@ df.camera_get_ready()
 df.camera_start()
 
 # 5. user termination
-p =''
-while p !='q':
-    p=input('press q to exit...\n')
+p = ''
+while p != 'q':
+    p = input('press q to exit...\n')
     sleep(0.05)
 
 # 6. stop the camera
