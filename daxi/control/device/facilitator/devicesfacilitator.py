@@ -1,7 +1,9 @@
 from daxi.control.device.facilitator.direct.orca_flash4_simulated import OrcaFlash4Simulation
 from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, \
     SubTaskAO, SubTaskDO, Counter
-from daxi.control.device.facilitator.serial.daxims2kstage import DaxiMs2kStage
+from daxi.control.device.facilitator.serial.daxi_ms2k_stage import DaxiMs2kStage
+from daxi.control.device.facilitator.serial.daxi_ms2k_stage_simulated import DaxiMS2kStageSimulated
+
 try:
     from daxi.control.device.pool.orca_flash4 import OrcaFlash4
 except:
@@ -490,7 +492,6 @@ class DevicesFcltr:
 
     def camera_start(self):
         print("          this will start the camera, leave it out for now. will implement in the future.")
-        pass
         self.camera.start(camera_ids=self.configs_camera['camera ids'])
 
     def camera_stop(self):
@@ -537,9 +538,13 @@ class DevicesFcltr:
             raise ValueError('only one camera is supported right now.')
         return output
 
-    def stage_prepare(self):
-        self.asi_stage = DaxiMs2kStage(self.configs_asi_stage['COM Port'],
-                                       self.configs_asi_stage['BAUD RATE'])
+    def stage_prepare(self, simulation=False):
+        if simulation is True:
+            self.asi_stage = DaxiMS2kStageSimulated(self.configs_asi_stage['COM Port'],
+                                           self.configs_asi_stage['BAUD RATE'])
+        else:
+            self.asi_stage = DaxiMs2kStage(self.configs_asi_stage['COM Port'],
+                                           self.configs_asi_stage['BAUD RATE'])
 
     def stage_get_ready(self):
         if self.asi_stage is not None:
@@ -605,3 +610,4 @@ class DevicesFcltr:
                                                    scan_speed=scan_speed)
         else:
             raise ValueError('asi stage is not initialized yet.')
+

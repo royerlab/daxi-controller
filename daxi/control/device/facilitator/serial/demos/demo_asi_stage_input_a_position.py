@@ -1,4 +1,4 @@
-from daxi.control.device.facilitator.serial.daxims2kstage import DaxiMs2kStage
+from daxi.control.device.facilitator.serial.daxi_ms2k_stage import DaxiMs2kStage
 
 a = DaxiMs2kStage("COM6", 9600)
 a.connect()
