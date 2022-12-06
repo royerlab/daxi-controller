@@ -14,9 +14,9 @@ class ProcessesFcltr(ProcessesFcltrGUI):
     def start(self):
         self.get_process_type()
         self.get_process_parameters()
-        self.get_nidaq_configurations()
-        self.get_asistage_configurations()
-        self.get_hamamatsu_configurations()
+        self.get_configs_nidaq()
+        self.get_configs_asistage()
+        self.get_configs_hamamatsu()
 
     def get_process_type(self):
         """

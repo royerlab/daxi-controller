@@ -10,6 +10,7 @@ import numpy as np
 #     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
+from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
 
 class AcquisitionFcltr():
@@ -92,17 +93,17 @@ class AcquisitionFcltr():
         # 7. get ready, and start/stop.
         self.devices_fcltr.daq_get_ready()
         self.devices_fcltr.daq_start()
-        self.devices_fcltr.daq_stop()
+        self.devices_fcltr.daq_stop()  # run a start-stop cycle to flush the buffer.
 
         # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a
         # working daq is done)
         # copy/organize from the previous ad-hoc in the old_workbench
-        # demo - indevelopment -set raster scanning speed.py
+        # demo - in development -set raster scanning speed.py
         # think:
         # this should be in device facilitator
 
         # camera get ready (for now, display an image to prompt the user to run the HCI)
-        # daq card configure and everybody get ready (do it through the DevicesFcilitator, map, chekcout 1
+        # daq card configure and everybody get ready (do it through the DevicesFcilitator, map, checkout 1
         # configuration and start everything)
         # loop over positions
         for time_point_index in np.arange(number_of_time_points):
