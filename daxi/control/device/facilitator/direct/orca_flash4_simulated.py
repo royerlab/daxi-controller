@@ -385,6 +385,9 @@ class SimulatedDcam():
         self.device_opened = True
         return True
 
+    def dev_close(self):
+        self.devices_opened = False
+
     def is_opened(self):
         return self.device_opened
 

@@ -1,6 +1,12 @@
-from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO, Counter
+from daxi.control.device.facilitator.direct.orca_flash4_simulated import OrcaFlash4Simulation
+from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, \
+    SubTaskAO, SubTaskDO, Counter
 from daxi.control.device.facilitator.serial.daxims2kstage import DaxiMs2kStage
-from daxi.control.device.pool.oara_flash4 import OrcaFlash4
+try:
+    from daxi.control.device.pool.orca_flash4 import OrcaFlash4
+except:
+    pass
+
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 import numpy as np
 
@@ -111,8 +117,8 @@ class DevicesFcltr:
         this should do things equivalent to load_device_configs, but instead of doing it from loading things from file,
         it receive from outside the dictionary - device_configs.
         # pay attention to the difference between process_configs and devices configs.
-        #todo implement the specifics.
-        doubl echeck and makes ure the device configuration generators generates the correct devices configs as done
+        # todo implement the specifics.
+        double check and makes ure the device configuration generators generates the correct devices configs as done
         in the load* function shown above.
 
         there is process_configs, devices_configs, single_view_devices_configs
@@ -471,8 +477,11 @@ class DevicesFcltr:
 
         """
 
-    def camera_prepare(self):
-        self.camera = OrcaFlash4()
+    def camera_prepare(self, simulation=False):
+        if simulation is True:
+            self.camera = OrcaFlash4Simulation()
+        else:
+            self.camera = OrcaFlash4()
 
     def camera_get_ready(self):
         self.camera.get_ready(camera_ids=self.configs_camera['camera ids'])
@@ -567,7 +576,7 @@ class DevicesFcltr:
             raise ValueError('the stage is note prepared. run .stage_prepare() first.')
         return current_position
 
-    def stage_define_explicit_position(self, unit:str = 'mm', x:float = 1.0, y:float = 1.0):
+    def stage_define_explicit_position(self, unit: str = 'mm', x: float = 1.0, y: float = 1.0):
         """this funciton allows the user to explicitly define a position"""
         if self.asi_stage is not None:
             pos = self.asi_stage.define_explicit_position(unit=unit,
