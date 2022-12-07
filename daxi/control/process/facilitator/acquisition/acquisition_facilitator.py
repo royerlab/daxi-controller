@@ -97,8 +97,11 @@ class AcquisitionFcltr():
 
         # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a
         # working daq is done)
+        self.devices_fcltr.stage_prepare()
+        self.devices_fcltr.stage_get_ready()
+        # self.devices_fcltr.
         # copy/organize from the previous ad-hoc in the old_workbench
-        # demo - in development -set raster scanning speed.py
+        # the speed and everything should already be stored in the list of positions.
         # think:
         # this should be in device facilitator
 
@@ -112,8 +115,19 @@ class AcquisitionFcltr():
             for position in position_list:
                 os.system('echo moving to this position: ' + str(position))
                 # move the stage to the position
+                self.devices_fcltr.move_to(position)
+                self.devices_fcltr.stage_raster_scan_get_ready_at_position(
+                    position_name=position,
+                    scan_range=self.devices_fcltr.configs_asi_stage['scan range'],
+                    # perhaps should add this to a feature of the position, instead of the general.
+                    encoder_divide=position['scan configurations']['encoder divide'],
+                    scan_speed=position['scan configurations']['scan speed'],
+                    )
+                # this raster scan configuration is meant to be here because this mode1 is enforcing the following
+                # looping order:
+                # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
 
-                # need to get devices ready before looping
+                # think about should I set the scanning configuration for each position.
 
                 # loop over views.
                 for view in view_list:
@@ -121,8 +135,8 @@ class AcquisitionFcltr():
                     # loop over colors.
                     for color in color_list:
                         os.system('echo --- --- switching to this color: color' + str(color))
-                        os.system('echo --- --- --- current: time point: ' + str(time_point_index) + ', position: ' + str(position) +
-                                  ', view' + str(view) + ', color' + str(color))
+                        os.system('echo --- --- --- current: time point: ' + str(time_point_index) +
+                                  ', position: ' + str(position) + ', view' + str(view) + ', color' + str(color))
                         # move the filter wheel.
                         # think about it:
                         # this should be done under devices facilitator and should be calling the serial devices.
@@ -131,7 +145,7 @@ class AcquisitionFcltr():
 
                         # based on the view and color indexes, choose a daq data cycle index. (This is
                         # actually implemented in DevicesFcltr)
-                        self.devices_fcltr.checkout_single_cycle_configs(key='view'+str(view)+' color'+str(color),
+                        self.devices_fcltr.checkout_single_cycle_configs(key='view'+str(view) + ' color' + str(color),
                                                                          verbose=True)
                         # write data to daq card again for the changed cycle index.
                         self.devices_fcltr.daq_update_data()
@@ -141,7 +155,7 @@ class AcquisitionFcltr():
                         # start camera (waiting for the trigger)
                         self.devices_fcltr.camera_start()
                         # start raster scan of asi-stage (will send out the trigger)
-                        self.devices_fcltr.stage_start()
+                        self.devices_fcltr.stage_start_raster_scan()
 
                         # loop over slices for the stack:
                         counter = 0
@@ -154,13 +168,13 @@ class AcquisitionFcltr():
                         # stop(pause) daq card
                         self.devices_fcltr.daq_stop()
                         self.devices_fcltr.camera_stop()
-                        self.devices_fcltr.stage_stop()
+                        # self.devices_fcltr.stage_stop()
                         os.system('echo single stack acquisition ends.')
                         os.system('echo .')
 
         self.devices_fcltr.daq_close()
         self.devices_fcltr.camera_close()
-        self.devices_fcltr.stage_close()
+        # self.devices_fcltr.stage_close()  # seems like it is not necessary to call a function to close the stage.
 
         # todo need to check how to re-trigger camera acquisition with the same acquisition protocol.
         # think about the structure of the data here # todo 2022-10-25 item 1.
