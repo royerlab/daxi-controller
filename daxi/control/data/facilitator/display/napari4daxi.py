@@ -52,35 +52,51 @@ class DaXiViewer:
                     self.viewer.add_image(self.image, name=name)
 
     def process_image(self, image):
+        if isinstance(self.camera, VideoCapture):
+            # estimate maximum position
+            from scipy.ndimage import center_of_mass
+            y, x = center_of_mass(np.power(image, 10000))
 
-        # estimate maximum position
-        from scipy.ndimage import center_of_mass
-        y, x = center_of_mass(np.power(image, 10000))
+            # put a point around maximum
+            self.points = np.asarray([[y, x]])
 
-        # put a point around maximum
-        self.points = np.asarray([[y, x]])
+            # send dictionary of images back to napari
+            return {
+                "original": image,
+                "brightest point": self.points
+            }
+        else:
+            return {
+                "stitched mips": image,
+            }
 
-        # send dictionary of images back to napari
-        return {
-            "original": image,
-            "brightest point": self.points
-        }
-
-    def prepare(self, image_feeder=None):
+    def prepare(self, image_feeder=None, camera=None):
         # create a viewer window
         self.viewer = napari.Viewer()
 
         # connect to webcam
-        self.camera = VideoCapture(camera_index)
+        self.camera = camera  # VideoCapture(camera_index)
 
         # image feeder
         self.image_feeder = image_feeder
+
+        # release camera
+        if isinstance(self.camera, VideoCapture):
+            self.camera_release = self.camera.release
+        else:
+            self.camera_release = self.camera_release_orca
+
+    def camera_release_orca(self):
+        self.camera.stop()
+        self.camera.release_buffer()
+        self.camera.close()
+
 
     # https://napari.org/guides/stable/threading.html
     @thread_worker
     def loop_run(self):
         while True:  # endless loop
-            self.image = self.image_feeder(self.camera)
+            self.image = self.image_feeder(camera=self.camera)
             yield self.process_image(self.image)
             time.sleep(0.5)
 
@@ -88,7 +104,7 @@ class DaXiViewer:
         # Start the loop
         self.worker = self.loop_run()
         self.worker.yielded.connect(self.update_layers)
-        self.worker.aborted.connect(self.camera.release)
+        self.worker.aborted.connect(self.camera_release)
         self.worker.start()
 
         # Start napari
