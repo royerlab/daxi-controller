@@ -8,15 +8,15 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
-def simulated_orca_camera_image_feeder(camera : OrcaFlash4Simulation):
-    processor = StackProcessing()
+def simulated_orca_camera_image_feeder(camera : OrcaFlash4Simulation, processor=None):
+    # processor = StackProcessing()
     processor.camera = camera
-    stitched_mips = processor.get_current_stitched_mips()
+    stitched_mips = processor.get_current_stitched_mips(camera_id=0)
     return stitched_mips
 
 
 def demo_daxiviewer_on_simulated_orca_flash4():
-    a = DaXiViewer()
+    daxi_viewer = DaXiViewer()
     camera = OrcaFlash4Simulation(camera_index=0)
     camera.get_ready(camera_ids=[0])
     # define camera configurations
@@ -38,11 +38,13 @@ def demo_daxiviewer_on_simulated_orca_flash4():
     camera_configs['ydim'] = 200
     camera.set_configurations(camera_configs=camera_configs)
     camera.start(camera_ids=[0])
-    a.prepare(
+    p = StackProcessing()
+    daxi_viewer.prepare(
               image_feeder=simulated_orca_camera_image_feeder,
               camera=camera,
+              processor=p,
               )
-    a.go()
+    daxi_viewer.go()
     return 'success'
 
 

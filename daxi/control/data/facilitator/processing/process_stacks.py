@@ -26,13 +26,15 @@ class StackProcessing:
     def _retrieve_last_stack(self, camera_id):
         """this will take the entire stack from the current buffer"""
         # ToDo - need to implement this method in the camera module.
-        self.last_stack = self.camera.get_last_stack(camera_id=camera_id)
+        self.last_stack = self.camera.get_any_stack(camera_id=camera_id, stack_index=0)
+        # self.last_stack = abs(np.random.randn(100, 100, 100))
         return self.last_stack
 
     def _get_current_3d_mips(self):
         self.mip0, self.mip1, self.mip2, self.stitched_mips = get_3d_mips(self.last_stack)
 
-    def get_current_stitched_mips(self):
+    def get_current_stitched_mips(self, camera_id):
+        self._retrieve_last_stack(camera_id=camera_id)
         self._get_current_3d_mips()
         return self.stitched_mips
 

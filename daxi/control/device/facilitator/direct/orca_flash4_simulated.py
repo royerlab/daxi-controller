@@ -393,7 +393,6 @@ class OrcaFlash4Simulation:
             for camera_id in camera_ids:
                 self.devices['camera ' + str(camera_id)].message = False
 
-
 class SimulatedDcam():
     def __init__(self, camera_id):
         self.devices_opened = None

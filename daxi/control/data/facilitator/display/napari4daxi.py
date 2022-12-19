@@ -70,7 +70,7 @@ class DaXiViewer:
                 "stitched mips": image,
             }
 
-    def prepare(self, image_feeder=None, camera=None):
+    def prepare(self, image_feeder=None, camera=None, processor=None):
         # create a viewer window
         self.viewer = napari.Viewer()
 
@@ -79,6 +79,9 @@ class DaXiViewer:
 
         # image feeder
         self.image_feeder = image_feeder
+
+        # processor
+        self.processor = processor
 
         # release camera
         if isinstance(self.camera, VideoCapture):
@@ -96,7 +99,7 @@ class DaXiViewer:
     @thread_worker
     def loop_run(self):
         while True:  # endless loop
-            self.image = self.image_feeder(camera=self.camera)
+            self.image = self.image_feeder(camera=self.camera, processor=self.processor)
             yield self.process_image(self.image)
             time.sleep(0.5)
 
