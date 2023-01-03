@@ -38,7 +38,7 @@ def demo_daxiviewer_on_simulated_orca_flash4():
     camera_configs['ydim'] = 200
     camera.set_configurations(camera_configs=camera_configs)
     camera.start(camera_ids=[0])
-    p=StackProcessing()
+    p = StackProcessing()
     a.prepare(
               image_feeder=simulated_orca_camera_image_feeder,
               camera=camera,

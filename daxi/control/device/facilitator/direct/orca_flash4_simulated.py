@@ -41,6 +41,7 @@ class OrcaFlash4Simulation:
         self.timeout_milisec = None
         self.dcam_status = None
         self.last_stack = None
+        self.current_stack_index = 0
 
     def run(self, nb_frame: int = 100000):
         """
@@ -307,7 +308,7 @@ class OrcaFlash4Simulation:
                                                                                                   'only \'CONTINUOUS\', \'EXTERNAL\' and \'SOFTWARE\' are supported.')
 
         # allocate buffer
-        dcam.buf_alloc(self.buffer_size_frame_number - 1)
+        dcam.buf_alloc(self.buffer_size_frame_number)  # in real devices, should subtract 1.
 
     def start(self, camera_ids=[0]):
         """
@@ -393,6 +394,20 @@ class OrcaFlash4Simulation:
             for camera_id in camera_ids:
                 self.devices['camera ' + str(camera_id)].message = False
 
+    def get_current_stack_index(self, camera_id):
+        frame_index = self.devices['camera ' + str(camera_id)].current_buffer_index
+        stack_index = int(frame_index/(int(self.buffer_size_frame_number/3)))
+        self.current_stack_index = stack_index
+        return stack_index
+
+    def get_current_stack(self, camera_id):
+        """This will return the last acquired stack as an numpy.ndarray"""
+        stack_index = self.get_current_stack_index(camera_id=camera_id)
+        self.get_any_stack(camera_id=camera_id, stack_index=stack_index)
+        print('current stack index is '+ str(stack_index))
+        return self.last_stack
+
+
 class SimulatedDcam():
     def __init__(self, camera_id):
         self.devices_opened = None
@@ -407,6 +422,7 @@ class SimulatedDcam():
         self.message = True
         self.xdim = None
         self.ydim = None
+        self.current_buffer_index = None
 
     def dev_open(self):
         self.device_opened = True
@@ -490,6 +506,7 @@ class SimulatedDcam():
                         frame = object[:, :, i1]
                         sleep(self.exposure_time_seconds)
                         self.buffer[:, :, i] = copy.deepcopy(frame.astype('uint16'))
+                        self.current_buffer_index = i
                         sleep(0.01)
                     else:
                         break

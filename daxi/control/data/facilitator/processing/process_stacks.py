@@ -26,7 +26,8 @@ class StackProcessing:
     def _retrieve_last_stack(self, camera_id):
         """this will take the entire stack from the current buffer"""
         # ToDo - need to implement this method in the camera module.
-        self.last_stack = self.camera.get_any_stack(camera_id=camera_id, stack_index=0)
+        # self.last_stack = self.camera.get_any_stack(camera_id=camera_id, stack_index=2)
+        self.last_stack = self.camera.get_current_stack(camera_id=camera_id)
         # self.last_stack = abs(np.random.randn(100, 100, 100))
         return self.last_stack
 
