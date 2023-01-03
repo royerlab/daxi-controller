@@ -9,4 +9,3 @@ a.store_current_position()
 print('\n\nnow display the list of stored positions:')
 
 print(a.stored_positions)
-
