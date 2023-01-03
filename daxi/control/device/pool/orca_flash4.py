@@ -1,7 +1,8 @@
 from copylot.hardware.orca_camera.camera import OrcaCamera
+import numpy as np
 
 
-class OrcaFlashV4(OrcaCamera):
+class OrcaFlash4(OrcaCamera):
     """
     directly use the OrcaCamera class from coPylot, which was used as a dependency.
     """

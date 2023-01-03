@@ -1,8 +1,16 @@
-from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, SubTaskAO, SubTaskDO, Counter
-from daxi.control.device.facilitator.serial.daxims2kstage import DaxiMs2kStage
-from daxi.control.device.pool.oara_flashv4 import OrcaFlashV4
-from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
+from daxi.control.device.facilitator.direct.orca_flash4_simulated import OrcaFlash4Simulation
+from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, \
+    SubTaskAO, SubTaskDO, Counter
+from daxi.control.device.facilitator.serial.daxi_ms2k_stage import DaxiMs2kStage
+from daxi.control.device.facilitator.serial.daxi_ms2k_stage_simulated import DaxiMS2kStageSimulated
 
+try:
+    from daxi.control.device.pool.orca_flash4 import OrcaFlash4
+except:
+    pass
+
+from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
+import numpy as np
 
 class DevicesFcltr:
     """
@@ -111,8 +119,8 @@ class DevicesFcltr:
         this should do things equivalent to load_device_configs, but instead of doing it from loading things from file,
         it receive from outside the dictionary - device_configs.
         # pay attention to the difference between process_configs and devices configs.
-        #todo implement the specifics.
-        doubl echeck and makes ure the device configuration generators generates the correct devices configs as done
+        # todo implement the specifics.
+        double check and makes ure the device configuration generators generates the correct devices configs as done
         in the load* function shown above.
 
         there is process_configs, devices_configs, single_view_devices_configs
@@ -471,8 +479,11 @@ class DevicesFcltr:
 
         """
 
-    def camera_prepare(self):
-        self.camera = OrcaFlashV4()
+    def camera_prepare(self, simulation=False):
+        if simulation is True:
+            self.camera = OrcaFlash4Simulation()
+        else:
+            self.camera = OrcaFlash4()
 
     def camera_get_ready(self):
         self.camera.get_ready(camera_ids=self.configs_camera['camera ids'])
@@ -481,7 +492,6 @@ class DevicesFcltr:
 
     def camera_start(self):
         print("          this will start the camera, leave it out for now. will implement in the future.")
-        pass
         self.camera.start(camera_ids=self.configs_camera['camera ids'])
 
     def camera_stop(self):
@@ -493,9 +503,48 @@ class DevicesFcltr:
         self.camera.release_buffer(camera_ids=self.configs_camera['camera ids'])
         self.camera.close(camera_ids=self.configs_camera['camera ids'])
 
-    def stage_prepare(self):
-        self.asi_stage = DaxiMs2kStage(self.configs_asi_stage['COM Port'],
-                                       self.configs_asi_stage['BAUD RATE'])
+    def retrieve_1_frame_from_1_camera(self, camera_id=0, frame_index=0):
+        """ this will retrieve the frame_index-th frame from the camera buffer"""
+        print('retrieve frame index '+str(frame_index))
+        output = self.camera.retrieve_1_frame_from_1_camera(self,
+                                                            camera_id=camera_id,
+                                                            frame_index=frame_index)
+        return output
+
+    def camera_retrieve_buffer(self, camera_ids=[0],
+                               full_stack=True,
+                               stack_configs=None,
+                               frame_index=None):
+        """
+        This will take all the images from the camera buffer and return as a stack.
+        """
+        if camera_ids == [0]:
+            if full_stack is True:
+                "retrieve the full stack"
+                stack = np.empty(self.stack_configs['xdim'], stack_configs['ydim'], stack_configs['zdim'])
+                for index in np.arange(frame_index):
+                    print('retrieve frame index '+str(index))
+                    frame = self.retrieve_1_frame_from_1_camera(camera_id=0,
+                                                                frame_index=frame_index)
+                    stack[:, :, index] = frame
+                output = stack
+
+            if full_stack is False:
+                "retrieve the given slice"
+                print('retrieve frame index' + str(index))
+                output = self.retrieve_1_frame_from_1_camera(camera_id=0,
+                                                             frame_index=frame_index)
+        else:
+            raise ValueError('only one camera is supported right now.')
+        return output
+
+    def stage_prepare(self, simulation=False):
+        if simulation is True:
+            self.asi_stage = DaxiMS2kStageSimulated(self.configs_asi_stage['COM Port'],
+                                           self.configs_asi_stage['BAUD RATE'])
+        else:
+            self.asi_stage = DaxiMs2kStage(self.configs_asi_stage['COM Port'],
+                                           self.configs_asi_stage['BAUD RATE'])
 
     def stage_get_ready(self):
         if self.asi_stage is not None:
@@ -532,7 +581,7 @@ class DevicesFcltr:
             raise ValueError('the stage is note prepared. run .stage_prepare() first.')
         return current_position
 
-    def stage_define_explicit_position(self, unit:str = 'mm', x:float = 1.0, y:float = 1.0):
+    def stage_define_explicit_position(self, unit: str = 'mm', x: float = 1.0, y: float = 1.0):
         """this funciton allows the user to explicitly define a position"""
         if self.asi_stage is not None:
             pos = self.asi_stage.define_explicit_position(unit=unit,
@@ -561,3 +610,4 @@ class DevicesFcltr:
                                                    scan_speed=scan_speed)
         else:
             raise ValueError('asi stage is not initialized yet.')
+

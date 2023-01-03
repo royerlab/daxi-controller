@@ -156,7 +156,18 @@ class DaxiMs2kStage(SerialPort):
         self.read_response()
         self._wait_for_device()
 
-    def get_current_position(self, unit: str = 'mm'):
+    def _store_position_info(self, pos=None, verbose=False):
+        pos['scan configurations'] = copy.deepcopy(self.default_raster_scan_configs)
+        pos['scan configurations']['start position'] = pos['X']
+        pos['scan configurations']['end position'] = self.default_raster_scan_configs['scan range']+pos['X']
+
+        if verbose:
+            print('current position:')
+            print(pos)
+
+        return pos
+
+    def get_current_position(self, unit: str = 'mm', verbose=False):
         """
         read the current position of the stage, return a dictionary in units of mm.
         unit, str, options: "asi", "mm"
@@ -178,12 +189,7 @@ class DaxiMs2kStage(SerialPort):
             sleep(0.01)
             self._wait_for_device()
 
-        pos['scan configurations'] = copy.deepcopy(self.default_raster_scan_configs)
-        pos['scan configurations']['start position'] = pos['X']
-        pos['scan configurations']['end position'] = self.default_raster_scan_configs['scan range']+pos['X']
-
-        print('current position:')
-        print(pos)
+        pos = self._store_position_info(pos=pos)
         return pos
 
     def connect(self):

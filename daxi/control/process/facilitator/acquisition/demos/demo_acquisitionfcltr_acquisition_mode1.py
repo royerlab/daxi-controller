@@ -6,6 +6,7 @@ from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_m
 from daxi.control.process.facilitator.acquisition.acquisition_facilitator import AcquisitionFcltr
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates
+from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
 af = AcquisitionFcltr()  # checkout an acquisition facilitator.
 
@@ -19,7 +20,7 @@ af = AcquisitionFcltr()  # checkout an acquisition facilitator.
 
 # checkout a device facilitator
 # 0.  checkout a devices facilitator
-df = DevicesFcltr()
+df = DevicesFcltr(devices_connected=devices_connected)
 
 path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
 process_configs = load_process_configs(path=path)
