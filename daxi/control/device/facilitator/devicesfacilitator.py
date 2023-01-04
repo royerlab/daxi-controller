@@ -1,6 +1,8 @@
 from daxi.control.device.facilitator.direct.orca_flash4_simulated import OrcaFlash4Simulation
 from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, TaskBundleDO, \
-    SubTaskAO, SubTaskDO, Counter
+    SubTaskAO, SubTaskDO
+from daxi.control.device.facilitator.nidaq.counter import Counter
+from daxi.control.device.facilitator.nidaq.simulated_counter import SimulatedCounter
 from daxi.control.device.facilitator.serial.daxi_ms2k_stage import DaxiMs2kStage
 from daxi.control.device.facilitator.serial.daxi_ms2k_stage_simulated import DaxiMS2kStageSimulated
 
@@ -11,6 +13,7 @@ except:
 
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 import numpy as np
+
 
 class DevicesFcltr:
     """
@@ -243,7 +246,13 @@ class DevicesFcltr:
         -------
 
         """
-        self.counter = Counter(devices_connected=self.devices_connected)
+        if self.devices_connected is True:
+            self.counter = Counter(
+                devices_connected=self.devices_connected)
+        else:
+            self.counter = SimulatedCounter(
+                devices_connected=self.devices_connected)
+
         self.counter.set_configurations(self.configs_counter)
 
     def daq_prepare_taskbundle_ao(self):
