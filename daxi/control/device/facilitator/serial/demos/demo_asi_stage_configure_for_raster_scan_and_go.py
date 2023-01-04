@@ -7,7 +7,7 @@ a.connect()
 # store the current position of the stage.
 a.store_current_position()
 
-pos = a.define_explicit_position(name='p1')
+pos = a.define_explicit_position()
 print('pos:')
 print(pos)
 pos['scan configurations']['encoder divide'] = 24
@@ -23,4 +23,4 @@ print(a.stored_positions)
 a.move_to('p1')
 a.raster_scan_ready(position_name='p1')
 a.raster_scan_go()
-print()
+print('done')
