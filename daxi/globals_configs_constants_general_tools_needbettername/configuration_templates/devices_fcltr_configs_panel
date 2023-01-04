@@ -386,6 +386,8 @@ definition start.
     'master pulse interval': 0.01,
     'master pulse trigger': 'EXTERNAL',
     'buffer size (frame number)': 200,
+    'xdim': 512,
+    'ydim': 512,
 }
 definition end.
 
