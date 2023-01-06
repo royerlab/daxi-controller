@@ -110,7 +110,7 @@ class DaXiViewer:
         # Start the loop
         self.worker = self.loop_run()
         self.worker.yielded.connect(self.update_layers)
-        self.worker.aborted.connect(self.camera_release)
+        self.worker.aborted.connect(self.camera_release_orca)
         self.worker.start()
 
         # Start napari
