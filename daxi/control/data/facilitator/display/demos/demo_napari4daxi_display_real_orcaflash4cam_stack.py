@@ -16,9 +16,12 @@ from daxi.globals_configs_constants_general_tools_needbettername.parser import N
 
 def real_orca_camera_image_feeder(camera: OrcaFlash4, processor=None, counter=None):
     counter_output = counter.read()
+    # need to wrape the counter_countput into frame count (periodic boundary condition).
+
     processor.camera = camera
     print('counter output is:' + str(counter_output))
-    stitched_mips = processor.get_current_stitched_mips(camera_id=0, current_frame_count=counter_output)
+    current_frame_count = counter_output % (camera.buffer_size_frame_number )
+    stitched_mips = processor.get_current_stitched_mips(camera_id=0, current_frame_count=current_frame_count)
     return stitched_mips
 
 
