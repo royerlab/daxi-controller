@@ -14,6 +14,13 @@ class StackProcessing:
         self.mip2 = None
         self.stitched_mips = None
         self.last_stack = abs(np.random.randn(100, 100, 100))
+        self.data_window = {'x start index': 100,
+                               'x end index': 300,
+                               'y start index': 100,
+                               'y end index': 400,
+                               'z start index': 0,
+                               'z end index': 100}
+
         # need to think about something about the 3 time points ring buffer.
         # maybe should do the ring buffer in the camera module. But here, just take the last stack
         # use the simulated camera for this.
@@ -27,7 +34,8 @@ class StackProcessing:
         """this will take the entire stack from the current buffer"""
         # ToDo - need to implement this method in the camera module.
         self.last_stack = self.camera.get_current_stack(camera_id=camera_id,
-                                                        current_frame_count=current_frame_count)
+                                                        current_frame_count=current_frame_count,
+                                                        data_window=self.data_window)
         return self.last_stack
 
     def _get_current_3d_mips(self):

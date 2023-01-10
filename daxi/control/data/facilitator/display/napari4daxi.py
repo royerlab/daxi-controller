@@ -104,13 +104,13 @@ class DaXiViewer:
         while True:  # endless loop
             self.image = self.image_feeder(camera=self.camera, processor=self.processor, counter=self.counter)
             yield self.process_image(self.image)
-            time.sleep(0.5)
+            time.sleep(0.05)
 
     def go(self):
         # Start the loop
         self.worker = self.loop_run()
         self.worker.yielded.connect(self.update_layers)
-        self.worker.aborted.connect(self.camera_release)
+        self.worker.aborted.connect(self.camera_release_orca)
         self.worker.start()
 
         # Start napari
