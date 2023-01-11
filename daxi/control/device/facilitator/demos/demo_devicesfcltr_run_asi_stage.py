@@ -44,5 +44,3 @@ for name in ['p1', 'p2', 'p3']:
         sleep(0.05)
     df.stage_raster_scan_get_ready_at_position(name)
     df.stage_start_raster_scan()
-
-

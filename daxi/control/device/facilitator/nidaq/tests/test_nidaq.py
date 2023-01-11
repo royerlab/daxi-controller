@@ -3,7 +3,8 @@ import nidaqmx
 import pytest
 from time import sleep
 import os
-from daxi.control.device.facilitator.nidaq.nidaq import Counter, Metronome, TaskBundleAO, SubTaskAO
+from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, SubTaskAO
+from daxi.control.device.facilitator.nidaq.counter import Counter
 from daxi.control.device.facilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser

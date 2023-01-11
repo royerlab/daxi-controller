@@ -1,8 +1,4 @@
-from time import sleep
-
-from copylot.hardware.orca_camera.camera import OrcaCamera
-
-from daxi.control.device.pool.oara_flash4 import OrcaFlash4
+from daxi.control.device.pool.orca_flash4 import OrcaFlash4
 
 if __name__ == '__main__':
     # first define a camera configuration dictionary
