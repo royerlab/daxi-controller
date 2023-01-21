@@ -13,15 +13,14 @@ from daxi.control.device.facilitator.nidaq.simulated_counter import SimulatedCou
 def simulated_orca_camera_image_feeder(camera : OrcaFlash4Simulation, processor=None, counter=None):
     # processor = StackProcessing()
     counter_output = counter.read()
-    processor.camera = camera
-    stitched_mips = processor.get_current_stitched_mips(camera_id=0, current_frame_count=counter_output)
+    stitched_mips = processor.get_current_stitched_mips(camera_id=0,
+                                                        current_frame_count=counter_output,
+                                                        camera=camera)
     return stitched_mips
 
 
 def demo_daxiviewer_on_simulated_orca_flash4():
     # this demo itself may function as the combination of a process/data/device fcltr.
-    camera = OrcaFlash4Simulation(camera_index=0)  # this is a device
-    camera.get_ready(camera_ids=[0])
     # define camera configurations
     camera_configs = {}
     camera_configs['exposure time (ms)'] = 100
@@ -39,10 +38,20 @@ def demo_daxiviewer_on_simulated_orca_flash4():
     camera_configs['buffer size (frame number)'] = 300
     camera_configs['xdim'] = 100
     camera_configs['ydim'] = 200
+
+    # define a camera
+    camera = OrcaFlash4Simulation(camera_index=0)  # this is a device
+    camera.get_ready(camera_ids=[0])
     camera.set_configurations(camera_configs=camera_configs)
     camera.start(camera_ids=[0])
+
+    # preprae a counter
     counter = SimulatedCounter(camera=camera, camera_id=0)  # this is a device
+
+    # prepare a stack processing tool.
     p = StackProcessing()  # this is a data tool
+
+    # prepare the viewer.
     daxi_viewer = DaXiViewer()  # this is a data tool
     daxi_viewer.prepare(
               image_feeder=simulated_orca_camera_image_feeder,
@@ -50,7 +59,7 @@ def demo_daxiviewer_on_simulated_orca_flash4():
               processor=p,
               counter=counter,
               )
-    daxi_viewer.go()
+    daxi_viewer.start()
     return 'success'
 
 

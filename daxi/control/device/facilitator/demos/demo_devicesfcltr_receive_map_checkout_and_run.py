@@ -19,7 +19,7 @@ def demo_devicefcltr_receive_map_checkout_and_run(verbose=False, interactive=Tru
 
     # 1. receive configurations
     df.receive_device_configs_all_cycles(process_configs=configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
     # should have an extra step to choose a view/color, and map it to the
     # single cycle configs, then move on.

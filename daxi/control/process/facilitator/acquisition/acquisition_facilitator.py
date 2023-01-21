@@ -12,6 +12,9 @@ from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_m
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
+if devices_connected is False:
+    is_simulation = True
+
 
 class AcquisitionFcltr():
     """
@@ -51,11 +54,12 @@ class AcquisitionFcltr():
 
     def acquisition_mode1(self):
         # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
+        # in this acquisition mode, the configurations for the camera and the ASI stage is maintained the same.
         print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
-        # 1. receive configurations
-        self.devices_fcltr.receive_device_configs_all_cycles(
-                                    process_configs=self.configs,
-                                    device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+
+        # 1. receive configurations (this should be a job done by the device facilitator)
+        self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.configs,
+                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
         first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
@@ -67,10 +71,11 @@ class AcquisitionFcltr():
 
         os.system('echo test system output')
         os.system('echo number of positions: ' + str(len(position_list)))
-        os.system('echo viess: ' + str(view_list))
+        os.system('echo views: ' + str(view_list))
         os.system('echo colors: ' + str(color_list))
         os.system('echo number of time points: ' + str(number_of_time_points))
         os.system('echo number of slices: ' + str(slice_number))
+
         # 2. prepare subtasks and calculate the data for all subtasks
         self.devices_fcltr.daq_prepare_subtasks_ao()
         self.devices_fcltr.daq_prepare_subtasks_do()
@@ -97,7 +102,7 @@ class AcquisitionFcltr():
 
         # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a
         # working daq is done)
-        self.devices_fcltr.stage_prepare()
+        self.devices_fcltr.stage_prepare(simulation=is_simulation)
         self.devices_fcltr.stage_get_ready()
         # self.devices_fcltr.
         # copy/organize from the previous ad-hoc in the old_workbench
@@ -115,6 +120,11 @@ class AcquisitionFcltr():
             for position in position_list:
                 os.system('echo moving to this position: ' + str(position))
                 # move the stage to the position
+
+                # add configuration for the asi stage for this position:
+                self.devices_fcltr.configs_asi_stage # should look into the asi stage demo.
+
+                # move to the position and start the scan, ASI stage get ready.
                 self.devices_fcltr.move_to(position)
                 self.devices_fcltr.stage_raster_scan_get_ready_at_position(
                     position_name=position,

@@ -17,7 +17,7 @@ def demo_devicefcltr_checkout_configs_from_all_cycles_by_key(verbose=True):
     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
     configs = load_process_configs(path=path)
     df.receive_device_configs_all_cycles(process_configs=configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
     # before mapping:
     if verbose:
         print('before mapping')

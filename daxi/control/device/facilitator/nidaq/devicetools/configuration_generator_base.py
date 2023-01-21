@@ -39,11 +39,14 @@ class NIDAQDevicesConfigsGeneratorBase:
         self.configs_561_laser = None
         self.configs_639_laser = None
         self.configs_bright_field = None
+
         self.sample_number_total = None
         self.sample_number_on_duty = None
         self.sample_number_off_duty = None
+
         self.parser = NIDAQConfigsParser()
         self.parser.set_configs_path(configs_core_daq_devices)
+
         self.nidaq_terminals = nidaq_terminals
         self.calibration_records = calibration_records
         self.alignment_records = alignment_records

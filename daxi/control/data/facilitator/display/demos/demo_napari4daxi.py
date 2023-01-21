@@ -7,7 +7,7 @@ def demo_daxiviewer():
     a.prepare(image_feeder=acquire_image,
               camera=VideoCapture(0)
               )
-    a.go()
+    a.start()
     return 'success'
 
 

@@ -298,6 +298,9 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         return self.configs_o3
 
     def get_configs_405_laser(self, params):
+        """
+        This creates the voltage sequence for the 405 laser for one cycle when the laser is on.
+        """
         self.configs_405_laser['data configs']['sample number'] = \
             self.sample_number_total
         dg = DAQDataGenerator()

@@ -113,10 +113,13 @@ class DevicesFcltr:
                 # assign the attributes
                 setattr(self, 'configs_' + device_tool, configs)
 
-    def receive_device_configs_all_cycles(self, process_configs, device_configs_generator_class):
+    def receive_device_configs_all_cycles(self, process_configs,
+                                          daqdevice_configs_generator_class,
+                                          camera_configs_generator_class=None,
+                                          stage_configs_generator_class=None):
         """
 
-        :param device_configs_generator_class: the class for device generator
+        :param daqdevice_configs_generator_class: the class for device generator
         :param process_configs: dict. It should be passed in by a command - a FocusedProcessFcltr type.
         (leave abstraction for future for now.)
         this should do things equivalent to load_device_configs, but instead of doing it from loading things from file,
@@ -165,12 +168,12 @@ class DevicesFcltr:
 
         # now get the configuration generator
         configs_generator = \
-            device_configs_generator_class(params=process_parameters,
-                                           nidaq_terminals=daq_terminal_configs,
-                                           calibration_records=calibration_records,
-                                           alignment_records=alignment_records)
+            daqdevice_configs_generator_class(params=process_parameters,
+                                              nidaq_terminals=daq_terminal_configs,
+                                              calibration_records=calibration_records,
+                                              alignment_records=alignment_records)
 
-        # now generate all device configurations
+        # now generate all daq device configurations
         self.configs_all_cycles['configs_metronome'] = \
             configs_generator.get_configs_for_metronome()
         self.configs_all_cycles['configs_counter'] = \
@@ -619,4 +622,3 @@ class DevicesFcltr:
                                                    scan_speed=scan_speed)
         else:
             raise ValueError('asi stage is not initialized yet.')
-

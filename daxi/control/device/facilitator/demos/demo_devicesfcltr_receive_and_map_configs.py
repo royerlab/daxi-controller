@@ -28,7 +28,7 @@ configs = load_process_configs(path=path)
 
 # 1. receive the configurations
 df.receive_device_configs_all_cycles(process_configs=configs,
-                                     device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                     daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
 # 2. map the configurations
 print('printing dictionary keys for df.configs_single_cycle_dict')

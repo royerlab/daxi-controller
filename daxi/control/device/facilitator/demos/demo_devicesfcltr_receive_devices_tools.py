@@ -19,4 +19,4 @@ configs = load_process_configs(path=path)
 
 # then this configs is passed to the receiver to populate its configurations for all the devices.
 df.receive_device_configs_all_cycles(process_configs=configs,
-                                     device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                     daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
