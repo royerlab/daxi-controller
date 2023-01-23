@@ -153,6 +153,7 @@ class DevicesFcltr:
         OK it makes more sense to have it in the focused processes fcltr.
 
         :return: nothing
+        @type stage_configs_generator_class: object
         """
         # synthesize the configurations - process_parameter
         process_parameters = process_configs['process configs']['acquisition parameters']
@@ -166,50 +167,75 @@ class DevicesFcltr:
         # synthesize the configurations - alignment_records
         alignment_records = process_configs['device configurations']['alignment_records']
 
-        # now get the configuration generator
-        configs_generator = \
+        # synthesize the configurations - camera_core_configs
+        camera_core_configs = process_configs['device configurations']['camera_core_configs']
+
+        # synthesize the configurations - stage_core_configs
+        stage_core_configs = process_configs['device configurations']['stage_core_configs']
+
+        # now get the configuration generator for daq devices configurations
+        daq_configs_generator = \
             daqdevice_configs_generator_class(params=process_parameters,
                                               nidaq_terminals=daq_terminal_configs,
                                               calibration_records=calibration_records,
                                               alignment_records=alignment_records)
-
         # now generate all daq device configurations
         self.configs_all_cycles['configs_metronome'] = \
-            configs_generator.get_configs_for_metronome()
+            daq_configs_generator.get_configs_for_metronome()
         self.configs_all_cycles['configs_counter'] = \
-            configs_generator.get_configs_for_counter()
+            daq_configs_generator.get_configs_for_counter()
         self.configs_all_cycles['configs_DO_task_bundle'] = \
-            configs_generator.get_configs_do_task_bundle()
+            daq_configs_generator.get_configs_do_task_bundle()
         self.configs_all_cycles['configs_AO_task_bundle'] = \
-            configs_generator.get_configs_ao_task_bundle()
+            daq_configs_generator.get_configs_ao_task_bundle()
         self.configs_all_cycles['configs_scanning_galvo'] = \
-            configs_generator.get_configs_scanning_galvo(params=process_parameters)
+            daq_configs_generator.get_configs_scanning_galvo(params=process_parameters)
         self.configs_all_cycles['configs_view_switching_galvo_1'] = \
-            configs_generator.get_configs_view_switching_galvo_1(params=process_parameters)
+            daq_configs_generator.get_configs_view_switching_galvo_1(params=process_parameters)
         self.configs_all_cycles['configs_view_switching_galvo_2'] = \
-            configs_generator.get_configs_view_switching_galvo_2(params=process_parameters)
+            daq_configs_generator.get_configs_view_switching_galvo_2(params=process_parameters)
         self.configs_all_cycles['configs_gamma_galvo_strip_reduction'] = \
-            configs_generator.get_configs_gamma_galvo_strip_reduction(params=process_parameters)
+            daq_configs_generator.get_configs_gamma_galvo_strip_reduction(params=process_parameters)
         self.configs_all_cycles['configs_beta_galvo_light_sheet_incident_angle'] = \
-            configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(process_parameters)
+            daq_configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(process_parameters)
         self.configs_all_cycles['configs_O1'] = \
-            configs_generator.get_configs_o1(process_parameters)
+            daq_configs_generator.get_configs_o1(process_parameters)
         self.configs_all_cycles['configs_O3'] = \
-            configs_generator.get_configs_o3(process_parameters)
+            daq_configs_generator.get_configs_o3(process_parameters)
         self.configs_all_cycles['configs_405_laser'] = \
-            configs_generator.get_configs_405_laser(process_parameters)
+            daq_configs_generator.get_configs_405_laser(process_parameters)
         self.configs_all_cycles['configs_488_laser'] = \
-            configs_generator.get_configs_488_laser(process_parameters)
+            daq_configs_generator.get_configs_488_laser(process_parameters)
         self.configs_all_cycles['configs_561_laser'] = \
-            configs_generator.get_configs_561_laser(process_parameters)
+            daq_configs_generator.get_configs_561_laser(process_parameters)
         self.configs_all_cycles['configs_639_laser'] = \
-            configs_generator.get_configs_639_laser(process_parameters)
+            daq_configs_generator.get_configs_639_laser(process_parameters)
         self.configs_all_cycles['configs_bright_field'] = \
-            configs_generator.get_configs_bright_field(process_parameters)
+            daq_configs_generator.get_configs_bright_field(process_parameters)
+
+        # now get the configuration generator for camera and set the configurations:
+        if camera_configs_generator_class is not None:
+            camera_configs_generator = camera_configs_generator_class(
+                                          camera_core_configs=camera_core_configs
+                                          )
+            self.configs_all_cycles['configs_camera'] = \
+                camera_configs_generator.get_configs_camera(params=process_parameters)
+
+        # now get the configuration generator for stage and set the configurations:
+        if stage_configs_generator_class is not None:
+            stage_configs_generator = stage_configs_generator_class(
+                                        params=process_parameters,
+                                        nidaq_terminals=daq_terminal_configs,
+                                        calibration_records=calibration_records,
+                                        alignment_records=alignment_records
+                                        )
+            self.configs_all_cycles['configs_stage'] = \
+                stage_configs_generator.get_configs_asi_stage()
+
         # all the configurations are mapped to a dictionary that stores different cycle types,
         # specified by its own dictionary keys with acquisition-mode specific name patterns.
         self.configs_single_cycle_dict = \
-            configs_generator.get_configs_single_cycle_dict(process_parameters)
+            daq_configs_generator.get_configs_single_cycle_dict(process_parameters)
 
     def checkout_single_cycle_configs(self, key=None, verbose=False):
         if verbose:

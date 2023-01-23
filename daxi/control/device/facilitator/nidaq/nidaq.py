@@ -1,6 +1,6 @@
 # general description:
 import nidaqmx
-from daxi.control.device.facilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
+from daxi.control.device.facilitator.config_tools.generate_functions import DAQDataGenerator
 
 """
     To manage the DAQ card controlled devices, we have the module level manager class defined as the DAQDeviceManager

@@ -56,6 +56,14 @@ keyword = 'alignment_records'
 alignment_records = \
     p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
 
+keyword = 'camera_core_configs'
+camera_core_configs = \
+    p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
+
+keyword = 'stage_core_configs'
+stage_core_configs = \
+    p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
+
 # composite the configs_dict dictionary
 configs_dict={
         "process type": "acquisition, mode 1",
@@ -69,6 +77,8 @@ configs_dict={
             'nidaq_terminals': daq_terminal_configs,
             'calibration_records': calibration_records,
             'alignment_records': alignment_records,
+            'camera_core_configs': camera_core_configs,
+            'stage_core_configs': stage_core_configs,
         },
 }
 # save the configurations dictionary as a yaml file.

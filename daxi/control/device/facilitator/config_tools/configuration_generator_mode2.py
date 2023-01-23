@@ -1,4 +1,4 @@
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase
+from daxi.control.device.facilitator.config_tools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase
 
 
 class NIDAQDevicesConfigsGeneratorMode2(NIDAQDevicesConfigsGeneratorBase):

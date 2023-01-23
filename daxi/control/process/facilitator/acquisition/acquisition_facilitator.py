@@ -8,8 +8,8 @@ from time import sleep
 import numpy as np
 # from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
 #     NIDAQDevicesConfigsGeneratorMode1
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
-    NIDAQDevicesConfigsGeneratorMode1
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
+    NIDAQDevicesConfigsGeneratorMode1, CameraConfigsGeneratorMode1
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
 if devices_connected is False:
@@ -59,7 +59,9 @@ class AcquisitionFcltr():
 
         # 1. receive configurations (this should be a job done by the device facilitator)
         self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.configs,
-                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1,
+                                                             camera_configs_generator_class=CameraConfigsGeneratorMode1,
+                                                             stage_configs_generator_class=None)
         first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)

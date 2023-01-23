@@ -5,6 +5,11 @@ from daxi.globals_configs_constants_general_tools_needbettername.constants impor
 class NIDAQDevicesConfigsGeneratorBase:
     """
     This will take a parameter dictionary and generate the corresponding configurations
+
+    This class primarity contians two types of methods:
+    1. self._get_core_configs_for_X  - this loads the core configurations (the configs that is fixed for
+    the instrument upon construction)
+    2. self.get_configs_X - these will be overridden by the concrete class based on different acquisition  modes.
     """
     def __init__(self,
                  nidaq_terminals,
@@ -299,3 +304,49 @@ class NIDAQDevicesConfigsGeneratorBase:
 
     def get_configs_single_cycle(self, params):
         pass
+
+
+class CameraConfigsGeneratorBase:
+    """
+    This defines the base class for generator the configurations for camera.
+    This class primarity contians two types of methods:
+    1. self._get_core_configs_for_X  - this loads the core configurations (the configs that is fixed for
+    the instrument upon construction)
+    2. self.get_configs_X - these will be overridden by the concrete class based on different acquisition  modes.
+    """
+    def __init__(self,
+                 camera_core_configs=None,
+                 ):
+        self.configs_camera = None
+        self.camera_core_configs = camera_core_configs
+        pass
+
+    def _get_core_configs_orca_camera(self):
+        self.configs_camera = self.camera_core_configs
+        pass
+
+    def get_configs_camera(self, params):
+        pass
+
+
+class StageConfigsGeneratorBase:
+    """
+    This defines the base class for generator the configurations for stage.
+    This class primarity contians two types of methods:
+    1. self._get_core_configs_for_X  - this loads the core configurations (the configs that is fixed for
+    the instrument upon construction)
+    2. self.get_configs_X - these will be overridden by the concrete class based on different acquisition  modes.
+    """
+    def __init__(self,
+                 nidaq_terminals,
+                 calibration_records=None,
+                 alignment_records=None,
+                 verbose=True):
+        pass
+
+    def _get_core_onfigs_asi_stage(self):
+        pass
+
+    def get_configs_asi_stage(self):
+        pass
+

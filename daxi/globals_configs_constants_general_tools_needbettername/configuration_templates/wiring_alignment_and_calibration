@@ -193,3 +193,31 @@ definition start.
 }
 definition end.
 
+
+------------------------------------ Connection Section: camera_core_configs
+camera_core_configs:
+definition start.
+{
+    'trigger source': 'MASTER PULSE',
+    'trigger mode': 'NORMAL',
+    'trigger polarity': 'POSITIVE',
+    'trigger times': 1,
+    'output trigger kind': 'TRIGGER READY',
+    'output trigger polarity': 'POSITIVE',
+    'master pulse mode': 'START',
+    'burst times': 1,
+    'master pulse interval': 0.01,
+    'master pulse trigger': 'EXTERNAL',
+    'buffer size (stack number)': 3,
+}
+definition end.
+
+------------------------------------ Connection Section: stage_core_configs
+stage_core_configs:
+definition start.
+{
+
+
+}
+definition end.
+

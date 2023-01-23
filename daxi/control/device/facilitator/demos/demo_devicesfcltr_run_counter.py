@@ -2,16 +2,13 @@ import datetime
 import os
 from time import sleep
 
-from matplotlib import pyplot as plt
-import numpy as np
-
 # from daxi.ctr_devicesfacilitator.devicefacilitator import DevicesFcltr
 # from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
 #     NIDAQDevicesConfigsGeneratorMode1
 # from daxi.ctr_devicesfacilitator.nidaq.nidaq import SubTaskAO
 # from daxi.ctr_processesfacilitator.processes_facilitator import load_process_configs
 from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates

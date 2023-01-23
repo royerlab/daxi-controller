@@ -1,4 +1,4 @@
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.device.facilitator.nidaq.nidaq import SubTaskAO, SubTaskDO
 

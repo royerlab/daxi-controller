@@ -29,6 +29,18 @@ device configurations:
       linear ramp stop for view 2: 0.4
     scanning galvo:
       distance (um) to voltage (v) conversion factor (v/um): 0.004
+  camera_core_configs:
+    buffer size (stack number): 3
+    burst times: 1
+    master pulse interval: 0.01
+    master pulse mode: START
+    master pulse trigger: EXTERNAL
+    output trigger kind: TRIGGER READY
+    output trigger polarity: POSITIVE
+    trigger mode: NORMAL
+    trigger polarity: POSITIVE
+    trigger source: MASTER PULSE
+    trigger times: 1
   nidaq_terminals:
     405 laser:
       device name: 405 laser
@@ -98,6 +110,7 @@ device configurations:
       device name: view switching galvo 2
       type: physical device
       voltage output terminal: cDAQ1AO/ao2
+  stage_core_configs: {}
 process configs:
   acquisition parameters:
     camera read out time (ms): 10.0

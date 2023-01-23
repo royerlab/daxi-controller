@@ -6,7 +6,7 @@ import os
 from pprint import pprint
 
 from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates
@@ -39,4 +39,4 @@ def demo_devicefcltr_checkout_configs_from_all_cycles_by_key(verbose=True):
 
 
 if __name__ == "__main__":
-    demo_devicefcltr_checkout_configs_from_all_cycles_by_key(verbose=False)
+    demo_devicefcltr_checkout_configs_from_all_cycles_by_key(verbose=True)

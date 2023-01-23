@@ -1,13 +1,13 @@
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase
+from daxi.control.device.facilitator.config_tools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase
 
 
-class NIDAQDevicesConfigsGeneratorMode4(NIDAQDevicesConfigsGeneratorBase):
+class NIDAQDevicesConfigsGeneratorMode5(NIDAQDevicesConfigsGeneratorBase):
     """
     This class takes the acquisition parameters, and generate the configuration dictionaries for all the devices.
-    This class is designed for mode4 acquisition
+    This class is designed for mode5 acquisition
 
     the looping order for this acquisition mode is:
-    [mode 4] - [layer 1: position, view] - [layer 2: color] - [layer 3: slice]
+    [mode 5] - [layer 1: position, view] - [layer 2: slice] - [layer 3: color]
     """
     def get_config_for_metronome(self, params):
         pass

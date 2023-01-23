@@ -1,5 +1,6 @@
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase
-from daxi.control.device.facilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
+from daxi.control.device.facilitator.config_tools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase, \
+    CameraConfigsGeneratorBase, StageConfigsGeneratorBase
+from daxi.control.device.facilitator.config_tools.generate_functions import DAQDataGenerator
 import numpy as np
 
 
@@ -666,3 +667,40 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
              'voltage output terminal': origin['voltage output terminal']
             }
         return configs
+
+
+class CameraConfigsGeneratorMode1(CameraConfigsGeneratorBase):
+    def __init__(self,
+                 camera_core_configs=None):
+        super().__init__(camera_core_configs=camera_core_configs)
+        # do some extra initiation operations.
+        self._get_core_configs_orca_camera()
+
+    def get_configs_camera(self, params):
+        """
+        generate the configuration file for the camera for this mode 1 acquisition
+        """
+        self.configs_camera['exposure time (ms)'] = params['exposure time (ms)']
+        self.configs_camera['frame number'] = 100
+        self.configs_camera['buffer size (frame number)'] = \
+            self.configs_camera['frame number'] * self.configs_camera['buffer size (stack number)']
+        return self.configs_camera
+
+
+class StageConfigsGeneratorMode1(StageConfigsGeneratorBase):
+    def __init__(self,
+                 params=None,
+                 nidaq_terminals=None,
+                 calibration_records=None,
+                 alignment_records=None,
+                 verbose=False):
+        super().__init__(nidaq_terminals,
+                         calibration_records=calibration_records,
+                         alignment_records=alignment_records)
+        # do some extra initiation operations.
+
+    def get_configs_asi_stage(self, params):
+        """
+        generate the configuration file for the camera for this mode 1 acquisition
+        """
+        return self.configs_asi_stage

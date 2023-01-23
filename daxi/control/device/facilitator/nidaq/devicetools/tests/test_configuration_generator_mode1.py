@@ -1,4 +1,4 @@
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.globals_configs_constants_general_tools_needbettername.constants import params_test_selected_params, configs_daq_terminals
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
