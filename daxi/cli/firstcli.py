@@ -123,7 +123,7 @@ def acquire(configs_path):
 
     # create the AcquisitionFcltr that takes the DevicesFcltr (this is the command)
     acquisition = AcquisitionFcltr()  # in this case the command is not aware of the receiver,
-    # but instead the receiver would be passed to the command by th einvoker.
+    # but instead the receiver would be passed to the command by the invoker.
     # this is the command object. it does not create or destroy the device_fcltr,
 
     # create an invoker

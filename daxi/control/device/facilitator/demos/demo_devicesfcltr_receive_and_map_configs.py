@@ -32,14 +32,14 @@ df.receive_device_configs_all_cycles(process_configs=configs,
 
 # 2. map the configurations
 print('printing dictionary keys for df.configs_single_cycle_dict')
-for k in df.configs_single_cycle_dict.keys():
+for k in df.configs_daq_single_cycle_dict.keys():
     print(k)
-print('length = '+str(len(df.configs_single_cycle_dict.keys())))
+print('length = ' + str(len(df.configs_daq_single_cycle_dict.keys())))
 
 # check one dict:
 print('')
 print('check one configuration:')
-for k in df.configs_single_cycle_dict['view1 color488']:
+for k in df.configs_daq_single_cycle_dict['view1 color488']:
     print(k)
-print('length = '+str(len(df.configs_single_cycle_dict['view1 color488'].keys())))
+print('length = ' + str(len(df.configs_daq_single_cycle_dict['view1 color488'].keys())))
 

@@ -73,7 +73,9 @@ class DevicesFcltr:
         self.configs_bright_field = None
         self.configs_O1 = None
         self.configs_O3 = None
-        self.configs_single_cycle_dict = None
+        self.configs_daq_single_cycle_dict = None
+        self.configs_cam_single_cycle_dict = None
+        self.configs_stage_single_cycle_dict = None
         self.configs_camera = None
         self.configs_asi_stage = None
 
@@ -152,11 +154,13 @@ class DevicesFcltr:
         configuraitons.
         OK it makes more sense to have it in the focused processes fcltr.
 
+        this function should also append all positions to the asi stage.
+
         :return: nothing
         @type stage_configs_generator_class: object
         """
         # synthesize the configurations - process_parameter
-        process_parameters = process_configs['process configs']['acquisition parameters']
+        acquisition_parameters = process_configs['process configs']['acquisition parameters']
 
         # synthesize the configurations - daq_terminal_configs
         daq_terminal_configs = process_configs['device configurations']['nidaq_terminals']
@@ -175,7 +179,7 @@ class DevicesFcltr:
 
         # now get the configuration generator for daq devices configurations
         daq_configs_generator = \
-            daqdevice_configs_generator_class(params=process_parameters,
+            daqdevice_configs_generator_class(params=acquisition_parameters,
                                               nidaq_terminals=daq_terminal_configs,
                                               calibration_records=calibration_records,
                                               alignment_records=alignment_records)
@@ -189,29 +193,29 @@ class DevicesFcltr:
         self.configs_all_cycles['configs_AO_task_bundle'] = \
             daq_configs_generator.get_configs_ao_task_bundle()
         self.configs_all_cycles['configs_scanning_galvo'] = \
-            daq_configs_generator.get_configs_scanning_galvo(params=process_parameters)
+            daq_configs_generator.get_configs_scanning_galvo(params=acquisition_parameters)
         self.configs_all_cycles['configs_view_switching_galvo_1'] = \
-            daq_configs_generator.get_configs_view_switching_galvo_1(params=process_parameters)
+            daq_configs_generator.get_configs_view_switching_galvo_1(params=acquisition_parameters)
         self.configs_all_cycles['configs_view_switching_galvo_2'] = \
-            daq_configs_generator.get_configs_view_switching_galvo_2(params=process_parameters)
+            daq_configs_generator.get_configs_view_switching_galvo_2(params=acquisition_parameters)
         self.configs_all_cycles['configs_gamma_galvo_strip_reduction'] = \
-            daq_configs_generator.get_configs_gamma_galvo_strip_reduction(params=process_parameters)
+            daq_configs_generator.get_configs_gamma_galvo_strip_reduction(params=acquisition_parameters)
         self.configs_all_cycles['configs_beta_galvo_light_sheet_incident_angle'] = \
-            daq_configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(process_parameters)
+            daq_configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(acquisition_parameters)
         self.configs_all_cycles['configs_O1'] = \
-            daq_configs_generator.get_configs_o1(process_parameters)
+            daq_configs_generator.get_configs_o1(acquisition_parameters)
         self.configs_all_cycles['configs_O3'] = \
-            daq_configs_generator.get_configs_o3(process_parameters)
+            daq_configs_generator.get_configs_o3(acquisition_parameters)
         self.configs_all_cycles['configs_405_laser'] = \
-            daq_configs_generator.get_configs_405_laser(process_parameters)
+            daq_configs_generator.get_configs_405_laser(acquisition_parameters)
         self.configs_all_cycles['configs_488_laser'] = \
-            daq_configs_generator.get_configs_488_laser(process_parameters)
+            daq_configs_generator.get_configs_488_laser(acquisition_parameters)
         self.configs_all_cycles['configs_561_laser'] = \
-            daq_configs_generator.get_configs_561_laser(process_parameters)
+            daq_configs_generator.get_configs_561_laser(acquisition_parameters)
         self.configs_all_cycles['configs_639_laser'] = \
-            daq_configs_generator.get_configs_639_laser(process_parameters)
+            daq_configs_generator.get_configs_639_laser(acquisition_parameters)
         self.configs_all_cycles['configs_bright_field'] = \
-            daq_configs_generator.get_configs_bright_field(process_parameters)
+            daq_configs_generator.get_configs_bright_field(acquisition_parameters)
 
         # now get the configuration generator for camera and set the configurations:
         if camera_configs_generator_class is not None:
@@ -219,31 +223,37 @@ class DevicesFcltr:
                                           camera_core_configs=camera_core_configs
                                           )
             self.configs_all_cycles['configs_camera'] = \
-                camera_configs_generator.get_configs_camera(params=process_parameters)
+                camera_configs_generator.get_configs_camera(params=acquisition_parameters)
 
         # now get the configuration generator for stage and set the configurations:
         if stage_configs_generator_class is not None:
             stage_configs_generator = stage_configs_generator_class(
-                                        params=process_parameters,
-                                        nidaq_terminals=daq_terminal_configs,
-                                        calibration_records=calibration_records,
-                                        alignment_records=alignment_records
+                                        stage_core_configs=stage_core_configs
                                         )
             self.configs_all_cycles['configs_stage'] = \
-                stage_configs_generator.get_configs_asi_stage()
+                stage_configs_generator.get_configs_asi_stage(acquisition_params=acquisition_parameters)
 
         # all the configurations are mapped to a dictionary that stores different cycle types,
         # specified by its own dictionary keys with acquisition-mode specific name patterns.
-        self.configs_single_cycle_dict = \
-            daq_configs_generator.get_configs_single_cycle_dict(process_parameters)
+        self.configs_daq_single_cycle_dict = \
+            daq_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
+
+        self.configs_cam_single_cycle_dict = \
+            camera_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
+
+        self.configs_stage_single_cycle_dict = \
+            stage_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
 
     def checkout_single_cycle_configs(self, key=None, verbose=False):
         if verbose:
             print('          checking out a single  cycle configuration for '+str(key))
-        configs = self.configs_single_cycle_dict[key]
-        # now map all the attributes in configs into this object
-        for k in configs.keys():
-            setattr(self, k, configs[k])
+        daq_configs = self.configs_daq_single_cycle_dict[key]
+        # now map all the attributes in daq configs into this object
+        for k in daq_configs.keys():
+            setattr(self, k, daq_configs[k])
+
+        setattr(self, 'configs_camera', self.configs_cam_single_cycle_dict[key])
+        setattr(self, 'configs_asi_stage', self.configs_stage_single_cycle_dict[key])
 
     def show_devices_configs(self):
         """
@@ -583,6 +593,27 @@ class DevicesFcltr:
         else:
             self.asi_stage = DaxiMs2kStage(self.configs_asi_stage['COM Port'],
                                            self.configs_asi_stage['BAUD RATE'])
+
+        # set the default raster scan configurations to have the current speed and range
+        scan_configs = {'scan speed': self.configs_asi_stage['scan speed (um/ms)'],
+                        'scan range': self.configs_asi_stage['scan range (um)'],
+                        'start position': None,
+                        'end position': None,
+                        'encoder divide': 24,
+                        }
+
+        # adding positions to the asi_stage object
+        for pos_name in self.configs_asi_stage['position list'].keys():
+            x = self.configs_asi_stage['position list'][pos_name]['x']
+            y = self.configs_asi_stage['position list'][pos_name]['y']
+            pos = {'unit': 'mm',
+                   'X': x,
+                   'Y': y,
+                   'scan configurations': scan_configs}
+            pos['scan configurations']['start position'] = pos['X']
+            pos['scan configurations']['end position'] = scan_configs['scan range'] + pos['X']
+
+            self.asi_stage.add_position_to_list(name=pos_name, unit='mm', pos_in=pos)
 
     def stage_get_ready(self):
         if self.asi_stage is not None:

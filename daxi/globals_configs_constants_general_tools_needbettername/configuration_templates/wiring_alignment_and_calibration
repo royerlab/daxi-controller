@@ -198,6 +198,7 @@ definition end.
 camera_core_configs:
 definition start.
 {
+    'camera ids': [0],
     'trigger source': 'MASTER PULSE',
     'trigger mode': 'NORMAL',
     'trigger polarity': 'POSITIVE',
@@ -209,15 +210,22 @@ definition start.
     'master pulse interval': 0.01,
     'master pulse trigger': 'EXTERNAL',
     'buffer size (stack number)': 3,
+    'xdim': 100,
+    'ydim': 200,
 }
 definition end.
 
 ------------------------------------ Connection Section: stage_core_configs
-stage_core_configs:
+
+:
 definition start.
 {
-
-
+    'scan speed (um/ms)': None,
+    'scan range (um)': None,
+    'start position': None,
+    'end position': None,
+    'encoder divide': 24,
+    'COM Port': "COM6",
+    'BAUD RATE':9600,
 }
 definition end.
-

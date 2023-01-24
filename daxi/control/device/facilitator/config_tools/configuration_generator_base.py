@@ -338,13 +338,12 @@ class StageConfigsGeneratorBase:
     2. self.get_configs_X - these will be overridden by the concrete class based on different acquisition  modes.
     """
     def __init__(self,
-                 nidaq_terminals,
-                 calibration_records=None,
-                 alignment_records=None,
-                 verbose=True):
-        pass
+                 stage_core_configs=None):
+        self.configs_stage = None
+        self.stage_core_configs = stage_core_configs
 
-    def _get_core_onfigs_asi_stage(self):
+    def _get_core_configs_asi_stage(self):
+        self.configs_asi_stage = self.stage_core_configs
         pass
 
     def get_configs_asi_stage(self):

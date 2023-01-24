@@ -32,6 +32,8 @@ device configurations:
   camera_core_configs:
     buffer size (stack number): 3
     burst times: 1
+    camera ids:
+    - 0
     master pulse interval: 0.01
     master pulse mode: START
     master pulse trigger: EXTERNAL
@@ -41,6 +43,8 @@ device configurations:
     trigger polarity: POSITIVE
     trigger source: MASTER PULSE
     trigger times: 1
+    xdim: 100
+    ydim: 200
   nidaq_terminals:
     405 laser:
       device name: 405 laser
@@ -110,7 +114,14 @@ device configurations:
       device name: view switching galvo 2
       type: physical device
       voltage output terminal: cDAQ1AO/ao2
-  stage_core_configs: {}
+  stage_core_configs:
+    BAUD RATE: 9600
+    COM Port: COM6
+    encoder divide: 24
+    end position: null
+    scan range (um): null
+    scan speed (um/ms): null
+    start position: null
 process configs:
   acquisition parameters:
     camera read out time (ms): 10.0

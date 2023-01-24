@@ -26,7 +26,7 @@ process_configs = load_process_configs(path=path)
 # 1. receive configurations and checkout a singel configuration.
 devices_fcltr.receive_device_configs_all_cycles(process_configs=process_configs,
                                                 daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-first_cycle_key = next(iter(devices_fcltr.configs_single_cycle_dict))
+first_cycle_key = next(iter(devices_fcltr.configs_daq_single_cycle_dict))
 devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                             verbose=True)
 

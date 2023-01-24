@@ -681,26 +681,84 @@ class CameraConfigsGeneratorMode1(CameraConfigsGeneratorBase):
         generate the configuration file for the camera for this mode 1 acquisition
         """
         self.configs_camera['exposure time (ms)'] = params['exposure time (ms)']
-        self.configs_camera['frame number'] = 100
+        self.configs_camera['frame number'] = params['n slices']
         self.configs_camera['buffer size (frame number)'] = \
             self.configs_camera['frame number'] * self.configs_camera['buffer size (stack number)']
         return self.configs_camera
 
+    def map_sc_configs_camera(self):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        configs = self.configs_camera
+        return configs
+
+    def get_configs_single_cycle_dict(self, params):
+        configs_list = {}
+        for view in params['views']:
+            for color in params['colors']:
+                configs_list['view' + view + ' color' + color] = \
+                    self.map_sc_configs_camera()
+        return configs_list
+
 
 class StageConfigsGeneratorMode1(StageConfigsGeneratorBase):
     def __init__(self,
-                 params=None,
-                 nidaq_terminals=None,
-                 calibration_records=None,
-                 alignment_records=None,
-                 verbose=False):
-        super().__init__(nidaq_terminals,
-                         calibration_records=calibration_records,
-                         alignment_records=alignment_records)
+                 stage_core_configs=None):
+        super().__init__(stage_core_configs=stage_core_configs)
         # do some extra initiation operations.
+        self._get_core_configs_asi_stage()
 
-    def get_configs_asi_stage(self, params):
+    def get_configs_asi_stage(self, acquisition_params):
         """
         generate the configuration file for the camera for this mode 1 acquisition
         """
+        # get exposure time (te):
+        te = acquisition_params['exposure time (ms)']
+
+        # get readout time (tr) - or the time for everything to fly back in LS3 mode:
+        tr = acquisition_params['camera read out time (ms)']
+
+        # total range (tr)
+        total_range = acquisition_params['scanning range (um)']
+
+        # number of slices
+        ns = acquisition_params['n slices']
+
+        # get travel range of sample per slice (um)
+        slice_range = total_range/ns
+
+        # get travel time of sample per slice (ms)
+        travel_time = te + tr
+
+        # get travel speed (the scanning speed of the stage) in um/ms
+        scan_speed_umms = slice_range/travel_time
+
+        self.configs_asi_stage['scan speed (um/ms)'] = scan_speed_umms
+        self.configs_asi_stage['scan range (um)'] = slice_range
+        self.configs_asi_stage['start position'] = None
+        self.configs_asi_stage['end position'] = None
+        self.configs_asi_stage['position list'] = acquisition_params['positions']
+
         return self.configs_asi_stage
+
+    def map_sc_configs_asi_stage(self):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        configs = self.configs_asi_stage
+        return configs
+
+    def get_configs_single_cycle_dict(self, params):
+        configs_list = {}
+        for view in params['views']:
+            for color in params['colors']:
+                configs_list['view' + view + ' color' + color] = \
+                    self.map_sc_configs_asi_stage()
+        return configs_list

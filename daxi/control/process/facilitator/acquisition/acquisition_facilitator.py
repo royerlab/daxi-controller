@@ -9,7 +9,7 @@ import numpy as np
 # from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
 #     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
-    NIDAQDevicesConfigsGeneratorMode1, CameraConfigsGeneratorMode1
+    NIDAQDevicesConfigsGeneratorMode1, CameraConfigsGeneratorMode1, StageConfigsGeneratorMode1
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
 if devices_connected is False:
@@ -61,8 +61,8 @@ class AcquisitionFcltr():
         self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.configs,
                                                              daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1,
                                                              camera_configs_generator_class=CameraConfigsGeneratorMode1,
-                                                             stage_configs_generator_class=None)
-        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+                                                             stage_configs_generator_class=StageConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
         position_list = self.configs['process configs']['acquisition parameters']['positions']
@@ -113,6 +113,8 @@ class AcquisitionFcltr():
         # this should be in device facilitator
 
         # camera get ready (for now, display an image to prompt the user to run the HCI)
+        self.devices_fcltr.camera_prepare(simulation=is_simulation)
+        self.devices_fcltr.camera_get_ready()
         # daq card configure and everybody get ready (do it through the DevicesFcilitator, map, checkout 1
         # configuration and start everything)
         # loop over positions
@@ -124,16 +126,17 @@ class AcquisitionFcltr():
                 # move the stage to the position
 
                 # add configuration for the asi stage for this position:
-                self.devices_fcltr.configs_asi_stage # should look into the asi stage demo.
+                self.devices_fcltr.configs_asi_stage  # should look into the asi stage demo.
 
                 # move to the position and start the scan, ASI stage get ready.
-                self.devices_fcltr.move_to(position)
+                self.devices_fcltr.stage_move_to(position)
+                position_configs = self.devices_fcltr.asi_stage.stored_positions[position]['scan configurations']
                 self.devices_fcltr.stage_raster_scan_get_ready_at_position(
                     position_name=position,
-                    scan_range=self.devices_fcltr.configs_asi_stage['scan range'],
-                    # perhaps should add this to a feature of the position, instead of the general.
-                    encoder_divide=position['scan configurations']['encoder divide'],
-                    scan_speed=position['scan configurations']['scan speed'],
+                    # scan_range=position_configs['scan range'],
+                    # # perhaps should add this to a feature of the position, instead of the general.
+                    # encoder_divide=position_configs['encoder divide'],
+                    # scan_speed=position_configs['scan speed'],
                     )
                 # this raster scan configuration is meant to be here because this mode1 is enforcing the following
                 # looping order:
