@@ -130,19 +130,14 @@ class AcquisitionFcltr():
 
                 # move to the position and start the scan, ASI stage get ready.
                 self.devices_fcltr.stage_move_to(position)
-                position_configs = self.devices_fcltr.asi_stage.stored_positions[position]['scan configurations']
                 self.devices_fcltr.stage_raster_scan_get_ready_at_position(
                     position_name=position,
-                    # scan_range=position_configs['scan range'],
-                    # # perhaps should add this to a feature of the position, instead of the general.
-                    # encoder_divide=position_configs['encoder divide'],
-                    # scan_speed=position_configs['scan speed'],
                     )
                 # this raster scan configuration is meant to be here because this mode1 is enforcing the following
                 # looping order:
                 # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
 
-                # think about should I set the scanning configuration for each position.
+                # think about should I set the scanning configuration for each position - yes.
 
                 # loop over views.
                 for view in view_list:
