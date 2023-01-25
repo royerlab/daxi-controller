@@ -58,12 +58,15 @@ class AcquisitionFcltr():
         # in this acquisition mode, the configurations for the camera and the ASI stage is maintained the same.
         print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
 
-        # 1. receive configurations (this should be a job done by the device facilitator)
+        # 1. receive configurations (done by device facilitator)
         self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.configs,
                                                              daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1,
                                                              camera_configs_generator_class=CameraConfigsGeneratorMode1,
                                                              stage_configs_generator_class=StageConfigsGeneratorMode1)
+        # get the first cycle key
         first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
+
+        # checkout the configurations of a single cycle by key
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
 
@@ -81,70 +84,23 @@ class AcquisitionFcltr():
         os.system('echo number of time points: ' + str(number_of_time_points))
         os.system('echo number of slices: ' + str(slice_number))
 
-        # 2. prepare subtasks and calculate the data for all subtasks
-        self.devices_fcltr.daq_prepare_subtasks_ao()
-        self.devices_fcltr.daq_prepare_subtasks_do()
+        prepare_all_devices_and_get_ready(devices_fcltr=self.devices_fcltr, is_simulation=is_simulation)
 
-        # 3. prepare metronome and counter
-        self.devices_fcltr.daq_prepare_metronome()
-        self.devices_fcltr.daq_prepare_counter()
-
-        # 4. prepare AO and DO task bundle
-        self.devices_fcltr.daq_prepare_taskbundle_ao()
-        self.devices_fcltr.daq_prepare_taskbundle_do()
-
-        # 5. add metronome to ao task bundle
-        self.devices_fcltr.daq_add_metronome()
-
-        # 6. add sub-tasks for ao task bundle
-        self.devices_fcltr.daq_add_subtasks_ao()
-        self.devices_fcltr.daq_add_subtasks_do()
-
-        # 7. get ready, and start/stop.
-        self.devices_fcltr.daq_get_ready()
-        self.devices_fcltr.daq_start()
-        self.devices_fcltr.daq_stop()  # run a start-stop cycle to flush the buffer.
-
-        # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a
-        # working daq is done)
-        self.devices_fcltr.stage_prepare(simulation=is_simulation)
-        self.devices_fcltr.stage_get_ready()
-        # self.devices_fcltr.
-        # copy/organize from the previous ad-hoc in the old_workbench
-        # the speed and everything should already be stored in the list of positions.
-        # think:
-        # this should be in device facilitator
-
-        # camera get ready (for now, display an image to prompt the user to run the HCI)
-        self.devices_fcltr.camera_prepare(simulation=is_simulation)
-        self.devices_fcltr.camera_get_ready()
-
-        # prepare_all_devices_and_get_ready(devices_fcltr=self.devices_fcltr, is_simulation = True)
-
-
-        # daq card configure and everybody get ready (do it through the DevicesFcilitator, map, checkout 1
-        # configuration and start everything)
-        # loop over positions
+        # loop over time points
         for time_point_index in np.arange(number_of_time_points):
             os.system('echo ')
             os.system('echo starting time point: ' + str(time_point_index))
+            # loop over positions
             for position in position_list:
                 os.system('echo moving to this position: ' + str(position))
                 # move the stage to the position
-
-                # add configuration for the asi stage for this position:
-                self.devices_fcltr.configs_asi_stage  # should look into the asi stage demo.
-
-                # move to the position and start the scan, ASI stage get ready.
                 self.devices_fcltr.stage_move_to(position)
+                # ASI stage get ready at the position (this line has to be here due to mode1 specifics)
+                # looping order:
+                # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
                 self.devices_fcltr.stage_raster_scan_get_ready_at_position(
                     position_name=position,
                     )
-                # this raster scan configuration is meant to be here because this mode1 is enforcing the following
-                # looping order:
-                # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
-
-                # think about should I set the scanning configuration for each position - yes.
 
                 # loop over views.
                 for view in view_list:
@@ -155,16 +111,15 @@ class AcquisitionFcltr():
                         os.system('echo --- --- --- current: time point: ' + str(time_point_index) +
                                   ', position: ' + str(position) + ', view' + str(view) + ', color' + str(color))
                         # move the filter wheel.
-                        # think about it:
-                        # this should be done under devices facilitator and should be calling the serial devices.
                         self.devices_fcltr.serial_move_filter_wheel(color)
-                        # manual for now XD.. sigh. - well, tolerable.
 
                         # based on the view and color indexes, choose a daq data cycle index. (This is
                         # actually implemented in DevicesFcltr)
-                        self.devices_fcltr.checkout_single_cycle_configs(key='view'+str(view) + ' color' + str(color),
+                        cycle_key = 'view'+str(view) + ' color' + str(color) # get the cycle key for this cycle
+                        self.devices_fcltr.checkout_single_cycle_configs(key=cycle_key,
                                                                          verbose=True)
-                        # write data to daq card again for the changed cycle index.
+
+                        # update and write data to daq card for the current cycle index.
                         self.devices_fcltr.daq_update_data()
                         self.devices_fcltr.daq_write_data()
                         # start daq card (waiting for the trigger)
@@ -173,15 +128,14 @@ class AcquisitionFcltr():
                         self.devices_fcltr.camera_start()
                         # start raster scan of asi-stage (will send out the trigger)
                         self.devices_fcltr.stage_start_raster_scan()
-
                         # loop over slices for the stack:
                         counter = 0
                         os.system('echo single stack acquisition starts ...')
                         while counter <= slice_number - 1:
+                            # trap the process in this while-loop until the counter reaches the desired count.
                             counter = self.devices_fcltr.counter.read()
                             sleep(0.003)
                         os.system('echo counted number of slices: '+str(counter))
-
                         # stop(pause) daq card
                         self.devices_fcltr.daq_stop()
                         self.devices_fcltr.camera_stop()
@@ -190,6 +144,7 @@ class AcquisitionFcltr():
 
         self.devices_fcltr.daq_close()
         self.devices_fcltr.camera_close()
+        # perhaps we shouldn't close the camera. Should test and see if the camera is re-trigger-able when stopped.
         # self.devices_fcltr.stage_close()  # seems like it is not necessary to call a function to close the stage.
 
         # todo need to check how to re-trigger camera acquisition with the same acquisition protocol.
