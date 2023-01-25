@@ -217,6 +217,13 @@ class DevicesFcltr:
         self.configs_all_cycles['configs_bright_field'] = \
             daq_configs_generator.get_configs_bright_field(acquisition_parameters)
 
+        # all the configurations are mapped to a dictionary that stores different cycle types,
+        # specified by its own dictionary keys with acquisition-mode specific name patterns.
+        self.configs_daq_single_cycle_dict = \
+            daq_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
+
+
+
         # now get the configuration generator for camera and set the configurations:
         if camera_configs_generator_class is not None:
             camera_configs_generator = camera_configs_generator_class(
@@ -224,6 +231,9 @@ class DevicesFcltr:
                                           )
             self.configs_all_cycles['configs_camera'] = \
                 camera_configs_generator.get_configs_camera(params=acquisition_parameters)
+
+            self.configs_cam_single_cycle_dict = \
+                camera_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
 
         # now get the configuration generator for stage and set the configurations:
         if stage_configs_generator_class is not None:
@@ -233,16 +243,8 @@ class DevicesFcltr:
             self.configs_all_cycles['configs_stage'] = \
                 stage_configs_generator.get_configs_asi_stage(acquisition_params=acquisition_parameters)
 
-        # all the configurations are mapped to a dictionary that stores different cycle types,
-        # specified by its own dictionary keys with acquisition-mode specific name patterns.
-        self.configs_daq_single_cycle_dict = \
-            daq_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
-
-        self.configs_cam_single_cycle_dict = \
-            camera_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
-
-        self.configs_stage_single_cycle_dict = \
-            stage_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
+            self.configs_stage_single_cycle_dict = \
+                stage_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
 
     def checkout_single_cycle_configs(self, key=None, verbose=False):
         if verbose:
@@ -252,12 +254,15 @@ class DevicesFcltr:
         for k in daq_configs.keys():
             setattr(self, k, daq_configs[k])
 
-        setattr(self, 'configs_camera', self.configs_cam_single_cycle_dict[key])
-        setattr(self, 'configs_asi_stage', self.configs_stage_single_cycle_dict[key])
+        if self.configs_cam_single_cycle_dict is not None:
+            setattr(self, 'configs_camera', self.configs_cam_single_cycle_dict[key])
+
+        if self.configs_stage_single_cycle_dict is not None:
+            setattr(self, 'configs_asi_stage', self.configs_stage_single_cycle_dict[key])
 
     def show_devices_configs(self):
         """
-        print out the names of the devices for convenience
+        print out the configurations for all the devices.
         :return:
         """
         for m in self.__dict__.keys():
@@ -679,3 +684,49 @@ class DevicesFcltr:
                                                    scan_speed=scan_speed)
         else:
             raise ValueError('asi stage is not initialized yet.')
+
+
+def prepare_all_devices_and_get_ready(devices_fcltr: DevicesFcltr = None, is_simulation: bool = True):
+    """
+    This function will take a devices facilitator, and prepare all the devices, and make sure all the devices are ready.
+    @param devices_fcltr:
+    @param is_simulation:
+    @return:
+    """
+    # 2. prepare subtasks and calculate the data for all subtasks
+    devices_fcltr.daq_prepare_subtasks_ao()
+    devices_fcltr.daq_prepare_subtasks_do()
+
+    # 3. prepare metronome and counter
+    devices_fcltr.daq_prepare_metronome()
+    devices_fcltr.daq_prepare_counter()
+
+    # 4. prepare AO and DO task bundle
+    devices_fcltr.daq_prepare_taskbundle_ao()
+    devices_fcltr.daq_prepare_taskbundle_do()
+
+    # 5. add metronome to ao task bundle
+    devices_fcltr.daq_add_metronome()
+
+    # 6. add sub-tasks for ao task bundle
+    devices_fcltr.daq_add_subtasks_ao()
+    devices_fcltr.daq_add_subtasks_do()
+
+    # 7. get ready, and start/stop.
+    devices_fcltr.daq_get_ready()
+    devices_fcltr.daq_start()
+    devices_fcltr.daq_stop()  # run a start-stop cycle to flush the buffer.
+
+    # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a
+    # working daq is done)
+    devices_fcltr.stage_prepare(simulation=is_simulation)
+    devices_fcltr.stage_get_ready()
+    # self.devices_fcltr.
+    # copy/organize from the previous ad-hoc in the old_workbench
+    # the speed and everything should already be stored in the list of positions.
+    # think:
+    # this should be in device facilitator
+
+    # camera get ready (for now, display an image to prompt the user to run the HCI)
+    devices_fcltr.camera_prepare(simulation=is_simulation)
+    devices_fcltr.camera_get_ready()
