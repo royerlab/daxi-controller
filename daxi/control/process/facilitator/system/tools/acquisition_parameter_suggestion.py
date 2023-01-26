@@ -47,18 +47,18 @@ class AcqParamBase:
     """
 
     def __init__(self,
-                 dx=0.4,
-                 length=1000,
-                 t_exposure=90,
-                 t_readout=10,
-                 t_stage_retraction=23,
-                 scanning_galvo_range_limit=0.8,
-                 number_of_colors_per_slice=1,
-                 colors=['488'],
-                 number_of_scans_per_timepoint=1,
+                 dx=None,
+                 length=None,
+                 t_exposure=None,
+                 t_readout=None,
+                 t_stage_retraction=None,
+                 scanning_galvo_range_limit=None,
+                 number_of_colors_per_slice=None,
+                 colors=None,
+                 number_of_scans_per_timepoint=None,
                  slice_color_list=None,
                  positions=None,
-                 views=['1'],
+                 views=None,
                  positions_views_list=None,
                  number_of_time_points=None,
                  ):
@@ -73,7 +73,7 @@ class AcqParamBase:
         thing about it...
 
         :param dx: pixel size in camera, unit=um
-        :param length: scan range along the stage scanning axis
+        :param length: scan range along the scanning axis (horizontal for LS3 and SG scan, axial for O1 scan).
         :param t_exposure: camera exposure time unit = ms
         :param t_readout: camera waiting time, unit = ms
         :param t_stage_retraction: the amount of time the stage needs to move back to the initial position.
@@ -107,7 +107,7 @@ class AcqParamBase:
         # during the read out time of the color channels except for the last color channel.).
         self.t_SG_retraction = self.t_readout  # SG retraction time, this should be during the read out time of the
         # last color channel.
-        self.number_of_scans_per_time_point = int(number_of_scans_per_timepoint)
+        self.number_of_scans_per_time_point = number_of_scans_per_timepoint
         self.slice_color_list = slice_color_list
         self.positions = positions
         self.positions_views_list = positions_views_list
@@ -116,16 +116,16 @@ class AcqParamBase:
         self.looping_order = None
         self.number_of_time_points = number_of_time_points
 
-    def find_parameter_combinations(self):
+    def find_parameter_combinations_ls3scan(self):
         """
         constrains:
-        1. =distance between different slices should be integer number of pixel size
-            y = N*dx
+        1. = keep the distance between different slices as an integer number of pixel size
+            y = N*dx   N is integer number, dx is the pixel size.
 
-        2. scanning range (at 45 angle) is associated with the stage speed and exposure times
+        2. scanning range per slice (at 45 angle) is associated with the stage speed and exposure times
         sqrt(2)*y = sqrt(2)*N*dx = (tE + tR) * Vs where, Vs is the scanning speed.
 
-        so now calcualte the scannings peed, we have:
+        so now calcualte the scanning speed, we have:
         Vs = sqrt(2)*N*dx/(tE + tR)
 
         3. calculate the total number of slices
@@ -187,9 +187,67 @@ class AcqParamBase:
         self.scan_durations_list = scan_durations_list
         self.time_per_datapoint_list = time_per_datapoint_list
 
+    def find_parameter_combinations_o1scan(self):
+        """
+        constrains:
+        1. = keep the distance between different slices (O1 position) as an integer number of pixel size
+            y = N*dx   N is integer number, dx is the pixel size.
+
+        2. scanning range (at 45 angle) is associated with the stage speed and exposure times
+        sqrt(2)*y = sqrt(2)*N*dx = (tE + tR) * Vs where, Vs is the scanning speed.
+
+        so now calcualte the scannings peed, we have:
+        Vs = sqrt(2)*N*dx/(tE + tR)
+
+        3. calculate the total number of slices
+        n_slices = floor(L/sqrt(2)*N*dx)
+
+        4. update the true range
+        Lupdated = n_slices * sqrt(2)*N*dx
+
+        5. should measure the raster scan retraction time with the current range and speed setting.
+        so perhaps arrange two triggers to measure that.
+        tS - the amount of time for retraction.
+
+        6. calculate the total amount of time per slice
+        n_slices * (tE + tR) + tS, and display it as time resolution
+        :return:
+        """
+
+        # prepare a list of magnification factor
+        ns = np.arange(10)+1  # magnification factor (ratio between axial pixel size, and lateral pixel size)
+
+        # based on the magnification factor, calculate the perpendicular distances between adjacent slices
+        ys_list = ns * self.dx
+
+        # based on the input stage travel total distance (self.length) and the
+        # stage travel distances between different slices, calculate the total number of slices.
+        n_slices_list = np.ceil(self.length / ys_list)
+        length_updated_list = n_slices_list*ys_list
+
+        # based on the number of slices and time spent for each slice, calculate the total amount of time for
+        # acquisition per stack per view.
+        stack_time_list = n_slices_list * self.t_per_slice + self.t_stage_retraction
+
+        # calculate the scanning duration per raster scan
+        scan_durations_list = n_slices_list * self.t_per_slice + self.t_stage_retraction
+        time_per_datapoint_list = scan_durations_list * self.number_of_scans_per_time_point
+
+        # copy over the parameters to the object:
+        self.ns = ns  # list of multiplication factors of slice distances as compared to the xy pixel size
+        self.ys_list = ys_list  # (um) list of slice distances
+        self.vs_list = ys_list*0  # (um/ms) list of stage scanning speed.
+        self.n_slices_list = n_slices_list  # list of total number of slices
+        self.stack_time_list = stack_time_list  # (ms) list of time per stack.
+        self.length_updated_list = length_updated_list
+        self.scanning_galvo_range_per_slice_list = [None]*len(ys_list)
+        self.scan_durations_list = scan_durations_list
+        self.time_per_datapoint_list = time_per_datapoint_list
+
     def display_parameter_options(self):
         print("suggested parameter options are shown below, based on different magnification factors:")
-        for n, y, n_slices, stack_time, length, vs, sgr, tpd, sd in zip(self.ns,
+        for n, y, n_slices, stack_time, length, vs, sgr, tpd, sd in zip(
+                                                               self.ns,
                                                                self.ys_list,
                                                                self.n_slices_list,
                                                                self.stack_time_list,
@@ -198,7 +256,8 @@ class AcqParamBase:
                                                                self.scanning_galvo_range_per_slice_list,
                                                                self.time_per_datapoint_list,
                                                                self.scan_durations_list):
-            print('mag-factor: ' + str(n) +
+            print('pixel size: ' + str(self.dx) +
+                  ', mag-factor: ' + str(n) +
                   ', slice distance (um): ' + str(np.floor(y*10)/10) + ' um' +
                   ', n slices: ' + str(n_slices) +
                   ', time per stack per view (s): ' + str(np.floor(stack_time/100)/10) + ' s' +
@@ -220,7 +279,10 @@ class AcqParamBase:
         scan_duration = n_slices * self.t_per_slice + self.t_stage_retraction
         time_per_datapoint = scan_duration*self.number_of_scans_per_time_point
         self.stage_travel_distance = float(length_updated)
-        self.scanning_galvo_range_per_slice = float(v * self.t_SG_scan)
+        if self.t_SG_scan is not None:
+            self.scanning_galvo_range_per_slice = float(v * self.t_SG_scan)
+        else:
+            self.scanning_galvo_range_per_slice = self.t_SG_scan
         self.selected_parameters = \
             {
                 'name': self.name,
@@ -233,7 +295,7 @@ class AcqParamBase:
                 "time per stack per view (s)": float(scan_duration/1000),
                 "time per time point (s)": float(time_per_datapoint/1000),
                 "scanning range (um)": float(length_updated),
-                "scanning speed (nm/ms)": float(v*1000),
+                "galvo scanning speed (nm/ms)": float(v*1000),
                 "exposure time (ms)": self.t_exposure,
                 "camera read out time (ms)": self.t_readout,
                 "stage retraction time (ms)": self.t_stage_retraction,
@@ -276,7 +338,7 @@ class AcqParamMode1(AcqParamBase):
 class AcqParamMode2(AcqParamBase):
     """
     [mode 2] - [layer 1: position] - [layer 2: view] - [layer 3: slice] - [layer 4: color]
-    This mode corresponds to the intervened acquisiton mode. for each slice, it takes the list of all colors acquisition
+    This mode corresponds to the intervened acquisition mode. for each slice, it takes the list of all colors acquisition
     first, then move on to the next slice.
     """
 
@@ -358,3 +420,26 @@ class AcqParamMode6(AcqParamBase):
         self.type = 'mode6'
         self.looping_order = '[mode 6] - [layer 1: position, view] - [layer 2: slice, color]'
 
+
+class AcqParamMode7(AcqParamBase):
+    """
+    loop layers:
+    [mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice] with O1 scan.
+    this acquisition mode maximize the time resolution within a color chanel, but with increased offsets between
+    different color channels.
+    the looping order is the same with mode1, but with O1 scan, while mode1 uses LS3 scan.
+
+    example 1:
+    How immune cells migrate away from blood vessels. immune cells need high time resolution, blood vessels is static.
+    """
+
+    def adapt(self):
+        # change the initialization parameters to adapt to this specific acquisition mode.
+        self.number_of_colors_per_slice = 1
+        self.number_of_scans_per_time_point = self.number_of_views * self.number_of_colors
+        self.t_per_slice = (self.t_exposure + self.t_readout)*self.number_of_colors_per_slice  # time per slice (ms)
+        self.t_SG_scan = None
+        self.name = 'mode7'
+        self.type = 'mode7'
+        self.looping_order = '[mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color] ' \
+                             '- [layer 4: slice] - [scan: O1]'

@@ -222,8 +222,6 @@ class DevicesFcltr:
         self.configs_daq_single_cycle_dict = \
             daq_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
 
-
-
         # now get the configuration generator for camera and set the configurations:
         if camera_configs_generator_class is not None:
             camera_configs_generator = camera_configs_generator_class(

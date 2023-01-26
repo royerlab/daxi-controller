@@ -24,7 +24,7 @@ def test_find_parameter_combinations():
                      length=1000,
                      t_exposure=90,
                      t_readout=10)
-    m.find_parameter_combinations()
+    m.find_parameter_combinations_ls3scan()
     assert m.ns is not None
     assert m.ys_list is not None
     assert m.vs_list is not None
@@ -77,7 +77,7 @@ def test_mode1to6_get_paramter_combination():
                        positions_views_list=None,
                        )
     m1.adapt()
-    m1.find_parameter_combinations()
+    m1.find_parameter_combinations_ls3scan()
     m1.get_parameter_combination(magnification_factor=5)
     assert abs(m1.selected_parameters['time per time point (s)'] - 141.692) < 0.001
 
@@ -97,7 +97,7 @@ def test_mode1to6_get_paramter_combination():
                        positions_views_list=None,
                        )
     m2.adapt()
-    m2.find_parameter_combinations()
+    m2.find_parameter_combinations_ls3scan()
     m2.get_parameter_combination(magnification_factor=5)
     assert abs(m2.selected_parameters['time per time point (s)'] - 141.646) < 0.001
 
@@ -117,7 +117,7 @@ def test_mode1to6_get_paramter_combination():
                        positions_views_list=None,
                        )
     m3.adapt()
-    m3.find_parameter_combinations()
+    m3.find_parameter_combinations_ls3scan()
     m3.get_parameter_combination(magnification_factor=5)
     assert abs(m3.selected_parameters['time per time point (s)'] - 70.846) < 0.001
 
@@ -137,7 +137,7 @@ def test_mode1to6_get_paramter_combination():
                        positions_views_list=None,
                        )
     m4.adapt()
-    m4.find_parameter_combinations()
+    m4.find_parameter_combinations_ls3scan()
     m4.get_parameter_combination(magnification_factor=5)
     assert abs(m4.selected_parameters['time per time point (s)'] - 141.692) < 0.001
 
@@ -157,7 +157,7 @@ def test_mode1to6_get_paramter_combination():
                        positions_views_list=None,
                        )
     m5.adapt()
-    m5.find_parameter_combinations()
+    m5.find_parameter_combinations_ls3scan()
     m5.get_parameter_combination(magnification_factor=5)
     assert abs(m5.selected_parameters['time per time point (s)'] - 141.646) < 0.001
 
@@ -177,6 +177,6 @@ def test_mode1to6_get_paramter_combination():
                        positions_views_list=None,
                        )
     m6.adapt()
-    m6.find_parameter_combinations()
+    m6.find_parameter_combinations_ls3scan()
     m6.get_parameter_combination(magnification_factor=5)
     assert abs(m6.selected_parameters['time per time point (s)'] - 70.846) < 0.001

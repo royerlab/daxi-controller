@@ -7,7 +7,7 @@ m = AcqParamBase(dx=0.4,
                  t_exposure=90,
                  t_readout=10)
 
-m.find_parameter_combinations()
+m.find_parameter_combinations_ls3scan()
 
 m.display_parameter_options()
 

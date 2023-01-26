@@ -51,11 +51,15 @@ class AcquisitionFcltr():
         if self.configs['process configs']['process type'] == 'acquisition, mode 1':
             self.acquisition_mode1()
 
+        if self.configs['process configs']['process type'] == 'acquisition, mode 7':
+            self.acquisition_mode7()
+
+
         return 0
 
     def acquisition_mode1(self):
         # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
-        # in this acquisition mode, the configurations for the camera and the ASI stage is maintained the same.
+        # Here, the configurations for the camera and the ASI stage is maintained the same for all cycles.
         print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
 
         # 1. receive configurations (done by device facilitator)
@@ -157,4 +161,12 @@ class AcquisitionFcltr():
         print("we will then go through the loop order shown above in the comments, to actually \n"
               "perform this acquisition task\n")
         print("stepped out of AcquisitionFacilitator.acquisition_mode1")
+        return 0
+
+    def acquisition_mode7(self):
+        """
+        this will be acquisition mode 7 - which is mode1 with O1 scan, instead of LS3 scan.
+        @return:
+        """
+        print('\n[implement acquisition mode 7 here]\n')
         return 0
