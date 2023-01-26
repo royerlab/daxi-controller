@@ -184,6 +184,7 @@ class AcqParamBase:
         self.stack_time_list = stack_time_list  # (ms) list of time per stack.
         self.length_updated_list = length_updated_list
         self.scanning_galvo_range_per_slice_list = scanning_galvo_scan_range_per_slice_list
+        self.scanning_galvo_range_limit = 0  # todo - need to load this from configuration files.
         self.scan_durations_list = scan_durations_list
         self.time_per_datapoint_list = time_per_datapoint_list
 
@@ -296,6 +297,7 @@ class AcqParamBase:
                 "time per time point (s)": float(time_per_datapoint/1000),
                 "scanning range (um)": float(length_updated),
                 "galvo scanning speed (nm/ms)": float(v*1000),
+                "stage scanning speed (nm/ms)": float(v*1000),
                 "exposure time (ms)": self.t_exposure,
                 "camera read out time (ms)": self.t_readout,
                 "stage retraction time (ms)": self.t_stage_retraction,
