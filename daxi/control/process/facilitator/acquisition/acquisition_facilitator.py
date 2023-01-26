@@ -232,6 +232,23 @@ class AcquisitionFcltr():
             think about it for a while.
 
         OK, try option 3 first.
+        option 3 - specifics.
+            the camera runs in a master pulse start trigger mode (same as mode 1)
+            the counter will count the number of frames to decide when a stack ends (same as mode 1)
+            the daq will stop-rewrite-start the daq card after each stack. (same as mode 1)
+            daq configuration swill be different from mode 1:
+                it won't be triggered by the camera output triggers.
+                it may or may not be retriger-able and it doesn't matter, because there will only be 1 duty cycle.
+                the voltages are generated for the full stack before the stack acquisition begins.
+            Now think about:
+                What is the start trigger for the camera?
+                    use an external trigger start mode. and make a super short asi-stage-scan trigger perhaps to be the
+                    camera trigger. The first frame won't be used.
+                What is the start trigger for the daq card?
+                    may still use the camera frame output trigger, and for the first frame, make it dark.
+            need to record the trigger signals on the oscilloscope for confirmation.
+            OK, proceed with these specifics.
+
         """
         print('\n[implement acquisition mode 7 here]\n')
         # 1. receive configurations (done by device facilitator)
@@ -246,5 +263,69 @@ class AcquisitionFcltr():
         # checkout the configurations of a single cycle by key
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
+
         prepare_all_devices_and_get_ready(devices_fcltr=self.devices_fcltr, is_simulation=is_simulation)
+        """
+        """
+        # loop over time points
+        for time_point_index in np.arange(number_of_time_points):
+            os.system('echo ')
+            os.system('echo starting time point: ' + str(time_point_index))
+            # loop over positions
+            for position in position_list:
+                os.system('echo moving to this position: ' + str(position))
+                # move the stage to the position
+                self.devices_fcltr.stage_move_to(position)
+                # ASI stage get ready at the position (this line has to be here due to mode1 specifics)
+                # looping order:
+                # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
+                self.devices_fcltr.stage_raster_scan_get_ready_at_position(
+                    position_name=position,
+                    )
+
+                # loop over views.
+                for view in view_list:
+                    os.system('echo --- going to this view: view' + str(view))
+                    # loop over colors.
+                    for color in color_list:
+                        os.system('echo --- --- switching to this color: color' + str(color))
+                        os.system('echo --- --- --- current: time point: ' + str(time_point_index) +
+                                  ', position: ' + str(position) + ', view' + str(view) + ', color' + str(color))
+                        # move the filter wheel.
+                        self.devices_fcltr.serial_move_filter_wheel(color)
+
+                        # based on the view and color indexes, choose a daq data cycle index. (This is
+                        # actually implemented in DevicesFcltr)
+                        cycle_key = 'view'+str(view) + ' color' + str(color) # get the cycle key for this cycle
+                        self.devices_fcltr.checkout_single_cycle_configs(key=cycle_key,
+                                                                         verbose=True)
+
+                        # update and write data to daq card for the current cycle index.
+                        self.devices_fcltr.daq_update_data()
+                        self.devices_fcltr.daq_write_data()
+                        # start daq card (waiting for the trigger)
+                        self.devices_fcltr.daq_start()
+                        # start camera (waiting for the trigger)
+                        self.devices_fcltr.camera_start()
+                        # start raster scan of asi-stage (will send out the trigger)
+                        self.devices_fcltr.stage_start_raster_scan()
+                        # loop over slices for the stack:
+                        counter = 0
+                        os.system('echo single stack acquisition starts ...')
+                        while counter <= slice_number - 1:
+                            # trap the process in this while-loop until the counter reaches the desired count.
+                            counter = self.devices_fcltr.counter.read()
+                            sleep(0.003)
+                        os.system('echo counted number of slices: '+str(counter))
+                        # stop(pause) daq card
+                        self.devices_fcltr.daq_stop()
+                        self.devices_fcltr.camera_stop()
+                        os.system('echo single stack acquisition ends.')
+                        os.system('echo .')
+
+        self.devices_fcltr.daq_close()
+        self.devices_fcltr.camera_close()
+        # perhaps we shouldn't close the camera. Should test and see if the camera is re-trigger-able when stopped.
+        # self.devices_fcltr.stage_close()  # seems like it is not necessary to call a function to close the stage.
+
         return 0
