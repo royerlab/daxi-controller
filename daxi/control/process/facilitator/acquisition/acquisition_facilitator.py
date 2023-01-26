@@ -21,7 +21,7 @@ class AcquisitionFcltr():
     """
     This is a concrete command in the command pattern.
     """
-    def __init__(self):
+    def __init__(self, verbose=True):
         """
 
         :param receiver: [DeviceFcltr]. receiver is a device facilitator: it contains all the physical and
@@ -30,10 +30,43 @@ class AcquisitionFcltr():
         """
         self.devices_fcltr = None
         self.configs = None
+        self.verbose = verbose
         # make sure the receiver and data is passed into the execute method, so the same command cna perform different
         # command once the configurations are changed in the client. (may not be the case in cli, but will be in gui.)
         # advantage of making the receiver and data as attributes of the command: it will be logged by the invoker, so
         # there is a record of all the specifics.
+
+    def _msg_1(self, verbose=False):
+        if verbose:
+            print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
+        pass
+
+    def _msg_2(self, verbose=False):
+        position_list, view_list, color_list, number_of_time_points, slice_number = self._convinience_reasign_params()
+        if verbose:
+            os.system('echo test system output')
+            os.system('echo number of positions: ' + str(len(position_list)))
+            os.system('echo views: ' + str(view_list))
+            os.system('echo colors: ' + str(color_list))
+            os.system('echo number of time points: ' + str(number_of_time_points))
+            os.system('echo number of slices: ' + str(slice_number))
+
+    def _msg_3(self, time_point_index=0, verbose=False):
+        if verbose:
+            os.system('echo ')
+            os.system('echo starting time point: ' + str(time_point_index))
+
+    def _msg_4(self, position, verbose=False):
+        if verbose:
+            os.system('echo moving to this position: ' + str(position))
+
+    def _convinience_reasign_params(self):
+        position_list = self.configs['process configs']['acquisition parameters']['positions']
+        view_list = self.configs['process configs']['acquisition parameters']['views']
+        color_list = self.configs['process configs']['acquisition parameters']['colors']
+        number_of_time_points = self.configs['process configs']['acquisition parameters']['number of time points']
+        slice_number = self.configs['process configs']['acquisition parameters']['n slices'] + 1
+        return position_list, view_list, color_list, number_of_time_points, slice_number
 
     def execute(self, devices_fcltr=None, data_fcltr=None, process_configs=None):
         """
@@ -60,7 +93,7 @@ class AcquisitionFcltr():
     def acquisition_mode1(self):
         # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
         # Here, the configurations for the camera and the ASI stage is maintained the same for all cycles.
-        print("stepped into AcquisitionFacilitator.acquisition_mode1\n")
+        self._msg_1(verbose=self.verbose)
 
         # 1. receive configurations (done by device facilitator)
         self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.configs,
@@ -75,70 +108,66 @@ class AcquisitionFcltr():
                                                          verbose=True)
 
         # convenience codes
-        position_list = self.configs['process configs']['acquisition parameters']['positions']
-        view_list = self.configs['process configs']['acquisition parameters']['views']
-        color_list = self.configs['process configs']['acquisition parameters']['colors']
-        number_of_time_points = self.configs['process configs']['acquisition parameters']['number of time points']
-        slice_number = self.configs['process configs']['acquisition parameters']['n slices'] + 1
+        position_list, view_list, color_list, number_of_time_points, slice_number = self._convinience_reasign_params()
 
-        os.system('echo test system output')
-        os.system('echo number of positions: ' + str(len(position_list)))
-        os.system('echo views: ' + str(view_list))
-        os.system('echo colors: ' + str(color_list))
-        os.system('echo number of time points: ' + str(number_of_time_points))
-        os.system('echo number of slices: ' + str(slice_number))
+        self._msg_2(self, verbose=self.verbose)
 
         prepare_all_devices_and_get_ready(devices_fcltr=self.devices_fcltr, is_simulation=is_simulation)
 
         # loop over time points
         for time_point_index in np.arange(number_of_time_points):
-            os.system('echo ')
-            os.system('echo starting time point: ' + str(time_point_index))
+            self._msg_3(verbose=self.verbose)
+
             # loop over positions
             for position in position_list:
-                os.system('echo moving to this position: ' + str(position))
+                self._msg_4(verbose=self.verbose)
+
                 # move the stage to the position
                 self.devices_fcltr.stage_move_to(position)
+
                 # ASI stage get ready at the position (this line has to be here due to mode1 specifics)
-                # looping order:
-                # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
-                self.devices_fcltr.stage_raster_scan_get_ready_at_position(
-                    position_name=position,
-                    )
+                self.devices_fcltr.stage_raster_scan_get_ready_at_position(position_name=position)
 
                 # loop over views.
                 for view in view_list:
                     os.system('echo --- going to this view: view' + str(view))
+
                     # loop over colors.
                     for color in color_list:
                         os.system('echo --- --- switching to this color: color' + str(color))
                         os.system('echo --- --- --- current: time point: ' + str(time_point_index) +
                                   ', position: ' + str(position) + ', view' + str(view) + ', color' + str(color))
+
                         # move the filter wheel.
                         self.devices_fcltr.serial_move_filter_wheel(color)
 
                         # based on the view and color indexes, choose a daq data cycle index. (This is
                         # actually implemented in DevicesFcltr)
-                        cycle_key = 'view'+str(view) + ' color' + str(color) # get the cycle key for this cycle
-                        self.devices_fcltr.checkout_single_cycle_configs(key=cycle_key,
-                                                                         verbose=True)
+                        cycle_key = 'view'+str(view) + ' color' + str(color)  # get the cycle key for this cycle
+                        self.devices_fcltr.checkout_single_cycle_configs(key=cycle_key, verbose=True)
 
                         # update and write data to daq card for the current cycle index.
                         self.devices_fcltr.daq_update_data()
                         self.devices_fcltr.daq_write_data()
+
                         # start daq card (waiting for the trigger)
                         self.devices_fcltr.daq_start()
+
                         # start camera (waiting for the trigger)
                         self.devices_fcltr.camera_start()
+
                         # start raster scan of asi-stage (will send out the trigger)
                         self.devices_fcltr.stage_start_raster_scan()
+
                         # loop over slices for the stack:
                         counter = 0
                         os.system('echo single stack acquisition starts ...')
+
                         while counter <= slice_number - 1:
                             # trap the process in this while-loop until the counter reaches the desired count.
                             counter = self.devices_fcltr.counter.read()
                             sleep(0.003)
+
                         os.system('echo counted number of slices: '+str(counter))
                         # stop(pause) daq card
                         self.devices_fcltr.daq_stop()
@@ -221,8 +250,6 @@ class AcquisitionFcltr():
             or maybe use a raspbery pi at the low cost range.
 
         option 3: 1 cycle = full stack 1 daq chassis
-            run a separate c-daq card to control O1.
-            maybe that works.
             everything is static so it can be implemented with certain buffer for uncertainty.
             imperfection arises with the imperfection of the master pulse time. check the reliabiitliy of that.
             danger: motion of strip-reduction galvo may generate artifacts - either match it with exposure time, or
@@ -249,6 +276,7 @@ class AcquisitionFcltr():
             need to record the trigger signals on the oscilloscope for confirmation.
             OK, proceed with these specifics.
 
+
         """
         print('\n[implement acquisition mode 7 here]\n')
         # 1. receive configurations (done by device facilitator)
@@ -265,67 +293,7 @@ class AcquisitionFcltr():
                                                          verbose=True)
 
         prepare_all_devices_and_get_ready(devices_fcltr=self.devices_fcltr, is_simulation=is_simulation)
-        """
-        """
-        # loop over time points
-        for time_point_index in np.arange(number_of_time_points):
-            os.system('echo ')
-            os.system('echo starting time point: ' + str(time_point_index))
-            # loop over positions
-            for position in position_list:
-                os.system('echo moving to this position: ' + str(position))
-                # move the stage to the position
-                self.devices_fcltr.stage_move_to(position)
-                # ASI stage get ready at the position (this line has to be here due to mode1 specifics)
-                # looping order:
-                # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
-                self.devices_fcltr.stage_raster_scan_get_ready_at_position(
-                    position_name=position,
-                    )
 
-                # loop over views.
-                for view in view_list:
-                    os.system('echo --- going to this view: view' + str(view))
-                    # loop over colors.
-                    for color in color_list:
-                        os.system('echo --- --- switching to this color: color' + str(color))
-                        os.system('echo --- --- --- current: time point: ' + str(time_point_index) +
-                                  ', position: ' + str(position) + ', view' + str(view) + ', color' + str(color))
-                        # move the filter wheel.
-                        self.devices_fcltr.serial_move_filter_wheel(color)
 
-                        # based on the view and color indexes, choose a daq data cycle index. (This is
-                        # actually implemented in DevicesFcltr)
-                        cycle_key = 'view'+str(view) + ' color' + str(color) # get the cycle key for this cycle
-                        self.devices_fcltr.checkout_single_cycle_configs(key=cycle_key,
-                                                                         verbose=True)
-
-                        # update and write data to daq card for the current cycle index.
-                        self.devices_fcltr.daq_update_data()
-                        self.devices_fcltr.daq_write_data()
-                        # start daq card (waiting for the trigger)
-                        self.devices_fcltr.daq_start()
-                        # start camera (waiting for the trigger)
-                        self.devices_fcltr.camera_start()
-                        # start raster scan of asi-stage (will send out the trigger)
-                        self.devices_fcltr.stage_start_raster_scan()
-                        # loop over slices for the stack:
-                        counter = 0
-                        os.system('echo single stack acquisition starts ...')
-                        while counter <= slice_number - 1:
-                            # trap the process in this while-loop until the counter reaches the desired count.
-                            counter = self.devices_fcltr.counter.read()
-                            sleep(0.003)
-                        os.system('echo counted number of slices: '+str(counter))
-                        # stop(pause) daq card
-                        self.devices_fcltr.daq_stop()
-                        self.devices_fcltr.camera_stop()
-                        os.system('echo single stack acquisition ends.')
-                        os.system('echo .')
-
-        self.devices_fcltr.daq_close()
-        self.devices_fcltr.camera_close()
-        # perhaps we shouldn't close the camera. Should test and see if the camera is re-trigger-able when stopped.
-        # self.devices_fcltr.stage_close()  # seems like it is not necessary to call a function to close the stage.
 
         return 0
