@@ -220,7 +220,7 @@ class AcquisitionFcltr():
             this should be the most reliable solution. you can even implment a channel to trigger the next chasis.
             or maybe use a raspbery pi at the low cost range.
 
-        option 3: 1 cycle = full stack 2 daq chasis
+        option 3: 1 cycle = full stack 1 daq chassis
             run a separate c-daq card to control O1.
             maybe that works.
             everything is static so it can be implemented with certain buffer for uncertainty.
