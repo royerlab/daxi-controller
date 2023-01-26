@@ -165,8 +165,86 @@ class AcquisitionFcltr():
 
     def acquisition_mode7(self):
         """
-        this will be acquisition mode 7 - which is mode1 with O1 scan, instead of LS3 scan.
+        this will be acquisition mode 7 - which is mode1 with O1 scan, (mode1 is using LS3 scan).
         @return:
+
+        [mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice] - [scan: O1]
+
+        now think about the event triggering strategy - Jan 26, 2023. xiyu.
+        1. first, the camera cannot be waiting for a asi stage trigger, it has to be a separate trigger
+        2. O1 voltages has to be a step function.
+        3. camera output trigger still needs to be used to trigger the DAQ suits (for light sheet sweeping and so on).
+        4. the voltage to set the O1 stage position needs to be settled before the frame acquisition begines, and when
+           the camera output trigger arrives, the O1 needs to stay static. So O1 move to desired position during the
+           readout time of the "last frame". Basically, all the daq devices need to get ready during the "read out time"
+           of the last frame.
+           after each slice, the daq card should stop-rewrite-start again - yes? think about it for a while. rewrite is
+           required if a single cycle covers the period of one slice instead of one stack, and O1 voltage
+           needs to be updated - but what if we put the full cycle to be the first camera trigger? (no, there will be
+           synchronization issue with the camera since the camera start time is not precise.) - ok, stop-rewrite-start
+           is necessary.
+
+           need to test the response time for the stop-rewrite-start cycle for the daq devices.
+
+           this means for O1 scan, we have to tolerate low speed. O1 is heavy anyhow and the stage stabilization takes
+           time anyhow, so that's fine.
+
+        5. Perhaps to capture the piezo-stage-is-stable signal and use that as the master trigger. write in a way that
+           allows for this upgrade.
+
+        option 1 - 1 cycle = 1 slice, 1 daq chasis
+            run the camera at master pulse start trigger mode and set large intervals and leave enough "resting" time
+            after each exposure time for each frame.
+            and after each frame, stop-rewrite-start the daq card cycle again.
+            dangers:
+                1. daq stop-rewrite-start may not catch up with the next exposure time.
+                In this case - you miss a camera trigger - and you get a dark frame, and the desired slice will come
+                in the next frame that has correct signal - which is fine. - mitigation - remove dark frames. OK for
+                static sample.
+                2. when the daq starts, the exposure trigger comes too early - and the movement haven't settled yet.
+                This will give wrong signal - think about it. - mitigation - set really long read out time so this event
+                does not happen.
+
+                the daq stop-rewrite-start signal should be triggered by what?
+                even assuming it is triggered properly, will O1 move to the desired position in time? It has to be already there.
+                is there an initialization state that we can issue?
+
+                daq runs a cycle, then it stops, then it runs again.
+
+                think about when to tell daq card to stop? when counter increase 1, wait for exposure time +
+                fraction buffer time, save the frame, then stop-rewrite-restart     All these needs to finish before the
+                next camera trigger.
+
+        option 2: 1 cycle = 1 slice, 2 daq chasis
+            run a separate c-daq card to control O1.
+            this should be the most reliable solution. you can even implment a channel to trigger the next chasis.
+            or maybe use a raspbery pi at the low cost range.
+
+        option 3: 1 cycle = full stack 2 daq chasis
+            run a separate c-daq card to control O1.
+            maybe that works.
+            everything is static so it can be implemented with certain buffer for uncertainty.
+            imperfection arises with the imperfection of the master pulse time. check the reliabiitliy of that.
+            danger: motion of strip-reduction galvo may generate artifacts - either match it with exposure time, or
+            have it run much faster than exposure time. or have it operate in a time window wider than the exposure time?
+            no, just run it much faster than the exposure time.
+            just make the daq card duty cycle slightly wider than the exposure time window, and extend on both ends.
+            think about it for a while.
+
+        OK, try option 3 first.
         """
         print('\n[implement acquisition mode 7 here]\n')
+        # 1. receive configurations (done by device facilitator)
+        self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.configs,
+                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode7,
+                                                             camera_configs_generator_class=CameraConfigsGeneratorMode7,
+                                                             stage_configs_generator_class=StageConfigsGeneratorMode7)
+        # todo - need to implement the XConfigsGeneratorMode7, think about abstraction for these generators.
+        # get the first cycle key
+        first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
+
+        # checkout the configurations of a single cycle by key
+        self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
+                                                         verbose=True)
+        prepare_all_devices_and_get_ready(devices_fcltr=self.devices_fcltr, is_simulation=is_simulation)
         return 0
