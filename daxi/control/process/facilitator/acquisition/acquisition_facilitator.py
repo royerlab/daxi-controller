@@ -90,16 +90,29 @@ class AcquisitionFcltr():
 
         return 0
 
-    def acquisition_mode1(self):
-        # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
+    def _acquisition_looping_order_p_v_c_s(self,
+                                           daq_configs_gclass=None,
+                                           cam_configs_gclass=None,
+                                           sta_configs_gclass=None):
+        """
+        This si the acquisition process with the p-v-c-s looping order:
+        [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
+        This looping order is currently used in mode1 and mode7 acquisitions. (with LS3 and O1 scan, there should be
+        another mode that corresponds to SG scan).
+
+        @param daq_configs_gclass:
+        @param cam_configs_gclass:
+        @param sta_configs_gclass:
+        @return:
+        """
         # Here, the configurations for the camera and the ASI stage is maintained the same for all cycles.
         self._msg_1(verbose=self.verbose)
 
         # 1. receive configurations (done by device facilitator)
         self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.configs,
-                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1,
-                                                             camera_configs_generator_class=CameraConfigsGeneratorMode1,
-                                                             stage_configs_generator_class=StageConfigsGeneratorMode1)
+                                                             daqdevice_configs_generator_class=daq_configs_gclass,
+                                                             camera_configs_generator_class=cam_configs_gclass,
+                                                             stage_configs_generator_class=sta_configs_gclass)
         # get the first cycle key
         first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
 
@@ -143,7 +156,7 @@ class AcquisitionFcltr():
 
                         # based on the view and color indexes, choose a daq data cycle index. (This is
                         # actually implemented in DevicesFcltr)
-                        cycle_key = 'view'+str(view) + ' color' + str(color)  # get the cycle key for this cycle
+                        cycle_key = 'view' + str(view) + ' color' + str(color)  # get the cycle key for this cycle
                         self.devices_fcltr.checkout_single_cycle_configs(key=cycle_key, verbose=True)
 
                         # update and write data to daq card for the current cycle index.
@@ -168,7 +181,7 @@ class AcquisitionFcltr():
                             counter = self.devices_fcltr.counter.read()
                             sleep(0.003)
 
-                        os.system('echo counted number of slices: '+str(counter))
+                        os.system('echo counted number of slices: ' + str(counter))
                         # stop(pause) daq card
                         self.devices_fcltr.daq_stop()
                         self.devices_fcltr.camera_stop()
@@ -191,6 +204,18 @@ class AcquisitionFcltr():
               "perform this acquisition task\n")
         print("stepped out of AcquisitionFacilitator.acquisition_mode1")
         return 0
+
+    def acquisition_mode1(self):
+        """
+        # [mode 1] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice]
+        # with LS3 scan.
+        @return:
+        """
+        self._acquisition_looping_order_p_v_c_s(
+                                           daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode1,
+                                           cam_configs_gclass=CameraConfigsGeneratorMode1,
+                                           sta_configs_gclass=StageConfigsGeneratorMode1)
+        # eventually have to refactor all these with dependency injection.
 
     def acquisition_mode7(self):
         """
@@ -275,25 +300,16 @@ class AcquisitionFcltr():
                     may still use the camera frame output trigger, and for the first frame, make it dark.
             need to record the trigger signals on the oscilloscope for confirmation.
             OK, proceed with these specifics.
+            the daq will ignore early triggers if the cycle is not finished yet, so that's good.
+            the triggering wiring do not need to change.
 
 
         """
         print('\n[implement acquisition mode 7 here]\n')
         # 1. receive configurations (done by device facilitator)
-        self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.configs,
-                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode7,
-                                                             camera_configs_generator_class=CameraConfigsGeneratorMode7,
-                                                             stage_configs_generator_class=StageConfigsGeneratorMode7)
-        # todo - need to implement the XConfigsGeneratorMode7, think about abstraction for these generators.
-        # get the first cycle key
-        first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
-
-        # checkout the configurations of a single cycle by key
-        self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
-                                                         verbose=True)
-
-        prepare_all_devices_and_get_ready(devices_fcltr=self.devices_fcltr, is_simulation=is_simulation)
-
-
-
+        self._acquisition_looping_order_p_v_c_s(
+                                           daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode7,
+                                           cam_configs_gclass=CameraConfigsGeneratorMode7,
+                                           sta_configs_gclass=StageConfigsGeneratorMode7)
+        # todo - focus on implementing these configs generators shown above then it should piece together.
         return 0
