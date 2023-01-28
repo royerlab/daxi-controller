@@ -115,7 +115,8 @@ class DevicesFcltr:
                 # assign the attributes
                 setattr(self, 'configs_' + device_tool, configs)
 
-    def receive_device_configs_all_cycles(self, process_configs,
+    def receive_device_configs_all_cycles(self,
+                                          process_configs,
                                           daqdevice_configs_generator_class,
                                           camera_configs_generator_class=None,
                                           stage_configs_generator_class=None):
@@ -179,7 +180,8 @@ class DevicesFcltr:
 
         # now get the configuration generator for daq devices configurations
         daq_configs_generator = \
-            daqdevice_configs_generator_class(params=acquisition_parameters,
+            daqdevice_configs_generator_class(process_configs=process_configs,
+                                              params=acquisition_parameters,
                                               nidaq_terminals=daq_terminal_configs,
                                               calibration_records=calibration_records,
                                               alignment_records=alignment_records)

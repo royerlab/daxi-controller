@@ -23,7 +23,11 @@ def test_find_parameter_combinations():
     m = AcqParamBase(dx=0.4,
                      length=1000,
                      t_exposure=90,
-                     t_readout=10)
+                     t_readout=10,
+                     number_of_colors_per_slice=1,
+                     t_stage_retraction=0.01,
+                     number_of_scans_per_timepoint=1,
+                     scanning_galvo_range_limit=0.1)
     m.find_parameter_combinations_ls3scan()
     assert m.ns is not None
     assert m.ys_list is not None
@@ -39,7 +43,11 @@ def test_get_parameter_combination():
     m = AcqParamBase(dx=0.4,
                      length=1000,
                      t_exposure=90,
-                     t_readout=10)
+                     t_readout=10,
+                     number_of_colors_per_slice=1,
+                     t_stage_retraction=0.01,
+                     number_of_scans_per_timepoint=1,
+                     scanning_galvo_range_limit=0.1)
 
     m.get_parameter_combination(magnification_factor=5)
     assert "pixel size in xy (um)" in m.selected_parameters.keys()
@@ -49,7 +57,8 @@ def test_get_parameter_combination():
     assert "time per stack per view (s)" in m.selected_parameters.keys()
     assert "time per time point (s)" in m.selected_parameters.keys()
     assert "scanning range (um)" in m.selected_parameters.keys()
-    assert "scanning speed (nm/ms)" in m.selected_parameters.keys()
+    assert "galvo scanning speed (nm/ms)" in m.selected_parameters.keys()
+    assert "stage scanning speed (nm/ms)" in m.selected_parameters.keys()
     assert "exposure time (ms)" in m.selected_parameters.keys()
     assert "camera read out time (ms)" in m.selected_parameters.keys()
     assert "stage retraction time (ms)" in m.selected_parameters.keys()

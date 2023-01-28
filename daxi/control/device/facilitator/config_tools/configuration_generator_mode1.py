@@ -1,7 +1,12 @@
+import os
+
 from daxi.control.device.facilitator.config_tools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase, \
     CameraConfigsGeneratorBase, StageConfigsGeneratorBase
 from daxi.control.device.facilitator.config_tools.generate_functions import DAQDataGenerator
 import numpy as np
+
+from daxi.control.process.facilitator.processes_facilitator import load_process_configs
+from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates
 
 
 class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
@@ -21,10 +26,16 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                  nidaq_terminals=None,
                  calibration_records=None,
                  alignment_records=None,
+                 process_configs=None,
                  verbose=False):
+        if process_configs is None:  # this is to make previous demo and tests to still be valid... - xiyu, 2023, Jan,
+            # 27.
+            path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
+            process_configs = load_process_configs(path=path)
         super().__init__(nidaq_terminals,
                          calibration_records=calibration_records,
-                         alignment_records=alignment_records)
+                         alignment_records=alignment_records,
+                         process_configs=process_configs)
         self.verbose = verbose
         self._get_core_configs_for_all()
 
@@ -170,10 +181,23 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
                                                       n_sample_ramp=self.sample_number_on_duty,
                                                       n_sample_retraction=self.sample_number_off_duty)
 
-            self.configs_scanning_galvo['data for view 1'] = data_view1
-            self.configs_scanning_galvo['data for view 2'] = data_view2
+        elif self.configs_scanning_galvo['data generator'] == 'constant':
+            data_view1 = \
+                dg.constant(
+                    n_samples=self.sample_number_on_duty + self.sample_number_off_duty,
+                    constant=vhome_view1
+                )
+            data_view2 = \
+                dg.constant(
+                    n_samples=self.sample_number_on_duty + self.sample_number_off_duty,
+                    constant=vhome_view2
+                )
+
         else:
             raise Exception('sorry, please choose from the available data generators')
+
+        self.configs_scanning_galvo['data for view 1'] = data_view1
+        self.configs_scanning_galvo['data for view 2'] = data_view2
 
         return self.configs_scanning_galvo
 

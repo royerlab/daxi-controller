@@ -10,6 +10,8 @@ import numpy as np
 #     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1, CameraConfigsGeneratorMode1, StageConfigsGeneratorMode1
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode7 import \
+    NIDAQDevicesConfigsGeneratorMode7, CameraConfigsGeneratorMode7, StageConfigsGeneratorMode7
 from daxi.control.device.facilitator.devicesfacilitator import prepare_all_devices_and_get_ready
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
