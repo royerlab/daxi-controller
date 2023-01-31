@@ -89,7 +89,7 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
         """
         return self.configs_ao_task_bundle
 
-    def get_configs_scanning_galvo(self, params):
+    def get_configs_scanning_galvo(self, params=None):
         """
         Note that the 'distance (um) to voltage (v) conversion factor (v/um)' should be done during the calibration
         stage.
@@ -126,7 +126,7 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
 
         return self.configs_scanning_galvo
 
-    def get_configs_view_switching_galvo_1(self, params):
+    def get_configs_view_switching_galvo_1(self, params=None):
         self.configs_view_switching_galvo_1['data configs']['sample number'] = \
             self.sample_number_total
         dg = DAQDataGenerator()
@@ -144,7 +144,7 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
 
         return self.configs_view_switching_galvo_1
 
-    def get_configs_view_switching_galvo_2(self, params):
+    def get_configs_view_switching_galvo_2(self, params=None):
         self.configs_view_switching_galvo_2['data configs']['sample number'] = \
             self.sample_number_total
         dg = DAQDataGenerator()

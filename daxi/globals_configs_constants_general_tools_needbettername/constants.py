@@ -22,4 +22,4 @@ configs_core_daq_devices = configs_templates_path+"/devices_configs_core"
 
 process_configs_yaml_path = process_templates + '/template_acquisition_mode1-dev.yaml'
 
-
+process_configs_yaml_path_mode7 = process_templates + '/template_acquisition_mode7-dev.yaml'
