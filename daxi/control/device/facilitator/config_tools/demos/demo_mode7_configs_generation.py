@@ -25,6 +25,14 @@ a.get_configs_scanning_galvo(params=None)
 a.get_configs_view_switching_galvo_1()
 a.get_configs_view_switching_galvo_2()
 a.get_configs_gamma_galvo_strip_reduction(params=None)
+a.get_configs_beta_galvo_light_sheet_incident_angle(params=None)
+a.get_configs_o3(params=None)
+a.get_configs_405_laser(params=None)
+a.get_configs_488_laser(params=None)
+a.get_configs_561_laser(params=None)
+a.get_configs_639_laser(params=None)
+a.get_configs_bright_field(params=None)
+
+
 
 plot_daq_voltage_profiles(configs=a)
-

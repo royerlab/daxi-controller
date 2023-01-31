@@ -199,22 +199,22 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
         # self.configs_gamma_galvo_strip_reduction['data'] = None
         return self.configs_gamma_galvo_strip_reduction
 
-    # def get_configs_beta_galvo_light_sheet_incident_angle(self, params):
-    #     self.configs_beta_galvo_light_sheet_incident_angle['data configs']['sample number'] = \
-    #         self.sample_number_total
-    #     dg = DAQDataGenerator()
-    #     if self.configs_beta_galvo_light_sheet_incident_angle['data generator'] == 'constant':
-    #         self.configs_beta_galvo_light_sheet_incident_angle['data for view 1'] = \
-    #             dg.constant(
-    #                 n_samples=self.sample_number_total,
-    #                 constant=self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 1'],
-    #             )
-    #         self.configs_beta_galvo_light_sheet_incident_angle['data for view 2'] = \
-    #             dg.constant(
-    #                 n_samples=self.sample_number_total,
-    #                 constant=self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 2'],
-    #             )
-    #     return self.configs_beta_galvo_light_sheet_incident_angle
+    def get_configs_beta_galvo_light_sheet_incident_angle(self, params):
+        self.configs_beta_galvo_light_sheet_incident_angle['data configs']['sample number'] = \
+            self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_beta_galvo_light_sheet_incident_angle['data generator'] == 'constant':
+            self.configs_beta_galvo_light_sheet_incident_angle['data for view 1'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 1'],
+                )
+            self.configs_beta_galvo_light_sheet_incident_angle['data for view 2'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 2'],
+                )
+        return self.configs_beta_galvo_light_sheet_incident_angle
 
     # def get_configs_o1(self, params):
     #     self.configs_o1['data configs']['sample number'] = self.sample_number_total
@@ -232,84 +232,107 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
     #             )
     #     return self.configs_o1
 
-    # def get_configs_o3(self, params):
-    #     self.configs_o3['data configs']['sample number'] = self.sample_number_total
-    #     dg = DAQDataGenerator()
-    #     if self.configs_o3['data generator'] == 'constant':
-    #         self.configs_o3['data for view 1'] = \
-    #             dg.constant(
-    #                 n_samples=self.sample_number_total,
-    #                 constant=self.configs_o3['home voltage offset for view 1'],
-    #             )
-    #         self.configs_o3['data for view 2'] = \
-    #             dg.constant(
-    #                 n_samples=self.sample_number_total,
-    #                 constant=self.configs_o3['home voltage offset for view 2'],
-    #             )
-    #     return self.configs_o3
+    def get_configs_o3(self, params=None):
+        self.configs_o3['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_o3['data generator'] == 'constant':
+            self.configs_o3['data for view 1'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o3['home voltage offset for view 1'],
+                )
+            self.configs_o3['data for view 2'] = \
+                dg.constant(
+                    n_samples=self.sample_number_total,
+                    constant=self.configs_o3['home voltage offset for view 2'],
+                )
+        return self.configs_o3
 
-    # def get_configs_405_laser(self, params):
-    #     """
-    #     This creates the voltage sequence for the 405 laser for one cycle when the laser is on.
-    #     """
-    #     self.configs_405_laser['data configs']['sample number'] = \
-    #         self.sample_number_total
-    #     dg = DAQDataGenerator()
-    #     if self.configs_405_laser['data generator'] == 'on-off sequence':
-    #         self.configs_405_laser['data'] = \
-    #             dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
-    #                                n_samples_off=self.sample_number_off_duty,
-    #                                on_value=True,
-    #                                off_value=False)
-    #     return self.configs_405_laser
+    def get_configs_405_laser(self, params):
+        """
+        This creates the voltage sequence for the 405 laser for the full stack when the laser is on.
+        """
+        n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
+        self.configs_405_laser['data configs']['sample number'] = \
+            self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_405_laser['data generator'] == 'on-off sequence':
+            one_frame_data = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
+            self.configs_405_laser['data'] = one_frame_data*n_slices
 
-    # def get_configs_488_laser(self, params):
-    #     self.configs_488_laser['data configs']['sample number'] = \
-    #         self.sample_number_total
-    #     dg = DAQDataGenerator()
-    #     if self.configs_488_laser['data generator'] == 'on-off sequence':
-    #         self.configs_488_laser['data'] = \
-    #             dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
-    #                                n_samples_off=self.sample_number_off_duty,
-    #                                on_value=True,
-    #                                off_value=False)
-    #     return self.configs_488_laser
+        return self.configs_405_laser
 
-    # def get_configs_561_laser(self, params):
-    #     self.configs_561_laser['data configs']['sample number'] = \
-    #         self.sample_number_total
-    #     dg = DAQDataGenerator()
-    #     if self.configs_561_laser['data generator'] == 'on-off sequence':
-    #         self.configs_561_laser['data'] = \
-    #             dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
-    #                                n_samples_off=self.sample_number_off_duty,
-    #                                on_value=True,
-    #                                off_value=False)
-    #     return self.configs_561_laser
+    def get_configs_488_laser(self, params):
+        """
+        This creates the voltage sequence for the 488 laser for the full stack when the laser is on.
+        """
+        n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
+        self.configs_488_laser['data configs']['sample number'] = \
+            self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_488_laser['data generator'] == 'on-off sequence':
+            one_frame_data = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
+            self.configs_488_laser['data'] = one_frame_data*n_slices
+        return self.configs_488_laser
 
-    # def get_configs_639_laser(self, params):
-    #     self.configs_639_laser['data configs']['sample number'] = \
-    #         self.sample_number_total
-    #     dg = DAQDataGenerator()
-    #     if self.configs_639_laser['data generator'] == 'on-off sequence':
-    #         self.configs_639_laser['data'] = \
-    #             dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
-    #                                n_samples_off=self.sample_number_off_duty,
-    #                                on_value=True,
-    #                                off_value=False)
-    #     return self.configs_639_laser
+    def get_configs_561_laser(self, params):
+        """
+        This creates the voltage sequence for the 561 laser for the full stack when the laser is on.
+        """
+        n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
+        self.configs_561_laser['data configs']['sample number'] = \
+            self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_561_laser['data generator'] == 'on-off sequence':
+            one_frame_data = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
+            self.configs_561_laser['data'] = one_frame_data*n_slices
+        return self.configs_561_laser
 
-    # def get_configs_bright_field(self, params):
-    #     self.configs_bright_field['data configs']['sample number'] = \
-    #         self.sample_number_total
-    #     dg = DAQDataGenerator()
-    #     if self.configs_bright_field['data generator'] == 'on-off sequence':
-    #         self.configs_bright_field['data'] = \
-    #             dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
-    #                                n_samples_off=self.sample_number_off_duty,
-    #                                on_value=True,
-    #                                off_value=False)
-    #     return self.configs_bright_field
+    def get_configs_639_laser(self, params):
+        """
+        This creates the voltage sequence for the 639 laser for the full stack when the laser is on.
+        """
+        n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
+        self.configs_639_laser['data configs']['sample number'] = \
+            self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_639_laser['data generator'] == 'on-off sequence':
+            one_frame_data = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
+            self.configs_639_laser['data'] = one_frame_data*n_slices
+        return self.configs_639_laser
+
+    def get_configs_bright_field(self, params):
+        """
+        This creates the voltage sequence for the bright field LED for the full stack when the laser is on.
+        """
+        n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
+        self.configs_bright_field['data configs']['sample number'] = \
+            self.sample_number_total
+        dg = DAQDataGenerator()
+        if self.configs_bright_field['data generator'] == 'on-off sequence':
+            one_frame_data = \
+                dg.on_off_sequence(n_samples_on=self.sample_number_on_duty,
+                                   n_samples_off=self.sample_number_off_duty,
+                                   on_value=True,
+                                   off_value=False)
+            self.configs_bright_field['data'] = one_frame_data*n_slices
+        return self.configs_bright_field
 
     # def get_configs_single_cycle_dict(self, params):
     #     configs_list = {}

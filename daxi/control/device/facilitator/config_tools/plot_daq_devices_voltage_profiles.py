@@ -44,9 +44,9 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, 
     print(type(configs))
 
     # plot exposure-readout ticks
-    expo_readout_profile = ([1] * int(expo_tick_n) + [-1] * int(readout_tick_n)) * int(n_slices_per_stack)
+    expo_readout_profile = ([0.5] * int(expo_tick_n) + [-0.5] * int(readout_tick_n)) * int(n_slices_per_stack)
     lines.append(expo_readout_profile[:data_points_to_show])
-    legends.append('exposure(1) and readout(-1) profile')
+    legends.append('exposure(0.5) and readout(-0.5) profile')
 
     # plot scanning galvo profiles
     if 'data for view 1' in configs.configs_scanning_galvo.keys():
@@ -83,6 +83,49 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, 
         lines.append(configs.configs_gamma_galvo_strip_reduction['data for view 2'][:data_points_to_show])
         legends.append('gamma galvo strip reduction, view 2')
 
+    # plot beta galvo for light sheet incident angle:
+    if 'data for view 1' in configs.configs_beta_galvo_light_sheet_incident_angle.keys():
+        lines.append(configs.configs_beta_galvo_light_sheet_incident_angle['data for view 1'][:data_points_to_show])
+        legends.append('beta galvo, lightsheet incident angle, view 1')
+
+    if 'data for view 2' in configs.configs_beta_galvo_light_sheet_incident_angle.keys():
+        lines.append(configs.configs_beta_galvo_light_sheet_incident_angle['data for view 2'][:data_points_to_show])
+        legends.append('beta galvo, lightsheet incident angle, view 2')
+
+    # plot the profile for O3:
+    if 'data for view 1' in configs.configs_o3.keys():
+        lines.append(configs.configs_o3['data for view 1'][:data_points_to_show])
+        legends.append('O3, view 1')
+
+    if 'data for view 2' in configs.configs_o3.keys():
+        lines.append(configs.configs_o3['data for view 2'][:data_points_to_show])
+        legends.append('O3, view 2')
+
+    # plot the profile for 405 laser when the channel is operating
+    if 'data' in configs.configs_405_laser.keys():
+        lines.append(numpy.asarray(configs.configs_405_laser['data'][:data_points_to_show])+0.1)
+        legends.append('405 laser when it is operating, offset + 0.1 on plot.')
+
+    # plot the profile for 488 laser when the channel is operating
+    if 'data' in configs.configs_488_laser.keys():
+        lines.append(numpy.asarray(configs.configs_488_laser['data'][:data_points_to_show])+0.15)
+        legends.append('488 laser when it is operating, offset + 0.15 on plot.')
+
+    # plot the profile for 561 laser when the channel is operating
+    if 'data' in configs.configs_561_laser.keys():
+        lines.append(numpy.asarray(configs.configs_561_laser['data'][:data_points_to_show])+0.2)
+        legends.append('488 laser when it is operating, offset + 0.2 on plot.')
+
+    # plot the profile for 639 laser when the channel is operating
+    if 'data' in configs.configs_639_laser.keys():
+        lines.append(numpy.asarray(configs.configs_639_laser['data'][:data_points_to_show])+0.25)
+        legends.append('488 laser when it is operating, offset + 0.25 on plot.')
+
+    # plot the profile for bright field LED when the channel is operating
+    if 'data' in configs.configs_bright_field.keys():
+        lines.append(numpy.asarray(configs.configs_bright_field['data'][:data_points_to_show])+0.3)
+        legends.append('488 laser when it is operating, offset + 0.3 on plot.')
+
     colors_list = Category20[20][:len(legends)]
     p = figure(width=1500, height=700)
     legend_it = []
@@ -90,7 +133,7 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, 
     for (colr, leg, line_data) in zip(colors_list, legends, lines):
         # c = p.line(numpy.arange(len(line_data)), line_data, color=colr, legend_label=leg, line_width=2)
         c = p.line(numpy.arange(len(line_data)), line_data, line_width=2, color=colr, alpha=0.9,
-                   muted_color=colr, muted_alpha=0.1)
+                   muted_color=colr, muted_alpha=0.01)
         legend_it.append((leg, [c]))
 
     # add texts to be displayed in the legend box
