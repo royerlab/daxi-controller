@@ -105,6 +105,8 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
         :param nidaq_terminals:
         :return:
         """
+        self.configs_scanning_galvo['data configs']['sample number'] = self.sample_number_total
+
         # home voltage for view 1 and view 2:
         vhome_view1 = self.configs_scanning_galvo['home voltage offset for view 1']
         vhome_view2 = self.configs_scanning_galvo['home voltage offset for view 2']
@@ -400,312 +402,313 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
             self.configs_bright_field['data'] = [False]*len(one_frame_data)+one_frame_data*(n_slices-1)
         return self.configs_bright_field
 
-    # def get_configs_single_cycle_dict(self, params):
-    #     configs_list = {}
-    #     for view in params['views']:
-    #         for color in params['colors']:
-    #             configs_list['view' + view + ' color' + color] = \
-    #                 self.get_configs_single_cycle(view=view, color=color)
-    #     return configs_list
+    def get_configs_single_cycle_dict(self, params):
+        configs_list = {}
+        for view in params['views']:
+            for color in params['colors']:
+                configs_list['view' + view + ' color' + color] = \
+                    self.get_configs_single_cycle(view=view, color=color)
+        return configs_list
 
-    # def get_configs_single_cycle(self, view=None, color=None):
-    #     # now mask and pikc from the all cycle dicts, to return a singel cycle configs.
-    #     configs = {}
-    #     # go through every devices, and map the devices configs for a single cycle.
-    #     configs['configs_metronome'] = self.map_sc_configs_metronome()
-    #     configs['configs_counter'] = self.map_sc_configs_counter()
-    #     configs['configs_DO_task_bundle'] = self.map_sc_configs_DO_task_bundle()
-    #     configs['configs_AO_task_bundle'] = self.map_sc_configs_AO_task_bundle()
-    #     configs['configs_scanning_galvo'] = self.map_sc_configs_scanning_galvo(view=view)
-    #     configs['configs_view_switching_galvo_1'] = self.map_sc_configs_view_switching_galvo_1(view=view, color=color)
-    #     configs['configs_view_switching_galvo_2'] = self.map_sc_configs_view_switching_galvo_2(view=view, color=color)
-    #     configs['configs_gamma_galvo_strip_reduction'] = \
-    #         self.map_sc_configs_gamma_galvo_strip_reduction(view=view, color=color)
-    #     configs['configs_beta_galvo_light_sheet_incident_angle'] = \
-    #         self.map_sc_configs_beta_galvo_light_sheet_incident_angle(view=view, color=color)
-    #     configs['configs_O1'] = self.map_sc_configs_O1(view=view, color=color)
-    #     configs['configs_O3'] = self.map_sc_configs_O3(view=view, color=color)
-    #     configs['configs_405_laser'] = self.map_sc_configs_405_laser(view=view, color=color)
-    #     configs['configs_488_laser'] = self.map_sc_configs_488_laser(view=view, color=color)
-    #     configs['configs_561_laser'] = self.map_sc_configs_561_laser(view=view, color=color)
-    #     configs['configs_639_laser'] = self.map_sc_configs_639_laser(view=view, color=color)
-    #     configs['configs_bright_field'] = self.map_sc_configs_bright_field(view=view, color=color)
-    #     return configs
+    def get_configs_single_cycle(self, view=None, color=None):
+        # now mask and pikc from the all cycle dicts, to return a singel cycle configs.
+        configs = {}
+        # go through every devices, and map the devices configs for a single cycle.
+        configs['configs_metronome'] = self.map_sc_configs_metronome()
+        configs['configs_counter'] = self.map_sc_configs_counter()
+        configs['configs_DO_task_bundle'] = self.map_sc_configs_DO_task_bundle()
+        configs['configs_AO_task_bundle'] = self.map_sc_configs_AO_task_bundle()
+        configs['configs_scanning_galvo'] = self.map_sc_configs_scanning_galvo(view=view)
+        configs['configs_view_switching_galvo_1'] = self.map_sc_configs_view_switching_galvo_1(view=view, color=color)
+        configs['configs_view_switching_galvo_2'] = self.map_sc_configs_view_switching_galvo_2(view=view, color=color)
+        configs['configs_gamma_galvo_strip_reduction'] = \
+            self.map_sc_configs_gamma_galvo_strip_reduction(view=view, color=color)
+        configs['configs_beta_galvo_light_sheet_incident_angle'] = \
+            self.map_sc_configs_beta_galvo_light_sheet_incident_angle(view=view, color=color)
+        configs['configs_O1'] = self.map_sc_configs_O1(view=view, color=color)
+        configs['configs_O3'] = self.map_sc_configs_O3(view=view, color=color)
+        configs['configs_405_laser'] = self.map_sc_configs_405_laser(view=view, color=color)
+        configs['configs_488_laser'] = self.map_sc_configs_488_laser(view=view, color=color)
+        configs['configs_561_laser'] = self.map_sc_configs_561_laser(view=view, color=color)
+        configs['configs_639_laser'] = self.map_sc_configs_639_laser(view=view, color=color)
+        configs['configs_bright_field'] = self.map_sc_configs_bright_field(view=view, color=color)
+        return configs
 
-    # def map_sc_configs_metronome(self, view=None, color=None):
-    #     """
-    #     sc = single cycle
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     configs = self.configs_metronome
-    #     return configs
+    def map_sc_configs_metronome(self, view=None, color=None):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        configs = self.configs_metronome
+        return configs
 
-    # def map_sc_configs_counter(self, view=None, color=None):
-    #     """
-    #     sc = single cycle
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     configs = self.configs_counter
-    #     return configs
+    def map_sc_configs_counter(self, view=None, color=None):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        configs = self.configs_counter
+        return configs
 
-    # def map_sc_configs_DO_task_bundle(self, view=None, color=None):
-    #     """
-    #     sc = single cycle
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     configs = self.configs_do_task_bundle
-    #     return configs
+    def map_sc_configs_DO_task_bundle(self, view=None, color=None):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        configs = self.configs_do_task_bundle
+        return configs
 
-    # def map_sc_configs_AO_task_bundle(self, view=None, color=None):
-    #     """
-    #     sc = single cycle
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     configs = self.configs_ao_task_bundle
-    #     return configs
+    def map_sc_configs_AO_task_bundle(self, view=None, color=None):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        configs = self.configs_ao_task_bundle
+        return configs
 
-    # def map_sc_configs_scanning_galvo(self, view=None, color=None):
-    #     """
-    #     sc = single cycle
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     origin = self.configs_scanning_galvo
-    #     # configs['device'] = origin['devices']
-    #     configs = \
-    #         {'device': origin['device'],
-    #          'name': origin['name'],
-    #          'task type': origin['task type'],
-    #          'idle state': origin['idle state'],
-    #          'voltage output terminal': origin['voltage output terminal'],
-    #          'distance (um) to voltage (v) conversion factor (v/um)':
-    #              origin['distance (um) to voltage (v) conversion factor (v/um)'],
-    #          'data': origin['data for view ' + str(view)],
-    #          'data generator': origin['data generator'],
-    #          'data configs': {'type': origin['data configs']['type'],
-    #                           'linear ramp start': origin['data configs']['linear ramp start for view ' + str(view)],
-    #                           'linear ramp stop': origin['data configs']['linear ramp stop for view ' + str(view)],
-    #                           'linear ramp sample number': origin['data configs']['linear ramp sample number'],
-    #                           'soft retraction sample number': origin['data configs']['soft retraction sample number']}
-    #          }
-    #     return configs
+    def map_sc_configs_scanning_galvo(self, view=None, color=None):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        origin = self.configs_scanning_galvo
+        # configs['device'] = origin['devices']
+        configs = \
+            {'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'idle state': origin['idle state'],
+             'voltage output terminal': origin['voltage output terminal'],
+             'distance (um) to voltage (v) conversion factor (v/um)':
+                 origin['distance (um) to voltage (v) conversion factor (v/um)'],
+             'data': origin['data for view ' + str(view)],
+             'data generator': origin['data generator'],
+             'data configs': None,
+             }
+        if origin['data generator'] == 'constant':
+            configs['data configs'] = \
+                {'type': origin['data configs']['type'],
+                 'sample number': origin['data configs']['sample number']
+                 }
+        return configs
 
-    # def map_sc_configs_view_switching_galvo_1(self, view=None, color=None):
-    #     """
-    #     sc = single cycle
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     origin = self.configs_view_switching_galvo_1
-    #     configs = {
-    #         'name': origin['name'],
-    #         'device': origin['device'],
-    #         'idle state': origin['idle state'],
-    #         'task type': origin['task type'],
-    #         'voltage output terminal': origin['voltage output terminal'],
-    #         'data': origin['data for view ' + str(view)],
-    #         'data generator': origin['data generator'],
-    #         'data configs': origin['data configs'],
-    #     }
-    #     return configs
+    def map_sc_configs_view_switching_galvo_1(self, view=None, color=None):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        origin = self.configs_view_switching_galvo_1
+        configs = {
+            'name': origin['name'],
+            'device': origin['device'],
+            'idle state': origin['idle state'],
+            'task type': origin['task type'],
+            'voltage output terminal': origin['voltage output terminal'],
+            'data': origin['data for view ' + str(view)],
+            'data generator': origin['data generator'],
+            'data configs': origin['data configs'],
+        }
+        return configs
 
-    # def map_sc_configs_view_switching_galvo_2(self, view=None, color=None):
-    #     """
-    #     sc = single cycle
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     origin = self.configs_view_switching_galvo_2
-    #     configs = {
-    #         'name': origin['name'],
-    #         'device': origin['device'],
-    #         'idle state': origin['idle state'],
-    #         'task type': origin['task type'],
-    #         'voltage output terminal': origin['voltage output terminal'],
-    #         'data': origin['data for view ' + str(view)],
-    #         'data generator': origin['data generator'],
-    #         'data configs': origin['data configs'],
-    #     }
-    #     return configs
+    def map_sc_configs_view_switching_galvo_2(self, view=None, color=None):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        origin = self.configs_view_switching_galvo_2
+        configs = {
+            'name': origin['name'],
+            'device': origin['device'],
+            'idle state': origin['idle state'],
+            'task type': origin['task type'],
+            'voltage output terminal': origin['voltage output terminal'],
+            'data': origin['data for view ' + str(view)],
+            'data generator': origin['data generator'],
+            'data configs': origin['data configs'],
+        }
+        return configs
 
-    # def map_sc_configs_gamma_galvo_strip_reduction(self, view=None, color=None):
-    #     """
-    #     sc = single cycle
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     origin = \
-    #         self.configs_gamma_galvo_strip_reduction
-    #     configs = {
-    #         'data': origin['data for view ' + str(view)],
-    #         'data configs': {'linear ramp sample number': origin['data configs']['linear ramp sample number'],
-    #                          'linear ramp start': origin['data configs']['linear ramp start for view ' + str(view)],
-    #                          'linear ramp stop': origin['data configs']['linear ramp stop for view ' + str(view)],
-    #                          'soft retraction sample number': origin['data configs']['soft retraction sample number'],
-    #                          'type': origin['data configs']['type']},
-    #         'data generator': origin['data generator'],
-    #         'device': origin['device'],
-    #         'idle state': origin['idle state'],
-    #         'name': origin['name'],
-    #         'task type': origin['task type'],
-    #         'voltage output terminal': origin['voltage output terminal']}
-    #
-    #     return configs
+    def map_sc_configs_gamma_galvo_strip_reduction(self, view=None, color=None):
+        """
+        sc = single cycle
+        :param view:
+        :param color:
+        :return:
+        """
+        origin = \
+            self.configs_gamma_galvo_strip_reduction
+        configs = {
+            'data': origin['data for view ' + str(view)],
+            'data configs': {'linear ramp sample number': origin['data configs']['linear ramp sample number'],
+                             'linear ramp start': origin['data configs']['linear ramp start for view ' + str(view)],
+                             'linear ramp stop': origin['data configs']['linear ramp stop for view ' + str(view)],
+                             'soft retraction sample number': origin['data configs']['soft retraction sample number'],
+                             'type': origin['data configs']['type']},
+            'data generator': origin['data generator'],
+            'device': origin['device'],
+            'idle state': origin['idle state'],
+            'name': origin['name'],
+            'task type': origin['task type'],
+            'voltage output terminal': origin['voltage output terminal']}
 
-    # def map_sc_configs_beta_galvo_light_sheet_incident_angle(self, view=None, color=None):
-    #     """
-    #
-    #     :param view:
-    #     :param color:
-    #     :return:
-    #     """
-    #     origin = \
-    #         self.configs_beta_galvo_light_sheet_incident_angle
-    #     configs = {
-    #         'data': origin['data for view '+str(view)],
-    #         'data configs': origin['data configs'],
-    #         'data generator': origin['data generator'],
-    #         'device': origin['device'],
-    #         'idle state': origin['idle state'],
-    #         'name': origin['name'],
-    #         'task type': origin['task type'],
-    #         'voltage output terminal': origin['voltage output terminal']}
-    #     return configs
+        return configs
 
-    # def map_sc_configs_O1(self, view=None, color=None):
-    #     origin = \
-    #         self.configs_o1
-    #     configs = {
-    #         'data': origin['data for view '+str(view)],
-    #         'data configs': origin['data configs'],
-    #         'data generator': origin['data generator'],
-    #         'device': origin['device'],
-    #         'idle state': origin['idle state'],
-    #         'name': origin['name'],
-    #         'task type': origin['task type'],
-    #         'voltage output terminal': origin['voltage output terminal']}
-    #     return configs
+    def map_sc_configs_beta_galvo_light_sheet_incident_angle(self, view=None, color=None):
+        """
 
-    # def map_sc_configs_O3(self, view=None, color=None):
-    #     origin = \
-    #         self.configs_o3
-    #     configs = {
-    #         'data': origin['data for view '+str(view)],
-    #         'data configs': origin['data configs'],
-    #         'data generator': origin['data generator'],
-    #         'device': origin['device'],
-    #         'idle state': origin['idle state'],
-    #         'name': origin['name'],
-    #         'task type': origin['task type'],
-    #         'voltage output terminal': origin['voltage output terminal']}
-    #     return configs
+        :param view:
+        :param color:
+        :return:
+        """
+        origin = \
+            self.configs_beta_galvo_light_sheet_incident_angle
+        configs = {
+            'data': origin['data for view '+str(view)],
+            'data configs': origin['data configs'],
+            'data generator': origin['data generator'],
+            'device': origin['device'],
+            'idle state': origin['idle state'],
+            'name': origin['name'],
+            'task type': origin['task type'],
+            'voltage output terminal': origin['voltage output terminal']}
+        return configs
 
-    # def map_sc_configs_405_laser(self, view=None, color=None):
-    #     origin=self.configs_405_laser
-    #     if color == '405':
-    #         data405=origin['data']
-    #     else:
-    #         data405=[False]*len(origin['data'])
-    #
-    #     configs = \
-    #         {
-    #          'data': data405,
-    #          'data configs': origin['data configs'],
-    #          'data generator': origin['data generator'],
-    #          'device': origin['device'],
-    #          'name': origin['name'],
-    #          'task type': origin['task type'],
-    #          'voltage output terminal': origin['voltage output terminal']
-    #         }
-    #     return configs
+    def map_sc_configs_O1(self, view=None, color=None):
+        origin = \
+            self.configs_o1
+        configs = {
+            'data': origin['data for view '+str(view)],
+            'data configs': origin['data configs'],
+            'data generator': origin['data generator'],
+            'device': origin['device'],
+            'idle state': origin['idle state'],
+            'name': origin['name'],
+            'task type': origin['task type'],
+            'voltage output terminal': origin['voltage output terminal']}
+        return configs
 
-    # def map_sc_configs_488_laser(self, view=None, color=None):
-    #     origin = self.configs_488_laser
-    #     if color == '488':
-    #         data488 = origin['data']
-    #     else:
-    #         data488 = [False]*len(origin['data'])
-    #
-    #     configs = \
-    #         {
-    #          'data': data488,
-    #          'data configs': origin['data configs'],
-    #          'data generator': origin['data generator'],
-    #          'device': origin['device'],
-    #          'name': origin['name'],
-    #          'task type': origin['task type'],
-    #          'voltage output terminal': origin['voltage output terminal']
-    #         }
-    #     return configs
+    def map_sc_configs_O3(self, view=None, color=None):
+        origin = \
+            self.configs_o3
+        configs = {
+            'data': origin['data for view '+str(view)],
+            'data configs': origin['data configs'],
+            'data generator': origin['data generator'],
+            'device': origin['device'],
+            'idle state': origin['idle state'],
+            'name': origin['name'],
+            'task type': origin['task type'],
+            'voltage output terminal': origin['voltage output terminal']}
+        return configs
 
-    # def map_sc_configs_561_laser(self, view=None, color=None):
-    #     origin = self.configs_561_laser
-    #     if color == '561':
-    #         data561 = origin['data']
-    #     else:
-    #         data561 = [False]*len(origin['data'])
-    #
-    #     configs = \
-    #         {
-    #          'data': data561,
-    #          'data configs': origin['data configs'],
-    #          'data generator': origin['data generator'],
-    #          'device': origin['device'],
-    #          'name': origin['name'],
-    #          'task type': origin['task type'],
-    #          'voltage output terminal': origin['voltage output terminal']
-    #         }
-    #     return configs
+    def map_sc_configs_405_laser(self, view=None, color=None):
+        origin=self.configs_405_laser
+        if color == '405':
+            data405=origin['data']
+        else:
+            data405=[False]*len(origin['data'])
 
-    # def map_sc_configs_639_laser(self, view=None, color=None):
-    #     origin = self.configs_639_laser
-    #     if color == '639':
-    #         data639 = origin['data']
-    #     else:
-    #         data639 = [False]*len(origin['data'])
-    #
-    #     configs = \
-    #         {
-    #          'data': data639,
-    #          'data configs': origin['data configs'],
-    #          'data generator': origin['data generator'],
-    #          'device': origin['device'],
-    #          'name': origin['name'],
-    #          'task type': origin['task type'],
-    #          'voltage output terminal': origin['voltage output terminal']
-    #         }
-    #     return configs
+        configs = \
+            {
+             'data': data405,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
 
-    # def map_sc_configs_bright_field(self, view=None, color=None):
-    #     origin = self.configs_bright_field
-    #     if color == 'bright_field':
-    #         data_bright_field = origin['data']
-    #     else:
-    #         data_bright_field = [False]*len(origin['data'])
-    #
-    #     configs = \
-    #         {
-    #          'data': data_bright_field,
-    #          'data configs': origin['data configs'],
-    #          'data generator': origin['data generator'],
-    #          'device': origin['device'],
-    #          'name': origin['name'],
-    #          'task type': origin['task type'],
-    #          'voltage output terminal': origin['voltage output terminal']
-    #         }
-    #     return configs
+    def map_sc_configs_488_laser(self, view=None, color=None):
+        origin = self.configs_488_laser
+        if color == '488':
+            data488 = origin['data']
+        else:
+            data488 = [False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data488,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
+
+    def map_sc_configs_561_laser(self, view=None, color=None):
+        origin = self.configs_561_laser
+        if color == '561':
+            data561 = origin['data']
+        else:
+            data561 = [False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data561,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
+
+    def map_sc_configs_639_laser(self, view=None, color=None):
+        origin = self.configs_639_laser
+        if color == '639':
+            data639 = origin['data']
+        else:
+            data639 = [False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data639,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
+
+    def map_sc_configs_bright_field(self, view=None, color=None):
+        origin = self.configs_bright_field
+        if color == 'bright_field':
+            data_bright_field = origin['data']
+        else:
+            data_bright_field = [False]*len(origin['data'])
+
+        configs = \
+            {
+             'data': data_bright_field,
+             'data configs': origin['data configs'],
+             'data generator': origin['data generator'],
+             'device': origin['device'],
+             'name': origin['name'],
+             'task type': origin['task type'],
+             'voltage output terminal': origin['voltage output terminal']
+            }
+        return configs
 
 
 class CameraConfigsGeneratorMode7(CameraConfigsGeneratorBase):

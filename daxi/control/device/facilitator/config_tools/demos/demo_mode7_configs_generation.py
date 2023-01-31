@@ -1,5 +1,6 @@
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode7 import NIDAQDevicesConfigsGeneratorMode7
-from daxi.control.device.facilitator.config_tools.plot_daq_devices_voltage_profiles import plot_daq_voltage_profiles
+from daxi.control.device.facilitator.config_tools.plot_daq_devices_voltage_profiles import plot_daq_voltage_profiles, \
+    plot_daq_voltage_profiles_single_cycle_dict
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_configs_yaml_path_mode7_short
 
@@ -36,3 +37,15 @@ a.get_configs_o1(params=None)
 
 plot_daq_voltage_profiles(configs=a,
                           data_points_to_show=10000)
+
+# now get single cycle dictionary
+configs_daq_single_cycle_dict = \
+    a.get_configs_single_cycle_dict(params=acquisition_parameters)
+
+# and perhaps plot all the sequences for each cycle type
+plot_daq_voltage_profiles_single_cycle_dict(configs_dict=configs_daq_single_cycle_dict['view1 color488'],
+                                            data_points_to_show=10000,
+                                            dict_key='view1 color488',
+                                            process_configs=a.process_configs)
+
+
