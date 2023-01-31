@@ -1,9 +1,9 @@
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode7 import NIDAQDevicesConfigsGeneratorMode7
 from daxi.control.device.facilitator.config_tools.plot_daq_devices_voltage_profiles import plot_daq_voltage_profiles
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
-from daxi.globals_configs_constants_general_tools_needbettername.constants import process_configs_yaml_path_mode7
+from daxi.globals_configs_constants_general_tools_needbettername.constants import process_configs_yaml_path_mode7_short
 
-process_configs = load_process_configs(path=process_configs_yaml_path_mode7)
+process_configs = load_process_configs(path=process_configs_yaml_path_mode7_short)
 acquisition_parameters = process_configs['process configs']['acquisition parameters']
 daq_terminal_configs = process_configs['device configurations']['nidaq_terminals']
 calibration_records = process_configs['device configurations']['calibration_records']
