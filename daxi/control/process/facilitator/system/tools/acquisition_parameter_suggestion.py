@@ -47,21 +47,20 @@ class AcqParamBase:
     """
 
     def __init__(self,
-                 dx=None,
-                 length=None,
-                 t_exposure=None,
-                 t_readout=None,
-                 t_stage_retraction=None,
-                 scanning_galvo_range_limit=None,
-                 number_of_colors_per_slice=None,
-                 colors=None,
-                 number_of_scans_per_timepoint=None,
+                 dx=0.4,
+                 length=1000,
+                 t_exposure=90,
+                 t_readout=10,
+                 t_stage_retraction=23,
+                 scanning_galvo_range_limit=0.8,
+                 number_of_colors_per_slice=1,
+                 colors=['488'],
+                 number_of_scans_per_timepoint=1,
                  slice_color_list=None,
                  positions=None,
-                 views=None,
+                 views=['1'],
                  positions_views_list=None,
-                 number_of_time_points=None,
-                 ):
+                 number_of_time_points=None):
         """
         This tool is expected to make the process of selecting imaging parameters easy.
         first, the user will input a series of basic parameters, and the program will
@@ -81,16 +80,34 @@ class AcqParamBase:
         :param view_number: total number of views, 1 or 2 for daxi.
         :param number_of_scans_per_timepoint: number of stacks per time point. this number chanes with the acquisiton mode.
         """
-        self.dx = float(dx)
-        self.length = float(length)
+        if dx is not None:
+            dx = float(dx)
+
+        if length is not None:
+            length = float(length)
+
+        if t_exposure is not None:
+            t_exposure = float(t_exposure)
+
+        if t_readout is not None:
+            t_readout = float(t_readout)
+
+        if t_stage_retraction is not None:
+            t_stage_retraction = float(t_stage_retraction)
+
+        self.dx = dx
+        self.length = length
         self.colors = colors
-        self.number_of_colors = len(colors)
+        if colors is None:
+            self.number_of_colors = 0
+        else:
+            self.number_of_colors = len(colors)
         self.number_of_colors_per_slice = number_of_colors_per_slice
         self.views = views
         self.number_of_views = len(views)
-        self.t_exposure = float(t_exposure)
-        self.t_readout = float(t_readout)
-        self.t_stage_retraction = float(t_stage_retraction)  # todo - make this a measured value as a calibration modules.
+        self.t_exposure = t_exposure
+        self.t_readout = t_readout
+        self.t_stage_retraction = t_stage_retraction  # todo - make this a measured value as a calibration modules.
         self.ns = None
         self.ys_list = None
         self.vs_list = None
@@ -100,8 +117,14 @@ class AcqParamBase:
         self.selected_parameters = None
         self.scanning_galvo_range_per_slice_list = None  # there has to be a limit based on the FOV on top of O1.
         self.scanning_galvo_range_limit = scanning_galvo_range_limit  # set this as the limit (mm)
-        self.t_per_slice = (self.t_exposure + self.t_readout)*self.number_of_colors_per_slice  # time per slice (ms)
-        self.t_SG_scan = self.t_per_slice - self.t_readout  # SG scanning time (more below)
+        if self.t_exposure is None or self.t_readout is None or self.number_of_colors_per_slice is None:
+            self.t_per_slice = None
+        else:
+            self.t_per_slice = (self.t_exposure + self.t_readout)*self.number_of_colors_per_slice  # time per slice (ms)
+        if self.t_per_slice is None or self.t_readout is None:
+            self.t_SG_scan = None
+        else:
+            self.t_SG_scan = self.t_per_slice - self.t_readout  # SG scanning time (more below)
         # (when there are multiple colors per slice in intervened mode, we keep scanning the SG to chase the stage,
         # and the laser is alternative per color to acquire multi-channels, and we keep the SG at constant speed even
         # during the read out time of the color channels except for the last color channel.).
@@ -297,7 +320,7 @@ class AcqParamBase:
                 "time per time point (s)": float(time_per_datapoint/1000),
                 "scanning range (um)": float(length_updated),
                 "galvo scanning speed (nm/ms)": float(v*1000),
-                "stage scanning speed (nm/ms)": float(v*1000),
+                "stage scanning speed (nm/ms)": float(v*1000), # scanning speed for galvo and stage are set to be the same.
                 "exposure time (ms)": self.t_exposure,
                 "camera read out time (ms)": self.t_readout,
                 "stage retraction time (ms)": self.t_stage_retraction,

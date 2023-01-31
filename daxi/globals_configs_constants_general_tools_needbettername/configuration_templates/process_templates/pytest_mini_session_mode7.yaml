@@ -36,7 +36,7 @@ device configurations:
     burst times: 1
     camera ids:
     - 0
-    master pulse interval: 0.1
+    master pulse interval: 0.03
     master pulse mode: START
     master pulse trigger: EXTERNAL
     output trigger kind: TRIGGER READY
@@ -130,13 +130,13 @@ process configs:
     colors:
     - '488'
     - '561'
-    exposure time (ms): 90.0
-    galvo scanning speed (nm/ms): 28.284271247461902
+    exposure time (ms): 20.0
+    galvo scanning speed (nm/ms): 94.28090415820635
     looping order: '[mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color]
       - [layer 4: slice] - [scan: O1]'
     mag-factor: 5
     metronome frequency: 10000
-    n slices: 354
+    n slices: 4
     name: mode7
     number of time points: 2
     pixel size in xy (um): 0.4
@@ -149,12 +149,12 @@ process configs:
         y: 12
     scanning galvo scan range limit (um): 0.8
     scanning galvo scan range per slice (um): null
-    scanning range (um): 1001.2632021601514
+    scanning range (um): 11.313708498984761
     slice distance (um): 2.0
-    stage retraction time (ms): 23.0
-    stage scanning speed (nm/ms): 28.284271247461902
-    time per stack per view (s): 35.423
-    time per time point (s): 141.692
+    stage retraction time (ms): 20.0
+    stage scanning speed (nm/ms): 94.28090415820635
+    time per stack per view (s): 0.14
+    time per time point (s): 0.56
     type: mode7
     views:
     - '1'

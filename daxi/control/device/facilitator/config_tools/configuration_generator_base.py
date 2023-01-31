@@ -1,3 +1,5 @@
+from daxi.control.device.facilitator.config_tools.get_core_configs_from_yaml.get_core_configs_SG import \
+    _get_core_sg_configs
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 from daxi.globals_configs_constants_general_tools_needbettername.constants import configs_core_daq_devices
 
@@ -15,6 +17,7 @@ class NIDAQDevicesConfigsGeneratorBase:
                  nidaq_terminals,
                  calibration_records=None,
                  alignment_records=None,
+                 process_configs=None,
                  verbose=True):
         """
         upon initialization, the program will first take the tempalte of configs_core_daq_devices (this is the
@@ -55,6 +58,7 @@ class NIDAQDevicesConfigsGeneratorBase:
         self.nidaq_terminals = nidaq_terminals
         self.calibration_records = calibration_records
         self.alignment_records = alignment_records
+        self.process_configs = process_configs
         self.verbose = verbose
 
     def _get_core_configs_for_all(self):
@@ -123,18 +127,26 @@ class NIDAQDevicesConfigsGeneratorBase:
             self.nidaq_terminals['ao task bundle']['trigger terminal']
 
     def _get_core_configs_scanning_galvo(self):
-        self.configs_scanning_galvo = \
-            self.parser.get_configs_by_path_section_keyword(section='Physical Devices Section',
-                                                            keyword='scanning_galvo',
-                                                            verbose=self.verbose)
-        self.configs_scanning_galvo['voltage output terminal'] = \
-            self.nidaq_terminals['scanning galvo']['voltage output terminal']
-        self.configs_scanning_galvo['distance (um) to voltage (v) conversion factor (v/um)'] = \
-            self.calibration_records['scanning galvo']['distance (um) to voltage (v) conversion factor (v/um)']
-        self.configs_scanning_galvo['home voltage offset for view 1'] = \
-            self.alignment_records['scanning galvo']['home voltage offset for view 1']
-        self.configs_scanning_galvo['home voltage offset for view 2'] = \
-            self.alignment_records['scanning galvo']['home voltage offset for view 2']
+        """
+        Update this into somethign that gets from the yaml file.
+        @return:
+        """
+        # replace the following part from loading from yaml file.
+        # if 0 == 1: # the following codes would be replaced by the 1==1 section
+        #     self.configs_scanning_galvo = \
+        #         self.parser.get_configs_by_path_section_keyword(section='Physical Devices Section',
+        #                                                         keyword='scanning_galvo',
+        #                                                         verbose=self.verbose)
+        #     self.configs_scanning_galvo['voltage output terminal'] = \
+        #         self.nidaq_terminals['scanning galvo']['voltage output terminal']
+        #     self.configs_scanning_galvo['distance (um) to voltage (v) conversion factor (v/um)'] = \
+        #         self.calibration_records['scanning galvo']['distance (um) to voltage (v) conversion factor (v/um)']
+        #     self.configs_scanning_galvo['home voltage offset for view 1'] = \
+        #         self.alignment_records['scanning galvo']['home voltage offset for view 1']
+        #     self.configs_scanning_galvo['home voltage offset for view 2'] = \
+        #         self.alignment_records['scanning galvo']['home voltage offset for view 2']
+
+        self.configs_scanning_galvo = _get_core_sg_configs(self.process_configs)
 
     def _get_core_configs_view_switching_galvo_1(self):
         self.configs_view_switching_galvo_1 = \

@@ -1,7 +1,7 @@
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.globals_configs_constants_general_tools_needbettername.constants import params_test_selected_params, \
-    configs_daq_terminals
+    configs_daq_terminals_calibrations
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 from matplotlib import pyplot as plt
 
@@ -15,20 +15,20 @@ process_parameters = \
 
 # now get the terminal configurations
 p2 = NIDAQConfigsParser()
-p2.set_configs_path(configs_daq_terminals)
+p2.set_configs_path(configs_daq_terminals_calibrations)
 section = 'Connection Section'
 keyword = 'nidaq_terminals'
 daq_terminal_configs = \
     p2.get_configs_by_path_section_keyword(section, keyword, verbose=False)
 
 p = NIDAQConfigsParser()
-p.set_configs_path(configs_daq_terminals)
+p.set_configs_path(configs_daq_terminals_calibrations)
 section = 'Connection Section'
 keyword = 'calibration_records'
 calibration_records = \
     p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
 
-p.set_configs_path(configs_daq_terminals)
+p.set_configs_path(configs_daq_terminals_calibrations)
 section = 'Connection Section'
 keyword = 'alignment_records'
 alignment_records = \

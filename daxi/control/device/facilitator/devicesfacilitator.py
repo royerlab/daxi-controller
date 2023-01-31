@@ -43,6 +43,7 @@ class DevicesFcltr:
     """
 
     def __init__(self, devices_connected=True):
+        self.display_message = True
         self.devices_connected = devices_connected
         self.description = "This is the devices facilitator for DaXi microscope"
         self.subtask_ao_list = []
@@ -115,7 +116,8 @@ class DevicesFcltr:
                 # assign the attributes
                 setattr(self, 'configs_' + device_tool, configs)
 
-    def receive_device_configs_all_cycles(self, process_configs,
+    def receive_device_configs_all_cycles(self,
+                                          process_configs,
                                           daqdevice_configs_generator_class,
                                           camera_configs_generator_class=None,
                                           stage_configs_generator_class=None):
@@ -179,7 +181,8 @@ class DevicesFcltr:
 
         # now get the configuration generator for daq devices configurations
         daq_configs_generator = \
-            daqdevice_configs_generator_class(params=acquisition_parameters,
+            daqdevice_configs_generator_class(process_configs=process_configs,
+                                              params=acquisition_parameters,
                                               nidaq_terminals=daq_terminal_configs,
                                               calibration_records=calibration_records,
                                               alignment_records=alignment_records)
@@ -246,7 +249,7 @@ class DevicesFcltr:
 
     def checkout_single_cycle_configs(self, key=None, verbose=False):
         if verbose:
-            print('          checking out a single  cycle configuration for '+str(key))
+            print('             checking out a single  cycle configuration for '+str(key))
         daq_configs = self.configs_daq_single_cycle_dict[key]
         # now map all the attributes in daq configs into this object
         for k in daq_configs.keys():
@@ -292,8 +295,10 @@ class DevicesFcltr:
             self.counter = Counter(
                 devices_connected=self.devices_connected)
         else:
-            self.counter = SimulatedCounter(
-                devices_connected=self.devices_connected)
+            # self.counter = SimulatedCounter(
+            #     devices_connected=self.devices_connected)
+            self.counter = SimulatedCounter(devices_connected=self.devices_connected,
+                                            camera=self.camera, camera_id=0)
 
         self.counter.set_configurations(self.configs_counter)
 
@@ -518,7 +523,7 @@ class DevicesFcltr:
         :param color:
         :return:
         """
-        print("          Move Filter Wheel: we will move the filter wheel to the following color: "+str(color))
+        print("             Move Filter Wheel: we will move the filter wheel to the following color: "+str(color))
         # need to have a configuration file of filters in the configs.
         pass
 
@@ -532,7 +537,7 @@ class DevicesFcltr:
 
     def camera_prepare(self, simulation=False):
         if simulation is True:
-            self.camera = OrcaFlash4Simulation()
+            self.camera = OrcaFlash4Simulation(display_message=self.display_message)
         else:
             self.camera = OrcaFlash4()
 
@@ -542,11 +547,11 @@ class DevicesFcltr:
                                        camera_configs=self.configs_camera)
 
     def camera_start(self):
-        print("          this will start the camera, leave it out for now. will implement in the future.")
+        print("             this will start the camera, implemented and tested with simulated devices.")
         self.camera.start(camera_ids=self.configs_camera['camera ids'])
 
     def camera_stop(self):
-        print("          this will stop the camera, leave it out for now. will implement in the future.")
+        print("              this will stop the camera, implemented and tested with simulated devices.")
         self.camera.stop(camera_ids=self.configs_camera['camera ids'])
 
     def camera_close(self):
@@ -691,6 +696,10 @@ def prepare_all_devices_and_get_ready(devices_fcltr: DevicesFcltr = None, is_sim
     @param is_simulation:
     @return:
     """
+    # camera get ready (for now, display an image to prompt the user to run the HCI)
+    devices_fcltr.camera_prepare(simulation=is_simulation)
+    devices_fcltr.camera_get_ready()
+
     # 2. prepare subtasks and calculate the data for all subtasks
     devices_fcltr.daq_prepare_subtasks_ao()
     devices_fcltr.daq_prepare_subtasks_do()
@@ -725,6 +734,3 @@ def prepare_all_devices_and_get_ready(devices_fcltr: DevicesFcltr = None, is_sim
     # think:
     # this should be in device facilitator
 
-    # camera get ready (for now, display an image to prompt the user to run the HCI)
-    devices_fcltr.camera_prepare(simulation=is_simulation)
-    devices_fcltr.camera_get_ready()

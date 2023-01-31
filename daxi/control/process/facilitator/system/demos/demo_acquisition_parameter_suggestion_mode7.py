@@ -12,9 +12,10 @@ def demo_acquisition_params_mode7():
                       number_of_colors_per_slice=1,
                       colors=['488', '561'],
                       slice_color_list=None,
-                      positions=None,
                       views=['1', '2'],
                       positions_views_list=None,
+                      positions={'position name 1': {'x': 1, 'y': 10}, 'position name 2': {'x': 23, 'y': 12}},
+                      number_of_time_points=2,
                       )
 
     m.adapt()
