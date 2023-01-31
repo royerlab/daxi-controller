@@ -216,21 +216,57 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                 )
         return self.configs_beta_galvo_light_sheet_incident_angle
 
-    # def get_configs_o1(self, params):
-    #     self.configs_o1['data configs']['sample number'] = self.sample_number_total
-    #     dg = DAQDataGenerator()
-    #     if self.configs_o1['data generator'] == 'constant':
-    #         self.configs_o1['data for view 1'] = \
-    #             dg.constant(
-    #                 n_samples=self.sample_number_total,
-    #                 constant=self.configs_o1['home voltage offset for view 1'],
-    #             )
-    #         self.configs_o1['data for view 2'] = \
-    #             dg.constant(
-    #                 n_samples=self.sample_number_total,
-    #                 constant=self.configs_o1['home voltage offset for view 2'],
-    #             )
-    #     return self.configs_o1
+    def get_configs_o1(self, params):
+        self.configs_o1['data configs']['sample number'] = self.sample_number_total
+        dg = DAQDataGenerator()
+        d2v = self.calibration_records['O1']['distance (um) to voltage (v) conversion factor (v/um)']
+        slice_distance = self.process_configs['process configs']['acquisition parameters']['slice distance (um)']
+        voltage_increment_per_slice = d2v*slice_distance
+        n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
+        # now assign the voltage profiles per slice:
+        n_samples_per_frame=self.sample_number_on_duty+self.sample_number_off_duty
+        self.configs_o1['data for view 1'] = []
+        self.configs_o1['data for view 2'] = []
+        # now generate the data sequences.
+        # note that in mode 7, we want the O1 movement to happen and settle before exposure begins.
+        # so here we choose to sacrifice the first cycle (turn off the laser, discard the first camera frame), and
+        # move O1 starting from the beginning of the readout time (while everything else start operating at the
+        # beginning of the exposure time)
+        # prepare empty data sequences:
+
+        # so, calculate data for O1 for the first cycle
+        prof_view1 = \
+            dg.constant(
+                n_samples=self.sample_number_on_duty,
+                constant=self.configs_o1['home voltage offset for view 1'],
+            )
+        prof_view2 = \
+            dg.constant(
+                n_samples=self.sample_number_on_duty,
+                constant=self.configs_o1['home voltage offset for view 2'],
+            )
+        self.configs_o1['data for view 1'] = self.configs_o1['data for view 1'] + list(prof_view1)
+        self.configs_o1['data for view 2'] = self.configs_o1['data for view 2'] + list(prof_view2)
+
+        # then, calculate data for all the rest of the cycles.
+        for slice_index in np.arange(1, n_slices):
+            print('generating sequence for O1, slice #' + str(slice_index))
+            v_incre = voltage_increment_per_slice*slice_index
+            if self.configs_o1['data generator'] == 'constant':
+                prof_view1 = \
+                    dg.constant(
+                        n_samples=n_samples_per_frame,
+                        constant=self.configs_o1['home voltage offset for view 1'] + v_incre,
+                    )
+                prof_view2 = \
+                    dg.constant(
+                        n_samples=n_samples_per_frame,
+                        constant=self.configs_o1['home voltage offset for view 2'] + v_incre,
+                    )
+                self.configs_o1['data for view 1'] = self.configs_o1['data for view 1'] + list(prof_view1)
+                self.configs_o1['data for view 2'] = self.configs_o1['data for view 2'] + list(prof_view2)
+
+        return self.configs_o1
 
     def get_configs_o3(self, params=None):
         self.configs_o3['data configs']['sample number'] = self.sample_number_total

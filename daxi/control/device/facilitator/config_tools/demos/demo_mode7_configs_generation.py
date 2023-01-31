@@ -32,7 +32,7 @@ a.get_configs_488_laser(params=None)
 a.get_configs_561_laser(params=None)
 a.get_configs_639_laser(params=None)
 a.get_configs_bright_field(params=None)
+a.get_configs_o1(params=None)
 
-
-
-plot_daq_voltage_profiles(configs=a)
+plot_daq_voltage_profiles(configs=a,
+                          data_points_to_show=10000)
