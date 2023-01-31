@@ -18,10 +18,11 @@ m = AcqParamMode7(dx=0.4,
                   number_of_colors_per_slice=1,
                   colors=['488', '561'],
                   slice_color_list=None,
-                  positions=None,
                   views=['1', '2'],
                   positions_views_list=None,
-                      )
+                  positions={'position name 1': {'x': 1, 'y': 10}, 'position name 2': {'x': 23, 'y': 12}},
+                  number_of_time_points=2,
+                  )
 
 m.adapt()
 
@@ -39,8 +40,6 @@ path = os.path.join(process_templates, 'template_acquisition_mode7-dev-small_sta
 configs_dict = {}
 
 # 1. get the acquisition parameter dictionary
-
-
 process_parameters = m.selected_parameters
 
 # load in all the devices' configuration dictionary
@@ -63,6 +62,7 @@ alignment_records = \
 keyword = 'camera_core_configs'
 camera_core_configs = \
     p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
+camera_core_configs['master pulse interval'] = (process_parameters['exposure time (ms)'] + process_parameters['camera read out time (ms)'])/1000
 
 keyword = 'stage_core_configs'
 stage_core_configs = \

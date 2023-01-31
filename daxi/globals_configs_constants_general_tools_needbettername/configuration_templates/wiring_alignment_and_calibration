@@ -212,7 +212,7 @@ definition start.
     'output trigger polarity': 'POSITIVE',
     'master pulse mode': 'START',
     'burst times': 1,
-    'master pulse interval': 0.01,
+    'master pulse interval': None,
     'master pulse trigger': 'EXTERNAL',
     'buffer size (stack number)': 3,
     'xdim': 100,

@@ -187,7 +187,7 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None,
     show(p)
 
 
-def plot_daq_voltage_profiles_single_cycle_dict(configs_dict:dict,
+def plot_daq_voltage_profiles_single_cycle_dict(configs_dict: dict,
                                                 data_points_to_show=10000,
                                                 dict_key='Whats the single cycle Key?',
                                                 process_configs=None):

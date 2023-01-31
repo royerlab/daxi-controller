@@ -125,7 +125,7 @@ class AcquisitionFcltr():
         # convenience codes
         position_list, view_list, color_list, number_of_time_points, slice_number = self._convinience_reasign_params()
 
-        self._msg_2(self, verbose=self.verbose)
+        self._msg_2(verbose=self.verbose)
 
         prepare_all_devices_and_get_ready(devices_fcltr=self.devices_fcltr, is_simulation=is_simulation)
 
@@ -135,7 +135,7 @@ class AcquisitionFcltr():
 
             # loop over positions
             for position in position_list:
-                self._msg_4(verbose=self.verbose)
+                self._msg_4(position=position, verbose=self.verbose)
 
                 # move the stage to the position
                 self.devices_fcltr.stage_move_to(position)

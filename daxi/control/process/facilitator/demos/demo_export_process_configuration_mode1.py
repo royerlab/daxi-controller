@@ -59,6 +59,7 @@ alignment_records = \
 keyword = 'camera_core_configs'
 camera_core_configs = \
     p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
+camera_core_configs['master pulse interval'] = (process_parameters['exposure time (ms)'] + process_parameters['camera read out time (ms)'])/1000
 
 keyword = 'stage_core_configs'
 stage_core_configs = \

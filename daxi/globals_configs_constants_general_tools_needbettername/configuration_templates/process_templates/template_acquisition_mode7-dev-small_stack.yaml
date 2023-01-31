@@ -36,7 +36,7 @@ device configurations:
     burst times: 1
     camera ids:
     - 0
-    master pulse interval: 0.01
+    master pulse interval: 0.04
     master pulse mode: START
     master pulse trigger: EXTERNAL
     output trigger kind: TRIGGER READY
@@ -138,9 +138,15 @@ process configs:
     metronome frequency: 10000
     n slices: 11
     name: mode7
-    number of time points: null
+    number of time points: 2
     pixel size in xy (um): 0.4
-    positions: null
+    positions:
+      position name 1:
+        x: 1
+        y: 10
+      position name 2:
+        x: 23
+        y: 12
     scanning galvo scan range limit (um): 0.8
     scanning galvo scan range per slice (um): null
     scanning range (um): 31.112698372208094

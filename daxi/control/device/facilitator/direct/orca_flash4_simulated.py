@@ -526,8 +526,8 @@ class SimulatedDcam():
                     if self.capture_status == 'started':
                         if self.message is True:
                             print(' simulated camera on a threaded process - acquiring frame '
-                                  + str(i) + ' in buffer [o] to [' + str(buffer_size) +
-                                  '], type m-off to hide this message')
+                                  + str(i) + ' in buffer [0] to [' + str(buffer_size) +
+                                  ']')
                         frame = object[:, :, i1]
                         sleep(self.exposure_time_seconds)
                         self.buffer[:, :, i] = copy.deepcopy(frame.astype('uint16'))

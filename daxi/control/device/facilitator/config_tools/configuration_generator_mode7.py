@@ -1,5 +1,7 @@
 from daxi.control.device.facilitator.config_tools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase, \
     CameraConfigsGeneratorBase, StageConfigsGeneratorBase
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import CameraConfigsGeneratorMode1, \
+    StageConfigsGeneratorMode1
 from daxi.control.device.facilitator.config_tools.generate_functions import DAQDataGenerator
 import numpy as np
 
@@ -711,12 +713,14 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
         return configs
 
 
-class CameraConfigsGeneratorMode7(CameraConfigsGeneratorBase):
+class CameraConfigsGeneratorMode7(CameraConfigsGeneratorMode1):
+    """
+    keeping it the same with Mode1 acquisition
+    """
     def __init__(self,
                  camera_core_configs=None):
         super().__init__(camera_core_configs=camera_core_configs)
-        # do some extra initiation operations.
-        self._get_core_configs_orca_camera()
+
 
     # def get_configs_camera(self, params):
     #     """
@@ -747,7 +751,7 @@ class CameraConfigsGeneratorMode7(CameraConfigsGeneratorBase):
     #     return configs_list
 
 
-class StageConfigsGeneratorMode7(StageConfigsGeneratorBase):
+class StageConfigsGeneratorMode7(StageConfigsGeneratorMode1):
     def __init__(self,
                  stage_core_configs=None):
         super().__init__(stage_core_configs=stage_core_configs)

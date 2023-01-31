@@ -36,7 +36,7 @@ device configurations:
     burst times: 1
     camera ids:
     - 0
-    master pulse interval: 0.01
+    master pulse interval: 0.1
     master pulse mode: START
     master pulse trigger: EXTERNAL
     output trigger kind: TRIGGER READY
