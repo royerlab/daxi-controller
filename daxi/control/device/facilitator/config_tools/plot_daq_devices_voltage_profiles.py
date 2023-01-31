@@ -293,25 +293,3 @@ def plot_daq_voltage_profiles_single_cycle_dict(configs_dict:dict,
     legend.click_policy = "mute"
     p.add_layout(legend, 'right')
     show(p)
-
-    # configs=NIDAQDevicesConfigsGeneratorBase(nidaq_terminals=None)
-    # configs.configs_scanning_galvo = configs_dict['configs_scanning_galvo']
-    # configs.configs_view_switching_galvo_1 = configs_dict['configs_view_switching_galvo_1']
-    # configs.configs_view_switching_galvo_2 = configs_dict['configs_view_switching_galvo_2']
-    # configs.configs_gamma_galvo_strip_reduction = configs_dict['configs_gamma_galvo_strip_reduction']
-    # configs.configs_beta_galvo_light_sheet_incident_angle = configs_dict['configs_beta_galvo_light_sheet_incident_angle']
-    # configs.configs_o1 = configs_dict['configs_O1']
-    # configs.configs_o3 = configs_dict['configs_O3']
-    # configs.configs_405_laser = configs_dict['configs_405_laser']
-    # configs.configs_488_laser = configs_dict['configs_488_laser']
-    # configs.configs_561_laser = configs_dict['configs_561_laser']
-    # configs.configs_639_laser = configs_dict['configs_639_laser']
-    # configs.configs_bright_field = configs_dict['configs_bright_field']
-    # configs.configs_metronome = configs_dict['configs_metronome']
-    # configs.process_configs = process_configs
-    #
-    #
-    # plot_daq_voltage_profiles(configs=configs,
-    #                           data_points_to_show=data_points_to_show,
-    #                           msgs=msgs)
-    pass
