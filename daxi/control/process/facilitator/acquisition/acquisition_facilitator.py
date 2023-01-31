@@ -175,12 +175,18 @@ class AcquisitionFcltr():
                         self.devices_fcltr.stage_start_raster_scan()
 
                         # loop over slices for the stack:
-                        counter = 0
+                        counter_pre = 0
+                        counter=0
                         os.system('echo single stack acquisition starts ...')
-
                         while counter <= slice_number - 1:
                             # trap the process in this while-loop until the counter reaches the desired count.
                             counter = self.devices_fcltr.counter.read()
+                            if counter is None:
+                                counter = 0
+
+                            if counter > counter_pre:
+                                print('counter read: ' + str(counter))
+                                counter_pre = counter
                             sleep(0.003)
 
                         os.system('echo counted number of slices: ' + str(counter))
@@ -194,17 +200,6 @@ class AcquisitionFcltr():
         self.devices_fcltr.camera_close()
         # perhaps we shouldn't close the camera. Should test and see if the camera is re-trigger-able when stopped.
         # self.devices_fcltr.stage_close()  # seems like it is not necessary to call a function to close the stage.
-
-        # todo need to check how to re-trigger camera acquisition with the same acquisition protocol.
-        # think about the structure of the data here # todo 2022-10-25 item 1.
-        print("will first get all the devices ready for the device facilitator, that is \n"
-              "appended in this class. we'll do something like self.devcie_fcltr.receive_\n"
-              "device_configs() to make sure the configs is received we'll then do \n "
-              "self.device_facilitators.\"prepare_everything_and_play_the_devices\" to make \n"
-              "sure all the devices are initiated and ready at the minimum level")
-        print("we will then go through the loop order shown above in the comments, to actually \n"
-              "perform this acquisition task\n")
-        print("stepped out of AcquisitionFacilitator.acquisition_mode1")
         return 0
 
     def acquisition_mode1(self):
@@ -218,6 +213,7 @@ class AcquisitionFcltr():
                                            cam_configs_gclass=CameraConfigsGeneratorMode1,
                                            sta_configs_gclass=StageConfigsGeneratorMode1)
         # eventually have to refactor all these with dependency injection.
+        print("stepped out of AcquisitionFacilitator.acquisition_mode1")
 
     def acquisition_mode7(self):
         """
@@ -307,11 +303,9 @@ class AcquisitionFcltr():
 
 
         """
-        print('\n[implement acquisition mode 7 here]\n')
-        # 1. receive configurations (done by device facilitator)
         self._acquisition_looping_order_p_v_c_s(
                                            daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode7,
                                            cam_configs_gclass=CameraConfigsGeneratorMode7,
                                            sta_configs_gclass=StageConfigsGeneratorMode7)
-        # todo - focus on implementing these configs generators shown above then it should piece together.
+        print("stepped out of AcquisitionFacilitator.acquisition_mode7")
         return 0

@@ -1,9 +1,11 @@
 import copy
 from time import sleep
 
+import napari
 import numpy as np
 import threading
 
+from napari._qt.qthreading import thread_worker
 from serial import threaded
 
 
@@ -19,7 +21,8 @@ def threaded(fn):
 class OrcaFlash4Simulation:
     """ This is a simulated camera that mimicks an OrcaFlash4 """
 
-    def __init__(self, camera_index: int = 0):
+    def __init__(self, camera_index: int = 0, display_message=True):
+        self.display_message = display_message
         self.trigger_source = None
         self.trigger_polarity = None
         self._camera_index = camera_index
@@ -89,7 +92,7 @@ class OrcaFlash4Simulation:
         # keep the symmetry with the real camera module
         if self.dcamapi_initiated:
             self.dcamapi_initiated = True
-            self.dcam = SimulatedDcam(self._camera_index)
+            self.dcam = SimulatedDcam(self._camera_index, message=self.display_message)
             if self.dcam.dev_open():
                 self.dcam.buf_alloc(nb_buffer_frames)
                 if self.dcam.cap_start():
@@ -156,7 +159,7 @@ class OrcaFlash4Simulation:
 
         for camera_id in camera_ids:
             # 2. create the camera device with the camera index
-            self.devices = {'camera ' + str(camera_id): SimulatedDcam(camera_id)}
+            self.devices = {'camera ' + str(camera_id): SimulatedDcam(camera_id, message=self.display_message)}
 
             # 3. open the camera device
             self.devices['camera ' + str(camera_id)].dev_open()
@@ -433,7 +436,7 @@ class OrcaFlash4Simulation:
 
 
 class SimulatedDcam():
-    def __init__(self, camera_id):
+    def __init__(self, camera_id, message=True):
         self.devices_opened = None
         self.camera_id = camera_id
         self.readme = 'this is a simualted Dcam object'
@@ -443,7 +446,7 @@ class SimulatedDcam():
         self.buffer_allocated = False
         self.buffer = None
         self.capture_thread_handle = None
-        self.message = True
+        self.message = message
         self.xdim = None
         self.ydim = None
         self.current_buffer_index = None
@@ -464,6 +467,10 @@ class SimulatedDcam():
         # once the camera starts, it should start the data feeder into its buffer
         # on the simulated dcam object
         self.capture_thread_handle = self.simulated_camera_data_feeder()
+        if isinstance(self.capture_thread_handle, napari._qt.qthreading.FunctionWorker):
+            # self.capture_thread_handle.aborted.connect(self.cap_stop())
+            self.capture_thread_handle.start()
+
         return True
 
     def buf_alloc(self, buffer_size):
@@ -494,7 +501,10 @@ class SimulatedDcam():
     def cap_stop(self):
         self.capture_status = 'stopped'
         sleep(0.05)
-        self.capture_thread_handle.join()
+        if isinstance(self.capture_thread_handle, napari._qt.qthreading.FunctionWorker):
+            self.capture_thread_handle.quit()
+        else:
+            self.capture_thread_handle.join()
 
     def buf_release(self):
         self.buffer = None
@@ -514,13 +524,14 @@ class SimulatedDcam():
         print('setting this idproperty:' + str(idprop))
         return fValue
 
-    @threaded
+    # @threaded
+    @thread_worker
     def simulated_camera_data_feeder(self):
         x, y, buffer_size = self.buffer.shape
         z = int(buffer_size / 3)
         while self.capture_status == 'started':
             for i0 in np.arange(3):
-                object = simulate_a_random_object_3d_stack(x, y, z)
+                object = simulate_a_random_object_3d_stack(x, y, z, message=self.message)
                 for i1 in np.arange(z):
                     i = i0 * z + i1
                     if self.capture_status == 'started':
@@ -537,7 +548,7 @@ class SimulatedDcam():
                         break
 
 
-def simulate_a_random_object_3d_stack(x=100, y=200, z=300):
+def simulate_a_random_object_3d_stack(x=100, y=200, z=300, message=True):
     stack = np.random.rand(x, y, z)
     x0 = int(np.random.rand(1) * x / 5)
     x1 = int(min(x - 1, x0 + x / 10 + x / 10 * np.random.rand(1) * 5))
@@ -548,7 +559,8 @@ def simulate_a_random_object_3d_stack(x=100, y=200, z=300):
     z0 = int(np.random.rand(1) * z / 5)
     z1 = int(min(z - 1, z0 + z / 10 + z / 10 * np.random.rand(1) * 5))
     stack[x0:x1, y0:y1, z0:z1] = max(stack.ravel())*1.2
-    print('x range is ' + str(x0) + ' to ' + str(x1))
-    print('y range is ' + str(y0) + ' to ' + str(y1))
-    print('z range is ' + str(z0) + ' to ' + str(z1))
+    if message is True:
+        print('x range is ' + str(x0) + ' to ' + str(x1))
+        print('y range is ' + str(y0) + ' to ' + str(y1))
+        print('z range is ' + str(z0) + ' to ' + str(z1))
     return stack

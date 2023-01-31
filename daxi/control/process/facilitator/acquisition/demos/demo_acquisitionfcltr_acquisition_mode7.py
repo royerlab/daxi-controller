@@ -11,6 +11,7 @@ process_configs = load_process_configs(path=path)
 
 # checkout a device facilitator
 df = DevicesFcltr(devices_connected=devices_connected)
+df.display_message = False
 
 # checkout an acquisition facilitator
 af = AcquisitionFcltr()
