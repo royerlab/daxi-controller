@@ -193,8 +193,13 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                                                                n_sample_ramp=self.sample_number_on_duty,
                                                                n_sample_retraction=self.sample_number_off_duty)
 
-            self.configs_gamma_galvo_strip_reduction['data for view 1'] = data_view1*n_slices
-            self.configs_gamma_galvo_strip_reduction['data for view 2'] = data_view2*n_slices
+            # keep in mind that the daq devices are not in duty for the first frame.
+            # this is specific for mode7 acquisition.
+            self.configs_gamma_galvo_strip_reduction['data for view 1'] = \
+                [data_view1[0]]*len(data_view1)+data_view1*(n_slices-1)
+            self.configs_gamma_galvo_strip_reduction['data for view 2'] = \
+                [data_view2[0]]*len(data_view2)+data_view2*(n_slices-1)
+
 
         # self.configs_gamma_galvo_strip_reduction['data'] = None
         return self.configs_gamma_galvo_strip_reduction
@@ -251,7 +256,7 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
         # then, calculate data for all the rest of the cycles.
         for slice_index in np.arange(1, n_slices):
             print('generating sequence for O1, slice #' + str(slice_index))
-            v_incre = voltage_increment_per_slice*slice_index
+            v_incre = voltage_increment_per_slice*(slice_index-1) # -1 is to make sure the first data-frame will be the actual starting position.
             if self.configs_o1['data generator'] == 'constant':
                 prof_view1 = \
                     dg.constant(
@@ -265,6 +270,21 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                     )
                 self.configs_o1['data for view 1'] = self.configs_o1['data for view 1'] + list(prof_view1)
                 self.configs_o1['data for view 2'] = self.configs_o1['data for view 2'] + list(prof_view2)
+
+        # now add the tail voltage to O1, to move the objective to the starting point, during the
+        # last off-duty time (readout time window).
+        prof_view1_tail = \
+            dg.constant(
+                n_samples=self.sample_number_off_duty,
+                constant=self.configs_o1['home voltage offset for view 1'],
+            )
+        prof_view2_tail = \
+            dg.constant(
+                n_samples=self.sample_number_off_duty,
+                constant=self.configs_o1['home voltage offset for view 2'],
+            )
+        self.configs_o1['data for view 1'] = self.configs_o1['data for view 1'] + list(prof_view1_tail)
+        self.configs_o1['data for view 2'] = self.configs_o1['data for view 2'] + list(prof_view2_tail)
 
         return self.configs_o1
 
@@ -298,7 +318,9 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                                    n_samples_off=self.sample_number_off_duty,
                                    on_value=True,
                                    off_value=False)
-            self.configs_405_laser['data'] = one_frame_data*n_slices
+            # keep in mind that the daq devices are not in duty for the first frame.
+            # this is specific for mode7 acquisition.
+            self.configs_405_laser['data'] = [False]*len(one_frame_data)+one_frame_data*(n_slices-1)
 
         return self.configs_405_laser
 
@@ -316,7 +338,9 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                                    n_samples_off=self.sample_number_off_duty,
                                    on_value=True,
                                    off_value=False)
-            self.configs_488_laser['data'] = one_frame_data*n_slices
+            # keep in mind that the daq devices are not in duty for the first frame.
+            # this is specific for mode7 acquisition.
+            self.configs_488_laser['data'] = [False]*len(one_frame_data)+one_frame_data*(n_slices-1)
         return self.configs_488_laser
 
     def get_configs_561_laser(self, params):
@@ -333,7 +357,9 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                                    n_samples_off=self.sample_number_off_duty,
                                    on_value=True,
                                    off_value=False)
-            self.configs_561_laser['data'] = one_frame_data*n_slices
+            # keep in mind that the daq devices are not in duty for the first frame.
+            # this is specific for mode7 acquisition.
+            self.configs_561_laser['data'] = [False]*len(one_frame_data)+one_frame_data*(n_slices-1)
         return self.configs_561_laser
 
     def get_configs_639_laser(self, params):
@@ -350,7 +376,9 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                                    n_samples_off=self.sample_number_off_duty,
                                    on_value=True,
                                    off_value=False)
-            self.configs_639_laser['data'] = one_frame_data*n_slices
+            # keep in mind that the daq devices are not in duty for the first frame.
+            # this is specific for mode7 acquisition.
+            self.configs_639_laser['data'] = [False]*len(one_frame_data)+one_frame_data*(n_slices-1)
         return self.configs_639_laser
 
     def get_configs_bright_field(self, params):
@@ -367,7 +395,9 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                                    n_samples_off=self.sample_number_off_duty,
                                    on_value=True,
                                    off_value=False)
-            self.configs_bright_field['data'] = one_frame_data*n_slices
+            # keep in mind that the daq devices are not in duty for the first frame.
+            # this is specific for mode7 acquisition.
+            self.configs_bright_field['data'] = [False]*len(one_frame_data)+one_frame_data*(n_slices-1)
         return self.configs_bright_field
 
     # def get_configs_single_cycle_dict(self, params):
