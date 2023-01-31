@@ -4,7 +4,15 @@ from daxi.control.process.facilitator.system.tools.acquisition_parameter_suggest
 
 
 def test_acq_param_suggestion_init():
-    m = AcqParamBase()
+    m = AcqParamBase(
+                 dx=0.4,
+                 length=1000,
+                 t_exposure=90,
+                 t_readout=10,
+                 colors=['488'],
+                 views=['1','2'],
+                 t_stage_retraction=10,
+                 number_of_colors_per_slice=2)
     assert hasattr(m, 'dx')
     assert hasattr(m, 'length')
     assert hasattr(m, 't_exposure')
@@ -28,6 +36,7 @@ def test_find_parameter_combinations():
                      t_stage_retraction=0.01,
                      number_of_scans_per_timepoint=1,
                      scanning_galvo_range_limit=0.1)
+
     m.find_parameter_combinations_ls3scan()
     assert m.ns is not None
     assert m.ys_list is not None
@@ -40,6 +49,7 @@ def test_find_parameter_combinations():
 
 
 def test_get_parameter_combination():
+
     m = AcqParamBase(dx=0.4,
                      length=1000,
                      t_exposure=90,

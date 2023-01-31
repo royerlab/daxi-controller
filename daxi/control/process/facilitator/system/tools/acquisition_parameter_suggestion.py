@@ -207,6 +207,7 @@ class AcqParamBase:
         self.stack_time_list = stack_time_list  # (ms) list of time per stack.
         self.length_updated_list = length_updated_list
         self.scanning_galvo_range_per_slice_list = scanning_galvo_scan_range_per_slice_list
+        self.scanning_galvo_range_limit = 0  # todo - need to load this from configuration files.
         self.scan_durations_list = scan_durations_list
         self.time_per_datapoint_list = time_per_datapoint_list
 
