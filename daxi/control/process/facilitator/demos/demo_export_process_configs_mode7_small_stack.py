@@ -11,16 +11,16 @@ import pprint
 
 # Prints the nicely formatted dictionary
 m = AcqParamMode7(dx=0.4,
-                      length=30,
-                      t_exposure=30,
-                      t_readout=10,
-                      t_stage_retraction=23,  # retraction time for the stage after a stack acquisition is done.
-                      number_of_colors_per_slice=1,
-                      colors=['488', '561'],
-                      slice_color_list=None,
-                      positions=None,
-                      views=['1', '2'],
-                      positions_views_list=None,
+                  length=30,
+                  t_exposure=30,
+                  t_readout=10,
+                  t_stage_retraction=23,  # retraction time for the stage after a stack acquisition is done.
+                  number_of_colors_per_slice=1,
+                  colors=['488', '561'],
+                  slice_color_list=None,
+                  positions=None,
+                  views=['1', '2'],
+                  positions_views_list=None,
                       )
 
 m.adapt()
