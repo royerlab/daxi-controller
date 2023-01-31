@@ -24,6 +24,7 @@ a.get_configs_ao_task_bundle()
 a.get_configs_scanning_galvo(params=None)
 a.get_configs_view_switching_galvo_1()
 a.get_configs_view_switching_galvo_2()
+a.get_configs_gamma_galvo_strip_reduction(params=None)
 
 plot_daq_voltage_profiles(configs=a)
 

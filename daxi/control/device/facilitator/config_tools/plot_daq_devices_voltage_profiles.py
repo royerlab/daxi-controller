@@ -28,7 +28,7 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, 
     expo_tick_n = t_expo / 1000 * metro_freq
     t_readout = configs.process_configs['process configs']['acquisition parameters']['camera read out time (ms)']
     readout_tick_n = t_readout / 1000 * metro_freq
-    n_slices_per_stack = t_expo = configs.process_configs['process configs']['acquisition parameters']['n slices']
+    n_slices_per_stack = configs.process_configs['process configs']['acquisition parameters']['n slices']
 
     msgs = ['Number of frames per stack: ' + str(n_slices_per_stack),
             'Metronome frequency: ' + str(metro_freq) + ' Hz',
@@ -74,6 +74,14 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, 
         lines.append(configs.configs_view_switching_galvo_2['data for view 2'][:data_points_to_show])
         legends.append('VSG-2 view 2')
 
+    # plot gamma galvo strip reduction profile
+    if 'data for view 1' in configs.configs_gamma_galvo_strip_reduction.keys():
+        lines.append(configs.configs_gamma_galvo_strip_reduction['data for view 1'][:data_points_to_show])
+        legends.append('gamma galvo strip reduction, view 1')
+
+    if 'data for view 2' in configs.configs_gamma_galvo_strip_reduction.keys():
+        lines.append(configs.configs_gamma_galvo_strip_reduction['data for view 2'][:data_points_to_show])
+        legends.append('gamma galvo strip reduction, view 2')
 
     colors_list = Category20[20][:len(legends)]
     p = figure(width=1500, height=700)

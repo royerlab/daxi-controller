@@ -162,41 +162,42 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
 
         return self.configs_view_switching_galvo_2
 
-    # def get_configs_gamma_galvo_strip_reduction(self, params):
-    #     # copy over the start and stop voltage for view 1.
-    #     self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 1'] = \
-    #         self.calibration_records['gamma galvo strip reduction']['linear ramp start for view 1']
-    #     self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 1'] = \
-    #         self.calibration_records['gamma galvo strip reduction']['linear ramp stop for view 1']
-    #     v_start_view1 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 1']
-    #     v_stop_view1 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 1']
-    #
-    #     # copy over the start and stop voltage for view 2.
-    #     self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 2'] = \
-    #         self.calibration_records['gamma galvo strip reduction']['linear ramp start for view 2']
-    #     self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 2'] = \
-    #         self.calibration_records['gamma galvo strip reduction']['linear ramp stop for view 2']
-    #     v_start_view2 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 2']
-    #     v_stop_view2 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 2']
-    #
-    #     # checkout a data generator
-    #     dg = DAQDataGenerator()
-    #     if self.configs_gamma_galvo_strip_reduction['data generator'] == 'linear_ramp_soft_retraction':
-    #         data_view1 = dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view1,
-    #                                                            v1=v_stop_view1,
-    #                                                            n_sample_ramp=self.sample_number_on_duty,
-    #                                                            n_sample_retraction=self.sample_number_off_duty)
-    #
-    #         data_view2 = dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view2,
-    #                                                            v1=v_stop_view2,
-    #                                                            n_sample_ramp=self.sample_number_on_duty,
-    #                                                            n_sample_retraction=self.sample_number_off_duty)
-    #
-    #         self.configs_gamma_galvo_strip_reduction['data for view 1'] = data_view1
-    #         self.configs_gamma_galvo_strip_reduction['data for view 2'] = data_view2
-    #
-    #     # self.configs_gamma_galvo_strip_reduction['data'] = None
-    #     return self.configs_gamma_galvo_strip_reduction
+    def get_configs_gamma_galvo_strip_reduction(self, params):
+        # copy over the start and stop voltage for view 1.
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 1'] = \
+            self.calibration_records['gamma galvo strip reduction']['linear ramp start for view 1']
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 1'] = \
+            self.calibration_records['gamma galvo strip reduction']['linear ramp stop for view 1']
+        v_start_view1 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 1']
+        v_stop_view1 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 1']
+
+        # copy over the start and stop voltage for view 2.
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 2'] = \
+            self.calibration_records['gamma galvo strip reduction']['linear ramp start for view 2']
+        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 2'] = \
+            self.calibration_records['gamma galvo strip reduction']['linear ramp stop for view 2']
+        v_start_view2 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp start for view 2']
+        v_stop_view2 = self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp stop for view 2']
+
+        # checkout a data generator
+        dg = DAQDataGenerator()
+        if self.configs_gamma_galvo_strip_reduction['data generator'] == 'linear_ramp_soft_retraction':
+            n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
+            data_view1 = dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view1,
+                                                               v1=v_stop_view1,
+                                                               n_sample_ramp=self.sample_number_on_duty,
+                                                               n_sample_retraction=self.sample_number_off_duty)
+
+            data_view2 = dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view2,
+                                                               v1=v_stop_view2,
+                                                               n_sample_ramp=self.sample_number_on_duty,
+                                                               n_sample_retraction=self.sample_number_off_duty)
+
+            self.configs_gamma_galvo_strip_reduction['data for view 1'] = data_view1*n_slices
+            self.configs_gamma_galvo_strip_reduction['data for view 2'] = data_view2*n_slices
+
+        # self.configs_gamma_galvo_strip_reduction['data'] = None
+        return self.configs_gamma_galvo_strip_reduction
 
     # def get_configs_beta_galvo_light_sheet_incident_angle(self, params):
     #     self.configs_beta_galvo_light_sheet_incident_angle['data configs']['sample number'] = \
