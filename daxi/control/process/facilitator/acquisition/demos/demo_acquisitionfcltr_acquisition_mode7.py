@@ -5,20 +5,27 @@ from daxi.control.process.facilitator.processes_facilitator import load_process_
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
-# Define path to the configuration file
-path = os.path.join(process_templates, 'template_acquisition_mode7-dev-small_stack.yaml')
-process_configs = load_process_configs(path=path)
 
-# checkout a device facilitator
-df = DevicesFcltr(devices_connected=devices_connected)
-df.display_message = False
+def demo_acquisitionfcltr_acquisition_mode7(config_fname):
+    # Define path to the configuration file
+    path = os.path.join(process_templates, config_fname)
+    process_configs = load_process_configs(path=path)
 
-# checkout an acquisition facilitator
-af = AcquisitionFcltr()
+    # checkout a device facilitator
+    df = DevicesFcltr(devices_connected=devices_connected)
+    df.display_message = False
 
-# configure the acquisition facilitator
-af.devices_fcltr = df
-af.configs = process_configs
+    # checkout an acquisition facilitator
+    af = AcquisitionFcltr()
 
-# start mode7 acquisition
-af.acquisition_mode7()
+    # configure the acquisition facilitator
+    af.devices_fcltr = df
+    af.configs = process_configs
+
+    # start mode7 acquisition
+    af.acquisition_mode7()
+    return 'success'
+
+
+if __name__ == '__main__':
+    demo_acquisitionfcltr_acquisition_mode7(config_fname='template_acquisition_mode7-dev-small_stack.yaml')
