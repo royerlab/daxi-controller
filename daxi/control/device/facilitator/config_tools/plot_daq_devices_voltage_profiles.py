@@ -6,7 +6,8 @@ from bokeh.models import Legend
 from daxi.control.device.facilitator.config_tools.configuration_generator_base import NIDAQDevicesConfigsGeneratorBase
 
 
-def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, data_points_to_show=10000):
+def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None,
+                              data_points_to_show=10000):
     """
     This function will take in a finished data generator class, find all the available daq card data profiles,
     and plot them together for inspection purposes.
@@ -33,7 +34,8 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, 
     msgs = ['Number of frames per stack: ' + str(n_slices_per_stack),
             'Metronome frequency: ' + str(metro_freq) + ' Hz',
             'Exposure time: ' + str(t_expo) + ' ms, ' + str(expo_tick_n) + ' ticks',
-            'Readout time: ' + str(t_readout) + ' ms' + str(readout_tick_n) + ' ticks'
+            'Readout time: ' + str(t_readout) + ' ms' + str(readout_tick_n) + ' ticks',
+            'Number of sample ticks per frame: ' + str(expo_tick_n+readout_tick_n),
             ]
 
     # show number of frames per stack
@@ -92,6 +94,15 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, 
         lines.append(configs.configs_beta_galvo_light_sheet_incident_angle['data for view 2'][:data_points_to_show])
         legends.append('beta galvo, lightsheet incident angle, view 2')
 
+    # plot the profile for O1
+    if 'data for view 1' in configs.configs_o1.keys():
+        lines.append(numpy.asarray(configs.configs_o1['data for view 1'][:data_points_to_show]) + 0.3)
+        legends.append('O1, view 1')
+
+    if 'data for view 2' in configs.configs_o1.keys():
+        lines.append(numpy.asarray(configs.configs_o1['data for view 2'][:data_points_to_show]) + 0.3)
+        legends.append('O1, view 2')
+
     # plot the profile for O3:
     if 'data for view 1' in configs.configs_o3.keys():
         lines.append(configs.configs_o3['data for view 1'][:data_points_to_show])
@@ -114,17 +125,17 @@ def plot_daq_voltage_profiles(configs: NIDAQDevicesConfigsGeneratorBase = None, 
     # plot the profile for 561 laser when the channel is operating
     if 'data' in configs.configs_561_laser.keys():
         lines.append(numpy.asarray(configs.configs_561_laser['data'][:data_points_to_show])+0.2)
-        legends.append('488 laser when it is operating, offset + 0.2 on plot.')
+        legends.append('561 laser when it is operating, offset + 0.2 on plot.')
 
     # plot the profile for 639 laser when the channel is operating
     if 'data' in configs.configs_639_laser.keys():
         lines.append(numpy.asarray(configs.configs_639_laser['data'][:data_points_to_show])+0.25)
-        legends.append('488 laser when it is operating, offset + 0.25 on plot.')
+        legends.append('639 laser when it is operating, offset + 0.25 on plot.')
 
     # plot the profile for bright field LED when the channel is operating
     if 'data' in configs.configs_bright_field.keys():
         lines.append(numpy.asarray(configs.configs_bright_field['data'][:data_points_to_show])+0.3)
-        legends.append('488 laser when it is operating, offset + 0.3 on plot.')
+        legends.append('bright field LED when it is operating, offset + 0.3 on plot.')
 
     colors_list = Category20[20][:len(legends)]
     p = figure(width=1500, height=700)

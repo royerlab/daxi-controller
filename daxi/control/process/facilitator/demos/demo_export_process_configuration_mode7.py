@@ -2,7 +2,7 @@ from daxi.control.process.facilitator.processes_facilitator import save_process_
 from daxi.control.process.facilitator.system.demos.demo_acquisition_parameter_suggestion_mode7 import \
     demo_acquisition_params_mode7
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates, \
-    params_test_selected_params, configs_daq_terminals
+    params_test_selected_params, configs_daq_terminals_calibrations
 from daxi.control.process.facilitator.system.tools.acquisition_parameter_suggestion import AcqParamMode1
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 import os
@@ -27,7 +27,7 @@ process_parameters = m.selected_parameters
 # load in all the devices' configuration dictionary
 p = NIDAQConfigsParser()
 # now get the terminal configurations
-p.set_configs_path(configs_daq_terminals)
+p.set_configs_path(configs_daq_terminals_calibrations)
 section = 'Connection Section'
 keyword = 'nidaq_terminals'
 daq_terminal_configs = \

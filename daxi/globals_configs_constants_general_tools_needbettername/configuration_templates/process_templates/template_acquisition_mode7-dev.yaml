@@ -22,6 +22,8 @@ device configurations:
       home voltage offset for view 1: -3.0
       home voltage offset for view 2: 3.0
   calibration_records:
+    O1:
+      distance (um) to voltage (v) conversion factor (v/um): 0.01
     gamma galvo strip reduction:
       linear ramp start for view 1: 0.1
       linear ramp start for view 2: 0.2
@@ -139,11 +141,12 @@ process configs:
     number of time points: null
     pixel size in xy (um): 0.4
     positions: null
-    scanning galvo scan range limit (um): null
+    scanning galvo scan range limit (um): 0.8
     scanning galvo scan range per slice (um): null
     scanning range (um): 1001.2632021601514
     slice distance (um): 2.0
     stage retraction time (ms): 23.0
+    stage scanning speed (nm/ms): 28.284271247461902
     time per stack per view (s): 35.423
     time per time point (s): 141.692
     type: mode7

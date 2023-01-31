@@ -16,7 +16,7 @@ device_fcltr_configs_path = configs_templates_path+"/devices_fcltr_configs_panel
 
 params_test_selected_params = configs_templates_path+"/params_test_selected_params_for_mode1to6"
 
-configs_daq_terminals = configs_templates_path+"/wiring_alignment_and_calibration"
+configs_daq_terminals_calibrations = configs_templates_path + "/wiring_alignment_and_calibration"
 
 configs_core_daq_devices = configs_templates_path+"/devices_configs_core"
 

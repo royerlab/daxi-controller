@@ -182,6 +182,11 @@ definition start.
     'distance (um) to voltage (v) conversion factor (v/um)': float(0.004),
     },
 
+    'O1':
+    {
+    'distance (um) to voltage (v) conversion factor (v/um)': float(0.01),
+    },
+
     'gamma galvo strip reduction':
     {
     'linear ramp start for view 1': float(0.1), # volt, should be obtained and adjusted during alignment
