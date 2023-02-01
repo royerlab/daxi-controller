@@ -414,7 +414,7 @@ class InspectionFcltr:
         self.status_serial_placeholder = 'good'
         return 0
 
-    def inspect_camera_placeholder(self):
+    def inspect_camera(self):
         print('AcquisitionFcltr - this will inspect camera [place holder]')
         self.status_camera_placeholder = 'good'
         return 0
