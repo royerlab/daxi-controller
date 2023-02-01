@@ -62,7 +62,7 @@ print('1 - ' + str(v))
 
 print('exposure time: '+str(v)+' seconds.')
 v = dcam.prop_setgetvalue(idprop=DCAM_IDPROP.TRIGGER_MODE,
-                          fValue=3)  # fValue = 1 sets the trigger mode to be 'NORMAL'.
+                          fValue=1)  # fValue = 1 sets the trigger mode to be 'NORMAL'. It can only be 1.
 print('2 - ' + str(v))
 
 dcam.prop_setgetvalue(idprop=DCAM_IDPROP.TRIGGER_CONNECTOR, fValue=2)
@@ -87,8 +87,6 @@ print(v)
 v = dcam.prop_setgetvalue(idprop=DCAM_IDPROP.MASTERPULSE_TRIGGERSOURCE,
                           fValue=1)  # this sets the trigger source to be external.
 print(v)
-
-
 
 # -- choose master pulse burst mode
 v = dcam.prop_setgetvalue(idprop=DCAM_IDPROP.MASTERPULSE_MODE,
