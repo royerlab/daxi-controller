@@ -17,6 +17,8 @@ from daxi.globals_configs_constants_general_tools_needbettername.python_globals 
 
 if devices_connected is False:
     is_simulation = True
+else:
+    is_simulation = False
 
 
 class AcquisitionFcltr():

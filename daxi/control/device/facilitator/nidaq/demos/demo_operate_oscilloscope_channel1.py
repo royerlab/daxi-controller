@@ -56,7 +56,7 @@ metronome.get_ready()
 taskbundle_ao = TaskBundleAO()
 
 # set the ao task bundle configurations
-taskbundle_ao.set_configurations(task_bundle_ao_configs, metronome)
+taskbundle_ao.set_configurations(task_bundle_ao_configs)
 
 # add metronome
 taskbundle_ao.add_metronome(metronome)

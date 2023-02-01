@@ -125,8 +125,8 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                     constant=vhome_view2
                 )
 
-            self.configs_scanning_galvo['data for view 1'] = data_view1
-            self.configs_scanning_galvo['data for view 2'] = data_view2
+            self.configs_scanning_galvo['data for view 1'] = list(data_view1)
+            self.configs_scanning_galvo['data for view 2'] = list(data_view2)
 
         return self.configs_scanning_galvo
 
@@ -135,16 +135,18 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
             self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_view_switching_galvo_1['data generator'] == 'constant':
-            self.configs_view_switching_galvo_1['data for view 1'] = \
+            data_view1 = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_1['home voltage offset for view 1'],
                 )
-            self.configs_view_switching_galvo_1['data for view 2'] = \
+            data_view2 = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_1['home voltage offset for view 2'],
                 )
+            self.configs_view_switching_galvo_1['data for view 1'] = list(data_view1)
+            self.configs_view_switching_galvo_1['data for view 2'] = list(data_view2)
 
         return self.configs_view_switching_galvo_1
 
@@ -153,16 +155,18 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
             self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_view_switching_galvo_2['data generator'] == 'constant':
-            self.configs_view_switching_galvo_2['data for view 1'] = \
+            data_view1 = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_2['home voltage offset for view 1'],
                 )
-            self.configs_view_switching_galvo_2['data for view 2'] = \
+            data_view2 = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_view_switching_galvo_2['home voltage offset for view 2'],
                 )
+            self.configs_view_switching_galvo_2['data for view 1'] = list(data_view1)
+            self.configs_view_switching_galvo_2['data for view 2'] = list(data_view2)
 
         return self.configs_view_switching_galvo_2
 
@@ -200,10 +204,9 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
             # keep in mind that the daq devices are not in duty for the first frame.
             # this is specific for mode7 acquisition.
             self.configs_gamma_galvo_strip_reduction['data for view 1'] = \
-                [data_view1[0]]*len(data_view1)+data_view1*(n_slices-1)
+                list([data_view1[0]]*len(data_view1)+data_view1*(n_slices-1))
             self.configs_gamma_galvo_strip_reduction['data for view 2'] = \
-                [data_view2[0]]*len(data_view2)+data_view2*(n_slices-1)
-
+                list([data_view2[0]]*len(data_view2)+data_view2*(n_slices-1))
 
         # self.configs_gamma_galvo_strip_reduction['data'] = None
         return self.configs_gamma_galvo_strip_reduction
@@ -213,16 +216,18 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
             self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_beta_galvo_light_sheet_incident_angle['data generator'] == 'constant':
-            self.configs_beta_galvo_light_sheet_incident_angle['data for view 1'] = \
+            data_view1 = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 1'],
                 )
-            self.configs_beta_galvo_light_sheet_incident_angle['data for view 2'] = \
+            data_view2 = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_beta_galvo_light_sheet_incident_angle['home voltage offset for view 2'],
                 )
+            self.configs_beta_galvo_light_sheet_incident_angle['data for view 1'] = list(data_view1)
+            self.configs_beta_galvo_light_sheet_incident_angle['data for view 2'] = list(data_view2)
         return self.configs_beta_galvo_light_sheet_incident_angle
 
     def get_configs_o1(self, params):
@@ -296,16 +301,18 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
         self.configs_o3['data configs']['sample number'] = self.sample_number_total
         dg = DAQDataGenerator()
         if self.configs_o3['data generator'] == 'constant':
-            self.configs_o3['data for view 1'] = \
+            data_view1 = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_o3['home voltage offset for view 1'],
                 )
-            self.configs_o3['data for view 2'] = \
+            data_view2 = \
                 dg.constant(
                     n_samples=self.sample_number_total,
                     constant=self.configs_o3['home voltage offset for view 2'],
                 )
+            self.configs_o3['data for view 1'] = list(data_view1)
+            self.configs_o3['data for view 2'] = list(data_view2)
         return self.configs_o3
 
     def get_configs_405_laser(self, params):

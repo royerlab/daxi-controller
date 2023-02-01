@@ -104,6 +104,7 @@ class DAQDataGenerator:
         # now get the soft retraction part
         data_retraction = get_soft_retraction(v_start=v1, v_end=v0, n_total=n_sample_retraction)
         self.data[len(data_ramp):] = data_retraction
+        self.data=list(self.data)
         return self.data
 
     def getfcn_sequence(self,
