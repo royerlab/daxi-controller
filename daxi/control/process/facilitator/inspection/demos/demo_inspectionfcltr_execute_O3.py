@@ -17,7 +17,7 @@ def demo_inspectionfcltr_execute_O3():
     path = os.path.join(process_templates, 'template_acquisition_mode1-dev.yaml')
     process_configs = load_process_configs(path=path)
 
-    # set the process to be inspecting metronome
+    # set the process to be inspecting O3
     process_configs['process type'] = 'inspection, inspect_O3'
     process_configs['process configs']['process type'] = 'inspection, inspect_O3'
 
