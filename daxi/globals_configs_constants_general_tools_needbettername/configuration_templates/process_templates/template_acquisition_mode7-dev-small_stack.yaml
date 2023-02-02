@@ -23,12 +23,12 @@ device configurations:
       home voltage offset for view 2: 3.0
   calibration_records:
     O1:
-      distance (um) to voltage (v) conversion factor (v/um): 0.01
+      distance (um) to voltage (v) conversion factor (v/um): 0.1
     gamma galvo strip reduction:
-      linear ramp start for view 1: 0.1
-      linear ramp start for view 2: 0.2
-      linear ramp stop for view 1: 0.3
-      linear ramp stop for view 2: 0.4
+      linear ramp start for view 1: 0.0
+      linear ramp start for view 2: -1.0
+      linear ramp stop for view 1: 0.5
+      linear ramp stop for view 2: -3.0
     scanning galvo:
       distance (um) to voltage (v) conversion factor (v/um): 0.004
   camera_core_configs:
@@ -36,11 +36,11 @@ device configurations:
     burst times: 1
     camera ids:
     - 0
-    master pulse interval: 0.04
-    master pulse mode: START
-    master pulse trigger: EXTERNAL
+    master pulse interval: 0.13
+    master pulse mode: CONTINUOUS
+    master pulse trigger: SOFTWARE
     output trigger kind: TRIGGER READY
-    output trigger polarity: POSITIVE
+    output trigger polarity: NEGATIVE
     trigger mode: NORMAL
     trigger polarity: POSITIVE
     trigger source: MASTER PULSE
@@ -126,12 +126,12 @@ device configurations:
     start position: null
 process configs:
   acquisition parameters:
-    camera read out time (ms): 10.0
+    camera read out time (ms): 30.0
     colors:
     - '488'
     - '561'
-    exposure time (ms): 30.0
-    galvo scanning speed (nm/ms): 70.71067811865476
+    exposure time (ms): 100.0
+    galvo scanning speed (nm/ms): 21.757131728816848
     looping order: '[mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color]
       - [layer 4: slice] - [scan: O1]'
     mag-factor: 5
@@ -152,9 +152,9 @@ process configs:
     scanning range (um): 31.112698372208094
     slice distance (um): 2.0
     stage retraction time (ms): 23.0
-    stage scanning speed (nm/ms): 70.71067811865476
-    time per stack per view (s): 0.463
-    time per time point (s): 1.852
+    stage scanning speed (nm/ms): 21.757131728816848
+    time per stack per view (s): 1.453
+    time per time point (s): 5.812
     type: mode7
     views:
     - '1'

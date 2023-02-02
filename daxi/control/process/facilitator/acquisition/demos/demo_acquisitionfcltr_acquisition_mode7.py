@@ -21,7 +21,7 @@ def demo_acquisitionfcltr_acquisition_mode7(config_fname):
     # configure the acquisition facilitator
     af.devices_fcltr = df
     af.configs = process_configs
-
+    af.configs['process configs']['acquisition parameters']['number of time points'] = 100
     # start mode7 acquisition
     af.acquisition_mode7()
     return 'success'

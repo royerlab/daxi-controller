@@ -12,8 +12,8 @@ import pprint
 # Prints the nicely formatted dictionary
 m = AcqParamMode7(dx=0.4,
                   length=30,
-                  t_exposure=30,
-                  t_readout=10,
+                  t_exposure=100,
+                  t_readout=30,
                   t_stage_retraction=23,  # retraction time for the stage after a stack acquisition is done.
                   number_of_colors_per_slice=1,
                   colors=['488', '561'],
@@ -63,6 +63,9 @@ keyword = 'camera_core_configs'
 camera_core_configs = \
     p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
 camera_core_configs['master pulse interval'] = (process_parameters['exposure time (ms)'] + process_parameters['camera read out time (ms)'])/1000
+camera_core_configs['master pulse trigger'] = 'SOFTWARE'
+camera_core_configs['master pulse mode'] = 'CONTINUOUS'
+camera_core_configs['output trigger polarity'] = 'NEGATIVE'
 
 keyword = 'stage_core_configs'
 stage_core_configs = \
