@@ -544,8 +544,8 @@ class Metronome:
                 trigger_source=self.trigger_terminal,
                 trigger_edge=trigger_edge_const,
             )
-            # self.task_handle.triggers.start_trigger.retriggerable = self.retriggerable
-            self.task_handle.triggers.start_trigger.retriggerable = True
+            self.task_handle.triggers.start_trigger.retriggerable = self.retriggerable
+            # self.task_handle.triggers.start_trigger.retriggerable = True
         else:
             self.status = 'metronome started'
 

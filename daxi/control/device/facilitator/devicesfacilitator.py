@@ -219,7 +219,8 @@ class DevicesFcltr:
             daq_configs_generator.get_configs_639_laser(acquisition_parameters)
         self.configs_all_cycles['configs_bright_field'] = \
             daq_configs_generator.get_configs_bright_field(acquisition_parameters)
-
+        self.configs_all_cycles['configs_daq_general'] = \
+            daq_configs_generator.get_configs_daq_general()
         # all the configurations are mapped to a dictionary that stores different cycle types,
         # specified by its own dictionary keys with acquisition-mode specific name patterns.
         self.configs_daq_single_cycle_dict = \

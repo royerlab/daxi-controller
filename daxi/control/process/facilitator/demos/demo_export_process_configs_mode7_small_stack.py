@@ -11,7 +11,7 @@ import pprint
 
 # Prints the nicely formatted dictionary
 m = AcqParamMode7(dx=0.4,
-                  length=30,
+                  length=20,
                   t_exposure=100,
                   t_readout=30,
                   t_stage_retraction=23,  # retraction time for the stage after a stack acquisition is done.
