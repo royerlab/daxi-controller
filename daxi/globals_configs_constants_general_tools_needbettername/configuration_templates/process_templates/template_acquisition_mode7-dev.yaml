@@ -37,8 +37,8 @@ device configurations:
     camera ids:
     - 0
     master pulse interval: 0.1
-    master pulse mode: START
-    master pulse trigger: EXTERNAL
+    master pulse mode: CONTINUOUS
+    master pulse trigger: SOFTWARE
     output trigger kind: TRIGGER READY
     output trigger polarity: POSITIVE
     trigger mode: NORMAL

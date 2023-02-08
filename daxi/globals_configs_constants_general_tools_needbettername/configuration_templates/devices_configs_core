@@ -21,7 +21,7 @@ definition start.
 'number of samples': None,
 'trigger terminal': None,
 'trigger edge': 'RISING',
-'retriggerable': True,
+'retriggerable': None,
 'purpose': "to provide a metronome to orchestrate all DAQ profiles for both AO and DO outputs",
 }
 definition end.
@@ -103,7 +103,7 @@ definition end.
 view_switching_galvo_1:
 definition start.
 {
-'device': 'scanning_galvo',
+'device': 'view switching galvo 1',
 'name': 'view switching galvo 1',
 'task type': 'AO subtask',
 'idle state': 'LOW',
@@ -126,7 +126,7 @@ definition end.
 view_switching_galvo_2:
 definition start.
 {
-'device': 'scanning_galvo',
+'device': 'view switching galvo 2',
 'name': 'view switching galvo 2',
 'task type': 'AO subtask',
 'idle state': 'LOW',
