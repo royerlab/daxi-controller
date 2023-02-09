@@ -16,7 +16,7 @@ m = AcqParamMode7(dx=0.4,
                   t_readout=30,
                   t_stage_retraction=23,  # retraction time for the stage after a stack acquisition is done.
                   number_of_colors_per_slice=1,
-                  colors=['488', '561'],
+                  colors=['bright_field'],  # a sublist of the list: ['bright_field', '405', '488', '561', '639']
                   slice_color_list=None,
                   views=['1', '2'],
                   positions_views_list=None,

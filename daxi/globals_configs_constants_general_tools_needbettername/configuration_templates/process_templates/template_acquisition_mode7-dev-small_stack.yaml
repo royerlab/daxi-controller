@@ -23,7 +23,7 @@ device configurations:
       home voltage offset for view 2: 3.0
   calibration_records:
     O1:
-      distance (um) to voltage (v) conversion factor (v/um): 0.1
+      distance (um) to voltage (v) conversion factor (v/um): 0.025
     gamma galvo strip reduction:
       linear ramp start for view 1: 0.0
       linear ramp start for view 2: -1.0
@@ -128,8 +128,7 @@ process configs:
   acquisition parameters:
     camera read out time (ms): 30.0
     colors:
-    - '488'
-    - '561'
+    - bright_field
     exposure time (ms): 100.0
     galvo scanning speed (nm/ms): 21.757131728816848
     looping order: '[mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color]
@@ -154,7 +153,7 @@ process configs:
     stage retraction time (ms): 23.0
     stage scanning speed (nm/ms): 21.757131728816848
     time per stack per view (s): 1.453
-    time per time point (s): 5.812
+    time per time point (s): 2.906
     type: mode7
     views:
     - '1'
