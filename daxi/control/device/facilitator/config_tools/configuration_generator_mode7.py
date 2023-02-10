@@ -112,8 +112,53 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
         # home voltage for view 1 and view 2:
         vhome_view1 = self.configs_scanning_galvo['home voltage offset for view 1']
         vhome_view2 = self.configs_scanning_galvo['home voltage offset for view 2']
+
         dg = DAQDataGenerator()
-        if self.configs_scanning_galvo['data generator'] == 'constant':
+        if self.configs_scanning_galvo['data generator'] == 'linear_ramp_soft_retraction':
+            # scanning range in delta distance.
+            # sr = params['scanning galvo scan range limit (um)']  # in O1 scan, scan the SG in it's full range.
+            sr = 100 # scan 100 um.
+
+            # voltage conversion factor
+            d2v = self.configs_scanning_galvo['distance (um) to voltage (v) conversion factor (v/um)']
+            # the +/- sign of this factor defines the scanning direciton with respect to the sign of the voltage applied to
+            # the galvo.
+
+            # scanning range in delta V
+            sr_v = sr * d2v
+
+            # linear ramp start/end voltage for view 1 a/2:
+            v_start_view1 = vhome_view1 - sr_v / 2
+            v_start_view2 = vhome_view2 - sr_v / 2
+            v_stop_view1 = vhome_view1 + sr_v / 2
+            v_stop_view2 = vhome_view2 + sr_v / 2
+
+            self.configs_scanning_galvo['data configs']['linear ramp start for view 1'] = v_start_view1
+            self.configs_scanning_galvo['data configs']['linear ramp stop for view 1'] = v_stop_view1
+            self.configs_scanning_galvo['data configs']['linear ramp start for view 2'] = v_start_view2
+            self.configs_scanning_galvo['data configs']['linear ramp stop for view 2'] = v_stop_view2
+            self.configs_scanning_galvo['data configs']['linear ramp sample number'] = self.sample_number_on_duty
+            self.configs_scanning_galvo['data configs']['soft retraction sample number'] = self.sample_number_off_duty
+
+            data_view1 = \
+                dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view1,
+                                                      v1=v_stop_view1,
+                                                      n_sample_ramp=self.sample_number_on_duty,
+                                                      n_sample_retraction=self.sample_number_off_duty)
+
+            data_view2 = \
+                dg.getfcn_linear_ramp_soft_retraction(v0=v_start_view2,
+                                                      v1=v_stop_view2,
+                                                      n_sample_ramp=self.sample_number_on_duty,
+                                                      n_sample_retraction=self.sample_number_off_duty)
+
+            n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
+            self.configs_scanning_galvo['data for view 1'] = \
+                list([data_view1[0]]*len(data_view1)+data_view1*(n_slices-1))
+            self.configs_scanning_galvo['data for view 2'] = \
+                list([data_view2[0]]*len(data_view2)+data_view2*(n_slices-1))
+
+        elif self.configs_scanning_galvo['data generator'] == 'constant':
             data_view1 = \
                 dg.constant(
                     n_samples=self.sample_number_total,

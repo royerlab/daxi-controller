@@ -43,9 +43,9 @@ configs_daq_single_cycle_dict = \
     a.get_configs_single_cycle_dict(params=acquisition_parameters)
 
 # and perhaps plot all the sequences for each cycle type
-plot_daq_voltage_profiles_single_cycle_dict(configs_dict=configs_daq_single_cycle_dict['view1 color488'],
-                                            data_points_to_show=10000,
-                                            dict_key='view1 color488',
+plot_daq_voltage_profiles_single_cycle_dict(configs_dict=configs_daq_single_cycle_dict['view1 colorbright_field'],
+                                            data_points_to_show=30000,
+                                            dict_key='view1 colorbright_field',
                                             process_configs=a.process_configs)
 
 

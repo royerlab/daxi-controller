@@ -10,10 +10,10 @@ import os
 import pprint
 
 # Prints the nicely formatted dictionary
-m = AcqParamMode7(dx=0.4,
+m = AcqParamMode7(dx=0.4,  # um
                   length=30,
                   t_exposure=100,
-                  t_readout=30,
+                  t_readout=1000,
                   t_stage_retraction=23,  # retraction time for the stage after a stack acquisition is done.
                   number_of_colors_per_slice=1,
                   colors=['bright_field'],  # a sublist of the list: ['bright_field', '405', '488', '561', '639']
@@ -22,6 +22,7 @@ m = AcqParamMode7(dx=0.4,
                   positions_views_list=None,
                   positions={'position name 1': {'x': 1, 'y': 10}, 'position name 2': {'x': 23, 'y': 12}},
                   number_of_time_points=2,
+                  light_sheet_scanning_range=1,  # unit: mm
                   )
 
 m.adapt()
@@ -30,7 +31,7 @@ m.find_parameter_combinations_o1scan()
 
 m.display_parameter_options()
 
-m.get_parameter_combination(magnification_factor=5)
+m.get_parameter_combination_o1scan(magnification_factor=5)
 
 acquisition_parameters = m.selected_parameters
 

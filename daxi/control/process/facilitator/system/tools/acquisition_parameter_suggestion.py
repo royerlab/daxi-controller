@@ -60,7 +60,10 @@ class AcqParamBase:
                  positions=None,
                  views=['1'],
                  positions_views_list=None,
-                 number_of_time_points=None):
+                 number_of_time_points=None,
+                 O1_scanning_step_length=None,
+                 light_sheet_scanning_range=None,  # mm
+                 ):
         """
         This tool is expected to make the process of selecting imaging parameters easy.
         first, the user will input a series of basic parameters, and the program will
@@ -115,6 +118,7 @@ class AcqParamBase:
         self.stack_time_list = None
         self.length_updated_list = None
         self.selected_parameters = None
+        self.light_sheet_scanning_range = light_sheet_scanning_range
         self.scanning_galvo_range_per_slice_list = None  # there has to be a limit based on the FOV on top of O1.
         self.scanning_galvo_range_limit = scanning_galvo_range_limit  # set this as the limit (mm)
         if self.t_exposure is None or self.t_readout is None or self.number_of_colors_per_slice is None:
@@ -297,7 +301,8 @@ class AcqParamBase:
     def get_parameter_combination(self, magnification_factor=5):
         n = magnification_factor
         y = n * self.dx
-        v = np.sqrt(2) * y / (self.t_exposure + self.t_readout) / self.number_of_colors_per_slice  # unit = um/ms
+        # v = np.sqrt(2) * y / (self.t_exposure + self.t_readout) / self.number_of_colors_per_slice  # unit = um/ms
+        v = self.light_sheet_scanning_range/1000/self.t_exposure  # galvo scanning speed (um/ms)
         n_slices = int(np.ceil(self.length / np.sqrt(2) / n / self.dx))
         length_updated = n_slices * np.sqrt(2) * n * self.dx
         scan_duration = n_slices * self.t_per_slice + self.t_stage_retraction
@@ -333,6 +338,47 @@ class AcqParamBase:
                 "number of time points": self.number_of_time_points,
             }
 
+    def get_parameter_combination_o1scan(self, magnification_factor=5):
+        n = magnification_factor
+        y = n * self.dx
+        self.O1_scanning_step_length = y
+        v = np.sqrt(2) * y / (self.t_exposure + self.t_readout) / self.number_of_colors_per_slice  # unit = um/ms
+        n_slices = int(np.ceil(self.length / n / self.dx))
+        length_updated = n_slices * n * self.dx
+        scan_duration = n_slices * self.t_per_slice + self.t_stage_retraction
+        time_per_datapoint = scan_duration*self.number_of_scans_per_time_point
+        self.stage_travel_distance = float(length_updated)
+        if self.t_SG_scan is not None:
+            self.scanning_galvo_range_per_slice = float(v * self.t_SG_scan)
+        else:
+            self.scanning_galvo_range_per_slice = self.t_SG_scan
+        self.selected_parameters = \
+            {
+                'name': self.name,
+                'type': self.type,
+                'looping order': self.looping_order,
+                "pixel size in xy (um)": self.dx,
+                "mag-factor": n,
+                "slice distance (um)": float(y),
+                "n slices": n_slices,
+                "time per stack per view (s)": float(scan_duration/1000),
+                "time per time point (s)": float(time_per_datapoint/1000),
+                "scanning range (um)": float(length_updated),
+                "galvo scanning speed (nm/ms)": float(v*1000),
+                "stage scanning speed (nm/ms)": float(v*1000), # scanning speed for galvo and stage are set to be the same.
+                "exposure time (ms)": self.t_exposure,
+                "camera read out time (ms)": self.t_readout,
+                "stage retraction time (ms)": self.t_stage_retraction,
+                "scanning galvo scan range per slice (um)": self.scanning_galvo_range_per_slice,
+                "scanning galvo scan range limit (um)": self.scanning_galvo_range_limit,
+                "metronome frequency": int(10000),
+                "views": self.views,
+                "colors": self.colors,
+                "positions": self.positions,
+                "number of time points": self.number_of_time_points,
+            }
+
+        return self.selected_parameters
 
 class AcqParamMode1(AcqParamBase):
     """

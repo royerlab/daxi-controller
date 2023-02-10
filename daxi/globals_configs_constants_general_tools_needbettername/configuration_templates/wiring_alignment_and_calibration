@@ -179,7 +179,7 @@ definition start.
 {
     'scanning galvo':
     {
-    'distance (um) to voltage (v) conversion factor (v/um)': float(0.004), # this value is a placeholder.
+    'distance (um) to voltage (v) conversion factor (v/um)': float(0.04), # this value is a placeholder.
     },
 
     'O1':

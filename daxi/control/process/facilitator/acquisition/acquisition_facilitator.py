@@ -109,6 +109,11 @@ class AcquisitionFcltr():
         @param sta_configs_gclass:
         @return:
         """
+        if self.configs['process configs']['process type'] == 'acquisition, mode 7':
+            self.move_stage = False
+        else:
+            self.move_stage = True
+
         # Here, the configurations for the camera and the ASI stage is maintained the same for all cycles.
         self._msg_1(verbose=self.verbose)
 
@@ -140,10 +145,12 @@ class AcquisitionFcltr():
                 self._msg_4(position=position, verbose=self.verbose)
 
                 # move the stage to the position
-                self.devices_fcltr.stage_move_to(position)
+                if self.move_stage is True:
+                    self.devices_fcltr.stage_move_to(position)
 
                 # ASI stage get ready at the position (this line has to be here due to mode1 specifics)
-                self.devices_fcltr.stage_raster_scan_get_ready_at_position(position_name=position)
+                if self.move_stage is True:
+                    self.devices_fcltr.stage_raster_scan_get_ready_at_position(position_name=position)
 
                 # loop over views.
                 for view in view_list:
@@ -174,11 +181,12 @@ class AcquisitionFcltr():
                         self.devices_fcltr.camera_start()
 
                         # start raster scan of asi-stage (will send out the trigger)
-                        self.devices_fcltr.stage_start_raster_scan()
+                        if self.move_stage is True:
+                            self.devices_fcltr.stage_start_raster_scan()
 
                         # loop over slices for the stack:
                         counter_pre = 0
-                        counter=0
+                        counter = 0
                         os.system('echo single stack acquisition starts ...')
                         while counter <= slice_number - 1:
                             # trap the process in this while-loop until the counter reaches the desired count.
@@ -195,6 +203,8 @@ class AcquisitionFcltr():
                         # stop(pause) daq card
                         self.devices_fcltr.daq_stop()
                         self.devices_fcltr.camera_stop()
+                        os.system('saving data: ' + str(counter))
+                        1
                         os.system('echo single stack acquisition ends.')
                         os.system('echo .')
 

@@ -547,15 +547,15 @@ class DevicesFcltr:
                                        camera_configs=self.configs_camera)
 
     def camera_start(self):
-        print("             this will start the camera, implemented and tested with simulated devices.")
+        print("             this will start the camera, implemented and tested with simulated devices, and real device.")
         self.camera.start(camera_ids=self.configs_camera['camera ids'])
 
     def camera_stop(self):
-        print("              this will stop the camera, implemented and tested with simulated devices.")
+        print("         this will stop the camera, implemented and tested with simulated devices, and real device..")
         self.camera.stop(camera_ids=self.configs_camera['camera ids'])
 
     def camera_close(self):
-        print("          this will close the camera, leave it out for now. will implement in the future.")
+        print("          this will close the camera.")
         self.camera.release_buffer(camera_ids=self.configs_camera['camera ids'])
         self.camera.close(camera_ids=self.configs_camera['camera ids'])
 

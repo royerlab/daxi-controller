@@ -30,13 +30,13 @@ device configurations:
       linear ramp stop for view 1: 0.5
       linear ramp stop for view 2: -3.0
     scanning galvo:
-      distance (um) to voltage (v) conversion factor (v/um): 0.004
+      distance (um) to voltage (v) conversion factor (v/um): 0.04
   camera_core_configs:
     buffer size (stack number): 3
     burst times: 1
     camera ids:
     - 0
-    master pulse interval: 0.13
+    master pulse interval: 1.1
     master pulse mode: CONTINUOUS
     master pulse trigger: SOFTWARE
     output trigger kind: TRIGGER READY
@@ -126,16 +126,16 @@ device configurations:
     start position: null
 process configs:
   acquisition parameters:
-    camera read out time (ms): 30.0
+    camera read out time (ms): 1000.0
     colors:
     - bright_field
     exposure time (ms): 100.0
-    galvo scanning speed (nm/ms): 21.757131728816848
+    galvo scanning speed (nm/ms): 2.5712973861329003
     looping order: '[mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color]
       - [layer 4: slice] - [scan: O1]'
     mag-factor: 5
     metronome frequency: 10000
-    n slices: 11
+    n slices: 15
     name: mode7
     number of time points: 2
     pixel size in xy (um): 0.4
@@ -148,12 +148,12 @@ process configs:
         y: 12
     scanning galvo scan range limit (um): 0.8
     scanning galvo scan range per slice (um): null
-    scanning range (um): 31.112698372208094
+    scanning range (um): 30.0
     slice distance (um): 2.0
     stage retraction time (ms): 23.0
-    stage scanning speed (nm/ms): 21.757131728816848
-    time per stack per view (s): 1.453
-    time per time point (s): 2.906
+    stage scanning speed (nm/ms): 2.5712973861329003
+    time per stack per view (s): 16.523
+    time per time point (s): 33.046
     type: mode7
     views:
     - '1'
