@@ -22,6 +22,8 @@ def demo_acquisitionfcltr_acquisition_mode7(config_fname):
     af.devices_fcltr = df
     af.configs = process_configs
     af.configs['process configs']['acquisition parameters']['number of time points'] = 100
+    af.data_saving_path='C:\\Users\\PiscesScope\\xiyu_workbench\\data'
+
     # start mode7 acquisition
     af.acquisition_mode7()
     return 'success'

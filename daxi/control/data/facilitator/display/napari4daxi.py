@@ -33,7 +33,7 @@ class DaXiViewer:
     def __init__(self):
         self.camera_index = 0
 
-    def update_layers(self, images_data : dict):
+    def update_layers(self, images_data: dict):
         """
         Add images to napari is layer or updates a pre-existing layer
         """

@@ -8,12 +8,14 @@ from time import sleep
 import numpy as np
 # from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
 #     NIDAQDevicesConfigsGeneratorMode1
+from daxi.control.data.facilitator.processing.process_stacks import get_3d_mips
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1, CameraConfigsGeneratorMode1, StageConfigsGeneratorMode1
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode7 import \
     NIDAQDevicesConfigsGeneratorMode7, CameraConfigsGeneratorMode7, StageConfigsGeneratorMode7
 from daxi.control.device.facilitator.devicesfacilitator import prepare_all_devices_and_get_ready
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
+from skimage.io import imsave
 
 if devices_connected is False:
     is_simulation = True
@@ -203,8 +205,21 @@ class AcquisitionFcltr():
                         # stop(pause) daq card
                         self.devices_fcltr.daq_stop()
                         self.devices_fcltr.camera_stop()
-                        os.system('saving data: ' + str(counter))
-                        1
+
+                        # data saving:
+                        os.system('echo saving data: ' + str(counter))
+                        stack_fname = 'STACK_position--' + position + '--view' + str(view) + '--color-' + str(color)+'.tif'
+                        mips_fname = 'MIPS_position--' + position + '--view' + str(view) + '--color-' + str(color)+'.tif'
+                        stack_path = os.path.join(self.data_saving_path, stack_fname)
+                        mips_path = os.path.join(self.data_saving_path, mips_fname)
+
+                        stack = self.devices_fcltr.camera.get_current_stack(camera_id=0, current_frame_count=14)
+                        m = np.transpose(stack, (2, 0, 1))
+                        imsave(stack_path, m)
+
+                        mip0, mip1, mip2, stitched_mips = get_3d_mips(stack, stitched_mips_only=False)
+                        imsave(mips_path, stitched_mips)
+
                         os.system('echo single stack acquisition ends.')
                         os.system('echo .')
 
