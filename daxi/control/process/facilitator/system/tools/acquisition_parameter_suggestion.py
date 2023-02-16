@@ -380,6 +380,7 @@ class AcqParamBase:
 
         return self.selected_parameters
 
+
 class AcqParamMode1(AcqParamBase):
     """
     loop layers:
@@ -514,3 +515,21 @@ class AcqParamMode7(AcqParamBase):
         self.type = 'mode7'
         self.looping_order = '[mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color] ' \
                              '- [layer 4: slice] - [scan: O1]'
+
+
+class AcqParamMode8(AcqParamBase):
+    """
+    loop layers:
+    [mode 8] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice] without scanning.
+    """
+
+    def adapt(self):
+        # change the initialization parameters to adapt to this specific acquisition mode.
+        self.number_of_colors_per_slice = 1
+        self.number_of_scans_per_time_point = self.number_of_views * self.number_of_colors
+        self.t_per_slice = (self.t_exposure + self.t_readout)*self.number_of_colors_per_slice  # time per slice (ms)
+        self.t_SG_scan = None
+        self.name = 'mode8'
+        self.type = 'mode8'
+        self.looping_order = '[mode 8] - [layer 1: position] - [layer 2: view] - [layer 3: color] ' \
+                             '- [layer 4: slice] - [scan: None]'

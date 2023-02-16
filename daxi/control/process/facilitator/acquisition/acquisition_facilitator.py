@@ -11,6 +11,8 @@ from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 
     NIDAQDevicesConfigsGeneratorMode1, CameraConfigsGeneratorMode1, StageConfigsGeneratorMode1
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode7 import \
     NIDAQDevicesConfigsGeneratorMode7, CameraConfigsGeneratorMode7, StageConfigsGeneratorMode7
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode8 import \
+    NIDAQDevicesConfigsGeneratorMode8, CameraConfigsGeneratorMode8, StageConfigsGeneratorMode8
 from daxi.control.device.facilitator.devicesfacilitator import prepare_all_devices_and_get_ready
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 from skimage.io import imsave
@@ -109,10 +111,11 @@ class AcquisitionFcltr():
         @param sta_configs_gclass:
         @return:
         """
+        self.move_stage = True
         if self.configs['process configs']['process type'] == 'acquisition, mode 7':
             self.move_stage = False
-        else:
-            self.move_stage = True
+        if self.configs['process configs']['process type'] == 'acquisition, mode 8':
+            self.move_stage = False
 
         # Here, the configurations for the camera and the ASI stage is maintained the same for all cycles.
         self._msg_1(verbose=self.verbose)
@@ -329,8 +332,25 @@ class AcquisitionFcltr():
 
         """
         self._acquisition_looping_order_p_v_c_s(
-                                           daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode7,
-                                           cam_configs_gclass=CameraConfigsGeneratorMode7,
-                                           sta_configs_gclass=StageConfigsGeneratorMode7)
+            daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode7,
+            cam_configs_gclass=CameraConfigsGeneratorMode7,
+            sta_configs_gclass=StageConfigsGeneratorMode7)
         print("stepped out of AcquisitionFacilitator.acquisition_mode7")
         return 0
+
+    def acquisition_mode8(self):
+        """
+        this will be acquisition mode 8 - which is mode1 without any scan, (mode1 is using LS3 scan).
+        @return:
+
+        [mode 8] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice] - no scan.
+
+        """
+        self._acquisition_looping_order_p_v_c_s(
+            daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode8,
+            cam_configs_gclass=CameraConfigsGeneratorMode8,
+            sta_configs_gclass=StageConfigsGeneratorMode8)
+        print("stepped out of AcquisitionFacilitator.acquisition_mode8")
+        return 0
+
+

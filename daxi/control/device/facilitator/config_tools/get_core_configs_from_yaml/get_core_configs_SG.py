@@ -61,6 +61,16 @@ def _get_core_sg_configs(process_configs: dict):
                         'linear ramp sample number': None,
                         'soft retraction sample number': None}
 
+    # set configurations for mode 8
+    if process_configs['process type'] == 'acquisition, mode 8':
+        name = 'Scanning Galvo, static'
+        data_generator = 'constant'
+        # data_configs = {'type': 'ao subtask configuration', 'sample number': None}
+        # name = 'Scanning Galvo with linear ramp soft retraction'
+        # data_generator = 'linear_ramp_soft_retraction'
+        data_configs = {'type': 'ao subtask configuration', 'sample number': None}
+
+
     # configure other parameteres to this galvanometer configs from the calibration and alignment records.
     voltage_output_terminal = process_configs['device configurations']['nidaq_terminals'] \
         ['scanning galvo']['voltage output terminal']
