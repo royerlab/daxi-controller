@@ -283,7 +283,7 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
         voltage_increment_per_slice = d2v*slice_distance
         n_slices = self.process_configs['process configs']['acquisition parameters']['n slices']
         # now assign the voltage profiles per slice:
-        n_samples_per_frame=self.sample_number_on_duty+self.sample_number_off_duty
+        n_samples_per_frame = self.sample_number_on_duty+self.sample_number_off_duty
         self.configs_o1['data for view 1'] = []
         self.configs_o1['data for view 2'] = []
         # now generate the data sequences.
@@ -304,6 +304,10 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                 n_samples=self.sample_number_on_duty,
                 constant=self.configs_o1['home voltage offset for view 2'],
             )
+
+        prof_view1 += self.configs_o1['home voltage offset for view 1']
+        prof_view2 += self.configs_o1['home voltage offset for view 2']
+
         self.configs_o1['data for view 1'] = self.configs_o1['data for view 1'] + list(prof_view1)
         self.configs_o1['data for view 2'] = self.configs_o1['data for view 2'] + list(prof_view2)
 
@@ -322,6 +326,10 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                         n_samples=n_samples_per_frame,
                         constant=self.configs_o1['home voltage offset for view 2'] + v_incre,
                     )
+
+                prof_view1 += self.configs_o1['home voltage offset for view 1']
+                prof_view2 += self.configs_o1['home voltage offset for view 2']
+
                 self.configs_o1['data for view 1'] = self.configs_o1['data for view 1'] + list(prof_view1)
                 self.configs_o1['data for view 2'] = self.configs_o1['data for view 2'] + list(prof_view2)
 
@@ -332,13 +340,21 @@ class NIDAQDevicesConfigsGeneratorMode7(NIDAQDevicesConfigsGeneratorBase):
                 n_samples=self.sample_number_off_duty,
                 constant=self.configs_o1['home voltage offset for view 1'],
             )
+
         prof_view2_tail = \
             dg.constant(
                 n_samples=self.sample_number_off_duty,
                 constant=self.configs_o1['home voltage offset for view 2'],
             )
+
+        prof_view1_tail += self.configs_o1['home voltage offset for view 1']
+        prof_view2_tail += self.configs_o1['home voltage offset for view 2']
+
         self.configs_o1['data for view 1'] = self.configs_o1['data for view 1'] + list(prof_view1_tail)
         self.configs_o1['data for view 2'] = self.configs_o1['data for view 2'] + list(prof_view2_tail)
+
+        self.configs_o1['data for view 1'], self.configs_o1['data for view 2'] =\
+            _center_shift_2_lists(self.configs_o1['data for view 1'], self.configs_o1['data for view 2'])
 
         return self.configs_o1
 
@@ -860,3 +876,12 @@ class StageConfigsGeneratorMode7(StageConfigsGeneratorMode1):
     #             configs_list['view' + view + ' color' + color] = \
     #                 self.map_sc_configs_asi_stage()
     #     return configs_list
+
+
+def _center_shift_2_lists(a: list, b: list):
+    mida = a[int(np.ceil(len(a) / 2))]
+    midb = b[int(np.ceil(len(b) / 2))]
+    mid = (mida + midb)/2
+    a = list(np.asarray(a) - mid)
+    b = list(np.asarray(b) - mid)
+    return a, b

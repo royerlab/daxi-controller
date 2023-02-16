@@ -6,8 +6,6 @@ import os
 from time import sleep
 
 import numpy as np
-# from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
-#     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.data.facilitator.processing.process_stacks import get_3d_mips
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1, CameraConfigsGeneratorMode1, StageConfigsGeneratorMode1

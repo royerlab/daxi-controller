@@ -22,7 +22,7 @@ def demo_acquisitionfcltr_acquisition_mode7(config_fname):
     af.devices_fcltr = df
     af.configs = process_configs
     af.configs['process configs']['acquisition parameters']['number of time points'] = 100
-    af.data_saving_path='C:\\Users\\PiscesScope\\xiyu_workbench\\data'
+    af.data_saving_path = 'C:\\Users\\PiscesScope\\xiyu_workbench\\data'
 
     # start mode7 acquisition
     af.acquisition_mode7()
@@ -30,4 +30,5 @@ def demo_acquisitionfcltr_acquisition_mode7(config_fname):
 
 
 if __name__ == '__main__':
-    demo_acquisitionfcltr_acquisition_mode7(config_fname='template_acquisition_mode7-dev-small_stack.yaml')
+    # demo_acquisitionfcltr_acquisition_mode7(config_fname = 'template_acquisition_mode7-dev-thick_stack.yaml')
+    demo_acquisitionfcltr_acquisition_mode7(config_fname='template_acquisition_mode7-dev-thick_stack_488only.yaml')
