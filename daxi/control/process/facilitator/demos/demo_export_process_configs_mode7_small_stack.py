@@ -10,18 +10,19 @@ import os
 import pprint
 
 # Prints the nicely formatted dictionary
-m = AcqParamMode7(dx=0.4,
-                  length=20,
+m = AcqParamMode7(dx=0.4,  # um
+                  length=500,
                   t_exposure=100,
-                  t_readout=30,
+                  t_readout=500,
                   t_stage_retraction=23,  # retraction time for the stage after a stack acquisition is done.
                   number_of_colors_per_slice=1,
-                  colors=['488', '561'],
+                  colors=['488'],  # a sublist of the list: ['bright_field', '405', '488', '561', '639']
                   slice_color_list=None,
                   views=['1', '2'],
                   positions_views_list=None,
-                  positions={'position name 1': {'x': 1, 'y': 10}, 'position name 2': {'x': 23, 'y': 12}},
+                  positions={'p1': {'x': 1, 'y': 10}, 'p2': {'x': 23, 'y': 12}},
                   number_of_time_points=2,
+                  light_sheet_scanning_range=1,  # unit: mm
                   )
 
 m.adapt()
@@ -30,11 +31,11 @@ m.find_parameter_combinations_o1scan()
 
 m.display_parameter_options()
 
-m.get_parameter_combination(magnification_factor=5)
+m.get_parameter_combination_o1scan(magnification_factor=5)
 
 acquisition_parameters = m.selected_parameters
 
-path = os.path.join(process_templates, 'template_acquisition_mode7-dev-small_stack.yaml')
+path = os.path.join(process_templates, 'template_acquisition_mode7-dev-thick_stack_488only.yaml')
 
 # create a configuration dictionary.
 configs_dict = {}

@@ -22,7 +22,7 @@ def real_orca_camera_image_feeder(camera: OrcaFlash4,
 
     processor.camera = camera
     print('counter output is:' + str(counter_output))
-    current_frame_count = counter_output % (camera.buffer_size_frame_number )
+    current_frame_count = counter_output % (camera.buffer_size_frame_number)
     stitched_mips = processor.get_current_stitched_mips(camera_id=0, current_frame_count=current_frame_count)
     return stitched_mips
 

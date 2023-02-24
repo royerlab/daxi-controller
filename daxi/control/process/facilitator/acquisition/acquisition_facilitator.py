@@ -7,14 +7,16 @@ import os
 from time import sleep
 
 import numpy as np
-# from daxi.ctr_devicesfacilitator.nidaq.devicetools.configuration_generator_mode1 import \
-#     NIDAQDevicesConfigsGeneratorMode1
+from daxi.control.data.facilitator.processing.process_stacks import get_3d_mips
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1, CameraConfigsGeneratorMode1, StageConfigsGeneratorMode1
 from daxi.control.device.facilitator.config_tools.configuration_generator_mode7 import \
     NIDAQDevicesConfigsGeneratorMode7, CameraConfigsGeneratorMode7, StageConfigsGeneratorMode7
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode8 import \
+    NIDAQDevicesConfigsGeneratorMode8, CameraConfigsGeneratorMode8, StageConfigsGeneratorMode8
 from daxi.control.device.facilitator.devicesfacilitator import prepare_all_devices_and_get_ready
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
+from skimage.io import imsave
 from matplotlib import pyplot as plt
 
 if devices_connected is False:
@@ -323,6 +325,12 @@ class AcquisitionFcltr():
         @param sta_configs_gclass:
         @return:
         """
+        self.move_stage = True
+        if self.configs['process configs']['process type'] == 'acquisition, mode 7':
+            self.move_stage = False
+        if self.configs['process configs']['process type'] == 'acquisition, mode 8':
+            self.move_stage = False
+
         # Here, the configurations for the camera and the ASI stage is maintained the same for all cycles.
         self._msg_1(verbose=self.verbose)
 
@@ -355,11 +363,12 @@ class AcquisitionFcltr():
                 self._msg_4(position=position, verbose=self.verbose)
 
                 # move the stage to the position
-                print('now move to position: '+ position)
-                self.devices_fcltr.stage_move_to(position)
+                if self.move_stage is True:
+                    self.devices_fcltr.stage_move_to(position)
 
                 # ASI stage get ready at the position (this line has to be here due to mode1 specifics)
-                self.devices_fcltr.stage_raster_scan_get_ready_at_position(position_name=position)
+                if self.move_stage is True:
+                    self.devices_fcltr.stage_raster_scan_get_ready_at_position(position_name=position)
 
                 # loop over views.
                 for view in view_list:
@@ -371,15 +380,62 @@ class AcquisitionFcltr():
                         os.system('echo --- --- --- current: time point: ' + str(time_point_index) +
                                   ', position: ' + str(position) + ', view' + str(view) + ', color' + str(color))
 
-                        self._prepare_acquisition_for_one_stack(view, color)
-                        self.ao_data_list = copy.deepcopy(self.devices_fcltr.taskbundle_ao.data_list)
-                        self.do_data_list = copy.deepcopy(self.devices_fcltr.taskbundle_do.data_list)
+                        # move the filter wheel.
+                        self.devices_fcltr.serial_move_filter_wheel(color)
 
-                        if self.configs['process configs']['process type'] == 'acquisition, mode 1':
-                            self._acquisition_for_one_stack_identical_daqv_across_frames()
+                        # based on the view and color indexes, choose a daq data cycle index. (This is
+                        # actually implemented in DevicesFcltr)
+                        cycle_key = 'view' + str(view) + ' color' + str(color)  # get the cycle key for this cycle
+                        self.devices_fcltr.checkout_single_cycle_configs(key=cycle_key, verbose=True)
 
-                        if self.configs['process configs']['process type'] == 'acquisition, mode 7':
-                            self._acquisition_for_one_stack_different_daqv_across_frames_static_sample_stage()
+                        # update and write data to daq card for the current cycle index.
+                        self.devices_fcltr.daq_update_data()
+                        self.devices_fcltr.daq_write_data()
+
+                        # start daq card (waiting for the trigger)
+                        self.devices_fcltr.daq_start()
+
+                        # start camera (waiting for the trigger)
+                        self.devices_fcltr.camera_start()
+
+                        # start raster scan of asi-stage (will send out the trigger)
+                        if self.move_stage is True:
+                            self.devices_fcltr.stage_start_raster_scan()
+
+                        # loop over slices for the stack:
+                        counter_pre = 0
+                        counter = 0
+                        os.system('echo single stack acquisition starts ...')
+                        while counter <= slice_number - 1:
+                            # trap the process in this while-loop until the counter reaches the desired count.
+                            counter = self.devices_fcltr.counter.read()
+                            if counter is None:
+                                counter = 0
+
+                            if counter > counter_pre:
+                                print('counter read: ' + str(counter))
+                                counter_pre = counter
+                            sleep(0.003)
+
+                        os.system('echo counted number of slices: ' + str(counter))
+                        # stop(pause) daq card
+                        self.devices_fcltr.daq_stop()
+                        self.devices_fcltr.camera_stop()
+
+                        # data saving:
+                        os.system('echo saving data: ' + str(counter))
+                        stack_fname = 'STACK_position--' + position + '--view' + str(view) + '--color-' + str(color)+'.tif'
+                        mips_fname = 'MIPS_position--' + position + '--view' + str(view) + '--color-' + str(color)+'.tif'
+                        stack_path = os.path.join(self.data_saving_path, stack_fname)
+                        mips_path = os.path.join(self.data_saving_path, mips_fname)
+
+                        stack = self.devices_fcltr.camera.get_current_stack(camera_id=0, current_frame_count=14)
+                        m = np.transpose(stack, (2, 0, 1))
+                        imsave(stack_path, m)
+
+                        mip0, mip1, mip2, stitched_mips = get_3d_mips(stack, stitched_mips_only=False)
+                        imsave(mips_path, stitched_mips)
+
 
                         os.system('echo single stack acquisition ends.')
                         os.system('echo .')
@@ -494,8 +550,25 @@ class AcquisitionFcltr():
 
         """
         self._acquisition_looping_order_p_v_c_s(
-                                           daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode7,
-                                           cam_configs_gclass=CameraConfigsGeneratorMode7,
-                                           sta_configs_gclass=StageConfigsGeneratorMode7)
+            daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode7,
+            cam_configs_gclass=CameraConfigsGeneratorMode7,
+            sta_configs_gclass=StageConfigsGeneratorMode7)
         print("stepped out of AcquisitionFacilitator.acquisition_mode7")
         return 0
+
+    def acquisition_mode8(self):
+        """
+        this will be acquisition mode 8 - which is mode1 without any scan, (mode1 is using LS3 scan).
+        @return:
+
+        [mode 8] - [layer 1: position] - [layer 2: view] - [layer 3: color] - [layer 4: slice] - no scan.
+
+        """
+        self._acquisition_looping_order_p_v_c_s(
+            daq_configs_gclass=NIDAQDevicesConfigsGeneratorMode8,
+            cam_configs_gclass=CameraConfigsGeneratorMode8,
+            sta_configs_gclass=StageConfigsGeneratorMode8)
+        print("stepped out of AcquisitionFacilitator.acquisition_mode8")
+        return 0
+
+

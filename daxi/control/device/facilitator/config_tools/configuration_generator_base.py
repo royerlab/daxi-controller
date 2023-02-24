@@ -1,5 +1,7 @@
 from daxi.control.device.facilitator.config_tools.get_core_configs_from_yaml.get_core_configs_SG import \
     _get_core_sg_configs
+from daxi.control.device.facilitator.config_tools.get_core_configs_from_yaml.get_core_configs_gamma_galvo import \
+    _get_core_gamma_galvo_configs
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 from daxi.globals_configs_constants_general_tools_needbettername.constants import configs_core_daq_devices
 
@@ -182,20 +184,23 @@ class NIDAQDevicesConfigsGeneratorBase:
             self.alignment_records['view switching galvo 2']['home voltage offset for view 2']
 
     def _get_core_configs_gamma_galvo_strip_reduction(self):
-        self.configs_gamma_galvo_strip_reduction = \
-            self.parser.get_configs_by_path_section_keyword(section='Physical Devices Section',
-                                                            keyword='gamma_galvo_strip_reduction',
-                                                            verbose=self.verbose)
-        self.configs_gamma_galvo_strip_reduction['voltage output terminal'] = \
-            self.nidaq_terminals['gamma galvo strip reduction']['voltage output terminal']
-        self.configs_gamma_galvo_strip_reduction['home voltage offset for view 1'] = \
-            self.alignment_records['gamma galvo strip reduction']['home voltage offset for view 1']
-        self.configs_gamma_galvo_strip_reduction['home voltage offset for view 2'] = \
-            self.alignment_records['gamma galvo strip reduction']['home voltage offset for view 2']
-        self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp sample number'] = \
-            self.sample_number_on_duty
-        self.configs_gamma_galvo_strip_reduction['data configs']['soft retraction sample number'] = \
-            self.sample_number_off_duty
+        # self.configs_gamma_galvo_strip_reduction = \
+        #     self.parser.get_configs_by_path_section_keyword(section='Physical Devices Section',
+        #                                                     keyword='gamma_galvo_strip_reduction',
+        #                                                     verbose=self.verbose)
+        # self.configs_gamma_galvo_strip_reduction['voltage output terminal'] = \
+        #     self.nidaq_terminals['gamma galvo strip reduction']['voltage output terminal']
+        # self.configs_gamma_galvo_strip_reduction['home voltage offset for view 1'] = \
+        #     self.alignment_records['gamma galvo strip reduction']['home voltage offset for view 1']
+        # self.configs_gamma_galvo_strip_reduction['home voltage offset for view 2'] = \
+        #     self.alignment_records['gamma galvo strip reduction']['home voltage offset for view 2']
+        # self.configs_gamma_galvo_strip_reduction['data configs']['linear ramp sample number'] = \
+        #     self.sample_number_on_duty
+        # self.configs_gamma_galvo_strip_reduction['data configs']['soft retraction sample number'] = \
+        #     self.sample_number_off_duty
+
+        self.configs_gamma_galvo_strip_reduction = _get_core_gamma_galvo_configs(self.process_configs)
+
 
     def _get_core_configs_beta_galvo_light_sheet_incident_angle(self):
         self.configs_beta_galvo_light_sheet_incident_angle = \
