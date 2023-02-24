@@ -191,8 +191,8 @@ definition start.
     {
     'linear ramp start for view 1': float(0), # volt, should be obtained and adjusted during alignment
     'linear ramp stop for view 1': float(0.5), # volt, should be obtained and adjusted during alignment
-    'linear ramp start for view 2': float(-1), # volt, should be obtained and adjusted during alignment
-    'linear ramp stop for view 2': float(-3), # volt, should be obtained and adjusted during alignment
+    'linear ramp start for view 2': float(-0.1), # volt, should be obtained and adjusted during alignment
+    'linear ramp stop for view 2': float(-0.4), # volt, should be obtained and adjusted during alignment
     },
 
 }

@@ -65,6 +65,7 @@ class NIDAQDevicesConfigsGeneratorMode1(NIDAQDevicesConfigsGeneratorBase):
         # t = (params['exposure time (ms)'] + params['camera read out time (ms)']) / 1000  # cycle time, unit = s
         # number_of_samples = params['metronome frequency'] / t
         self.configs_metronome['number of samples'] = self.sample_number_total
+        self.configs_metronome['retriggerable'] = True
         return self.configs_metronome  # write the tests to make sure there is no more None fields
 
     def get_configs_for_counter(self):

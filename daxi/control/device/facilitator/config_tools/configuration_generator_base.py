@@ -63,6 +63,15 @@ class NIDAQDevicesConfigsGeneratorBase:
         self.process_configs = process_configs
         self.verbose = verbose
 
+    def get_configs_daq_general(self):
+        duty_number = self.sample_number_total/(self.sample_number_on_duty+self.sample_number_off_duty)
+        output = {'total sample number': self.sample_number_total,
+                  'on-duty sample number': self.sample_number_on_duty,
+                  'off-duty sample number': self.sample_number_off_duty,
+                  'duty cycle number': duty_number}
+        return output
+
+
     def _get_core_configs_for_all(self):
         """
         This method runs all the _get_core_configs_* methods of this class.

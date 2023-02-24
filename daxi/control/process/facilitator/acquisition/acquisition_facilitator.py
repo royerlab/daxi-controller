@@ -2,6 +2,7 @@
 This facilitator should interact with the main gui, comsolidate all the configurations and send it to
 the device and data tools facilitators.
 """
+import copy
 import os
 from time import sleep
 
@@ -16,6 +17,7 @@ from daxi.control.device.facilitator.config_tools.configuration_generator_mode8 
 from daxi.control.device.facilitator.devicesfacilitator import prepare_all_devices_and_get_ready
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 from skimage.io import imsave
+from matplotlib import pyplot as plt
 
 if devices_connected is False:
     is_simulation = True
@@ -93,8 +95,220 @@ class AcquisitionFcltr():
         if self.configs['process configs']['process type'] == 'acquisition, mode 7':
             self.acquisition_mode7()
 
+        return 0
+
+    def _crop_data_setment(self, data_list, index_start, index_end):
+        """
+        thi smethod takes a list of data sequences, and crop the sequences from index_start to index_end
+        and generate a new data list with the cropped data sequences.
+        :param data_list:
+        :param index_start:
+        :param index_end:
+        :return:
+        """
+        output = []
+        for data_sequence in data_list:
+            output.append(data_sequence[index_start:index_end])
+        return output
+
+    def _update_data_for_all_ao(self, ind, d):
+        self.devices_fcltr.subtask_ao_configs_list[ind]['data'] = d
+        self.devices_fcltr.subtask_ao_list[ind] = d
+        self.devices_fcltr.taskbundle_ao.data_list[ind] = d
+
+    def _update_data_for_all_do(self, ind, d):
+        self.devices_fcltr.subtask_do_configs_list[ind]['data'] = d
+        self.devices_fcltr.subtask_do_list[ind] = d
+        self.devices_fcltr.taskbundle_do.data_list[ind] = d
+
+    def _prepare_acquisition_for_one_stack(self, view, color):
+        """
+        This will get the devices started and wait for the trigger to start acquisition.
+
+        :param view:
+        :param color:
+        :return:
+        """
+        # move the filter wheel.
+        self.devices_fcltr.serial_move_filter_wheel(color)
+
+        # based on the view and color indexes, choose a daq data cycle index. (This is
+        # actually implemented in DevicesFcltr)
+        cycle_key = 'view' + str(view) + ' color' + str(color)  # get the cycle key for this cycle
+        self.devices_fcltr.checkout_single_cycle_configs(key=cycle_key, verbose=True)
+
+        # then map the data to the ao do task bundles
+        # update the data fiels in subtask_ao_configs_list, and subtask_ao, and taskbundle_ao
+        for ind, a in enumerate(self.devices_fcltr.subtask_ao_configs_list):
+            if a['device'] == 'scanning_galvo':
+                d = copy.deepcopy(self.devices_fcltr.configs_scanning_galvo['data'])
+                self._update_data_for_all_ao(ind, d)
+
+            if a['device'] == 'view switching galvo 1':
+                d = self.devices_fcltr.configs_view_switching_galvo_1['data']
+                self._update_data_for_all_ao(ind, d)
+
+            if a['device'] == 'view switching galvo 2':
+                d = self.devices_fcltr.configs_view_switching_galvo_2['data']
+                self._update_data_for_all_ao(ind, d)
+
+            if a['device'] == 'gamma galvo':
+                d = self.devices_fcltr.configs_gamma_galvo_strip_reduction['data']
+                self._update_data_for_all_ao(ind, d)
+
+            if a['device'] == 'beta galvo':
+                d = self.devices_fcltr.configs_beta_galvo_light_sheet_incident_angle['data']
+                self._update_data_for_all_ao(ind, d)
+
+            if a['device'] == 'O1':
+                d = self.devices_fcltr.configs_O1['data']
+                self._update_data_for_all_ao(ind, d)
+
+            if a['device'] == 'O3':
+                d = self.devices_fcltr.configs_O3['data']
+                self._update_data_for_all_ao(ind, d)
+
+        # update the data fiels in subtask_do_configs_list, and subtask_do, and taskbundle_do
+        for ind, a in enumerate(self.devices_fcltr.subtask_do_configs_list):
+            if a['device'] == '405-laser':
+                d = self.devices_fcltr.configs_405_laser['data']
+                self._update_data_for_all_do(ind, d)
+
+            if a['device'] == '488-laser':
+                d = self.devices_fcltr.configs_488_laser['data']
+                self._update_data_for_all_do(ind, d)
+
+            if a['device'] == '561-laser':
+                d = self.devices_fcltr.configs_561_laser['data']
+                self._update_data_for_all_do(ind, d)
+
+            if a['device'] == '639-laser':
+                d = self.devices_fcltr.configs_639_laser['data']
+                self._update_data_for_all_do(ind, d)
+
+            if a['device'] == 'bright-field':
+                d = self.devices_fcltr.configs_bright_field['data']
+                self._update_data_for_all_do(ind, d)
 
         return 0
+
+    def _acquisition_for_one_stack_identical_daqv_across_frames(self):
+        """
+        This method implements the acquisition routine where the stack voltages for every exposure time is the same,
+        DAQ data do not get updated across the entire stack.
+
+        :return:
+        """
+        # update and write data to daq card for the current cycle index.
+        self.devices_fcltr.daq_update_data()
+        self.devices_fcltr.daq_write_data()
+
+        # start daq card (waiting for the trigger)
+        self.devices_fcltr.daq_start()
+
+        # start camera (waiting for the trigger)
+        self.devices_fcltr.camera_start()
+
+        # start raster scan of asi-stage (will send out the trigger)
+        self.devices_fcltr.stage_start_raster_scan()
+
+        # loop over slices for the stack:
+        counter_pre = 0
+        counter = 0
+        os.system('echo single stack acquisition starts ...')
+        while counter <= self.configs['process configs']['acquisition parameters']['n slices']:
+            # trap the process in this while-loop until the counter reaches the desired count.
+            counter = self.devices_fcltr.counter.read()
+            if counter is None:
+                counter = 0
+
+            if counter > counter_pre:
+                print('counter read: ' + str(counter))
+                counter_pre = counter
+            sleep(0.003)
+
+        os.system('echo counted number of slices: ' + str(counter))
+        # stop(pause) daq card
+        self.devices_fcltr.daq_stop()
+        self.devices_fcltr.camera_stop()
+
+    def _acquisition_for_one_stack_different_daqv_across_frames_static_sample_stage(self):
+        """
+        This method implements the acquisition routine where the stack voltages for every exposure time are updated each
+        time after the exposure (during the readout time of the frame). the daq card is stopped, updated, re-write, and
+        will be triggered by the next camera output trigger.
+
+        :return:
+        """
+        # first, because calculatign the daq profiles takes time, we only want to calculate it once and we dont want to
+        # perform the calculation every frame. So we will start from already clacualted data, and the data is stored in
+        # the sequences for the entire stack.
+        # now we want to write data to the card with data only for this frame, so we take out the segment and write
+        # to daq
+        # update and write data to daq card for the current cycle index.
+        # change the data of the subtasks for both AO and DO, then update/write
+
+        # find out the index of the data segment.
+        index_start = 0
+        cycle_sample_number = self.devices_fcltr.configs_all_cycles['configs_daq_general']['on-duty sample number'] + \
+                              self.devices_fcltr.configs_all_cycles['configs_daq_general']['off-duty sample number']
+        index_end = cycle_sample_number
+
+
+        self.devices_fcltr.taskbundle_ao.data_list = \
+            self._crop_data_setment(self.ao_data_list, index_start, index_end)
+        self.devices_fcltr.taskbundle_do.data_list = \
+            self._crop_data_setment(self.do_data_list, index_start, index_end)
+
+        # now write data to daq card
+        self.devices_fcltr.daq_write_data()
+
+        # start daq card (waiting for the trigger from the camera)
+        self.devices_fcltr.daq_start()
+
+        # start camera (In this mode, the camera should be configured for software trigger)
+        assert self.devices_fcltr.configs_camera['master pulse trigger'] == 'SOFTWARE'
+        self.devices_fcltr.camera_start()
+
+        # loop over slices for the stack:
+        frame_number = 0
+        counter = 0
+        os.system('echo single stack acquisition starts ...')
+        while frame_number < self.configs['process configs']['acquisition parameters']['n slices'] - 1:
+            # trap the process in this while-loop until the counter reaches the desired count.
+            counter = self.devices_fcltr.counter.read()
+            # print('c1 - counter read: ' + str(counter) + ', frame_number:' + str(frame_number))
+            if counter is None:
+                counter = 0
+
+            if counter > 0:
+                # that means the camera frame has increased one, now need to prepare everything for the next frame
+                frame_number = frame_number + 1  # and frame number incretes by one.
+                print('c2 - counter read: ' + str(counter) + ', frame_number :' + str(frame_number))
+                # wait for two frame cycles
+                sleep(self.devices_fcltr.configs_camera['master pulse interval'])
+                # stop daq card, update daq voltages and start again.
+                self.devices_fcltr.daq_stop()
+
+                index_start = frame_number*cycle_sample_number
+                index_end = index_start + cycle_sample_number
+                print('indexes is from ' + str(index_start) + ' to ' +str(index_end))
+                self.devices_fcltr.taskbundle_ao.data_list = \
+                    self._crop_data_setment(self.ao_data_list, index_start, index_end)
+                self.devices_fcltr.taskbundle_do.data_list = \
+                    self._crop_data_setment(self.do_data_list, index_start, index_end)
+                print('data length is ' + str(len(self.devices_fcltr.taskbundle_do.data_list[0])))
+                self.devices_fcltr.daq_write_data()
+                self.devices_fcltr.daq_start()
+                counter = None
+            counter = self.devices_fcltr.counter.read()
+
+        os.system('echo counted number of slices: ' + str(counter))
+        # stop(pause) daq card
+        # wait for two frame cycles
+        sleep(self.devices_fcltr.configs_camera['master pulse interval']*2)
+        self.devices_fcltr.daq_stop()
+        self.devices_fcltr.camera_stop()
 
     def _acquisition_looping_order_p_v_c_s(self,
                                            daq_configs_gclass=None,
@@ -133,7 +347,8 @@ class AcquisitionFcltr():
                                                          verbose=True)
 
         # convenience codes
-        position_list, view_list, color_list, number_of_time_points, slice_number = self._convinience_reasign_params()
+        position_list, view_list, color_list, number_of_time_points, slice_number = \
+            self._convinience_reasign_params()
 
         self._msg_2(verbose=self.verbose)
 
@@ -221,9 +436,12 @@ class AcquisitionFcltr():
                         mip0, mip1, mip2, stitched_mips = get_3d_mips(stack, stitched_mips_only=False)
                         imsave(mips_path, stitched_mips)
 
+
                         os.system('echo single stack acquisition ends.')
                         os.system('echo .')
 
+        # wait for two frame cycles
+        sleep(self.devices_fcltr.configs_camera['master pulse interval'] * 2)
         self.devices_fcltr.daq_close()
         self.devices_fcltr.camera_close()
         # perhaps we shouldn't close the camera. Should test and see if the camera is re-trigger-able when stopped.
