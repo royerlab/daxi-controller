@@ -14,7 +14,7 @@ also need a "refresh-data" type of method in the device facilitator
 import os
 
 from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates
@@ -28,18 +28,18 @@ configs = load_process_configs(path=path)
 
 # 1. receive the configurations
 df.receive_device_configs_all_cycles(process_configs=configs,
-                                     device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                     daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
 # 2. map the configurations
 print('printing dictionary keys for df.configs_single_cycle_dict')
-for k in df.configs_single_cycle_dict.keys():
+for k in df.configs_daq_single_cycle_dict.keys():
     print(k)
-print('length = '+str(len(df.configs_single_cycle_dict.keys())))
+print('length = ' + str(len(df.configs_daq_single_cycle_dict.keys())))
 
 # check one dict:
 print('')
 print('check one configuration:')
-for k in df.configs_single_cycle_dict['view1 color488']:
+for k in df.configs_daq_single_cycle_dict['view1 color488']:
     print(k)
-print('length = '+str(len(df.configs_single_cycle_dict['view1 color488'].keys())))
+print('length = ' + str(len(df.configs_daq_single_cycle_dict['view1 color488'].keys())))
 

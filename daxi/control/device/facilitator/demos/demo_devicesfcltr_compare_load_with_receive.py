@@ -2,7 +2,7 @@ import os
 import pprint
 
 from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import device_fcltr_configs_path, \
@@ -28,7 +28,7 @@ configs = load_process_configs(path=path)
 
 # then this configs is passed to the receiver to populate its configurations for all the devices.
 df2.receive_device_configs_all_cycles(process_configs=configs,
-                                      device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                      daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
 print(df2.configs_all_cycles['configs_405_laser'].keys())
 

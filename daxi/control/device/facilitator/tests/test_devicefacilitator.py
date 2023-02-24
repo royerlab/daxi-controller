@@ -4,7 +4,7 @@ from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import device_fcltr_configs_path, \
     process_templates
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 
 def test_check_AObundle():
@@ -271,7 +271,7 @@ def test_receive_device_configs_contents_all_cycles():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
     assert_configs_metronome_all_cycles(df.configs_all_cycles['configs_metronome'])
     assert_configs_counter_all_cycles(df.configs_all_cycles['configs_counter'])
     assert_configs_AO_task_bundle_all_cycles(df.configs_all_cycles['configs_AO_task_bundle'])
@@ -297,9 +297,9 @@ def test_receive_device_single_cycle_configs_metronome():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_metronome(df.configs_single_cycle_dict[c]['configs_metronome'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_metronome(df.configs_daq_single_cycle_dict[c]['configs_metronome'])
 
 
 def test_receive_device_single_cycle_configs_counter():
@@ -307,9 +307,9 @@ def test_receive_device_single_cycle_configs_counter():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_counter(df.configs_single_cycle_dict[c]['configs_counter'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_counter(df.configs_daq_single_cycle_dict[c]['configs_counter'])
 
 
 def test_receive_device_single_cycle_configs_AO_task_bundle():
@@ -317,9 +317,9 @@ def test_receive_device_single_cycle_configs_AO_task_bundle():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_AO_task_bundle(df.configs_single_cycle_dict[c]['configs_AO_task_bundle'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_AO_task_bundle(df.configs_daq_single_cycle_dict[c]['configs_AO_task_bundle'])
 
 
 def test_receive_device_single_cycle_configs_DO_task_bundle():
@@ -327,9 +327,9 @@ def test_receive_device_single_cycle_configs_DO_task_bundle():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_DO_task_bundle(df.configs_single_cycle_dict[c]['configs_DO_task_bundle'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_DO_task_bundle(df.configs_daq_single_cycle_dict[c]['configs_DO_task_bundle'])
 
 
 def test_receive_device_single_cycle_configs_scanning_galvo():
@@ -337,9 +337,9 @@ def test_receive_device_single_cycle_configs_scanning_galvo():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_scanning_galvo(df.configs_single_cycle_dict[c]['configs_scanning_galvo'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_scanning_galvo(df.configs_daq_single_cycle_dict[c]['configs_scanning_galvo'])
 
 
 def test_receive_device_single_cycle_configs_view_switching_galvo_1():
@@ -347,9 +347,9 @@ def test_receive_device_single_cycle_configs_view_switching_galvo_1():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_view_switching_galvo_1(df.configs_single_cycle_dict[c]['configs_view_switching_galvo_1'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_view_switching_galvo_1(df.configs_daq_single_cycle_dict[c]['configs_view_switching_galvo_1'])
 
 
 def test_receive_device_single_cycle_configs_view_switching_galvo_2():
@@ -357,9 +357,9 @@ def test_receive_device_single_cycle_configs_view_switching_galvo_2():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_view_switching_galvo_2(df.configs_single_cycle_dict[c]['configs_view_switching_galvo_2'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_view_switching_galvo_2(df.configs_daq_single_cycle_dict[c]['configs_view_switching_galvo_2'])
 
 
 def test_receive_device_single_cycle_configs_gamma_galvo_strip_reduction():
@@ -367,9 +367,9 @@ def test_receive_device_single_cycle_configs_gamma_galvo_strip_reduction():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_gamma_galvo_strip_reduction(df.configs_single_cycle_dict[c]['configs_gamma_galvo_strip_reduction'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_gamma_galvo_strip_reduction(df.configs_daq_single_cycle_dict[c]['configs_gamma_galvo_strip_reduction'])
 
 
 def test_receive_device_single_cycle_configs_beta_galvo_light_sheet_incident_angle():
@@ -377,9 +377,9 @@ def test_receive_device_single_cycle_configs_beta_galvo_light_sheet_incident_ang
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_beta_galvo_light_sheet_incident_angle(df.configs_single_cycle_dict[c]['configs_beta_galvo_light_sheet_incident_angle'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_beta_galvo_light_sheet_incident_angle(df.configs_daq_single_cycle_dict[c]['configs_beta_galvo_light_sheet_incident_angle'])
 
 
 def test_receive_device_single_cycle_configs_O1():
@@ -387,9 +387,9 @@ def test_receive_device_single_cycle_configs_O1():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_O1(df.configs_single_cycle_dict[c]['configs_O1'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_O1(df.configs_daq_single_cycle_dict[c]['configs_O1'])
 
 
 def test_receive_device_single_cycle_configs_O3():
@@ -397,9 +397,9 @@ def test_receive_device_single_cycle_configs_O3():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_O3(df.configs_single_cycle_dict[c]['configs_O3'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_O3(df.configs_daq_single_cycle_dict[c]['configs_O3'])
 
 
 def test_receive_device_single_cycle_configs_405_laser():
@@ -407,9 +407,9 @@ def test_receive_device_single_cycle_configs_405_laser():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_405_laser(df.configs_single_cycle_dict[c]['configs_405_laser'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_405_laser(df.configs_daq_single_cycle_dict[c]['configs_405_laser'])
 
 
 def test_receive_device_single_cycle_configs_488_laser():
@@ -417,9 +417,9 @@ def test_receive_device_single_cycle_configs_488_laser():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_488_laser(df.configs_single_cycle_dict[c]['configs_488_laser'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_488_laser(df.configs_daq_single_cycle_dict[c]['configs_488_laser'])
 
 
 def test_receive_device_single_cycle_configs_561_laser():
@@ -427,9 +427,9 @@ def test_receive_device_single_cycle_configs_561_laser():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_561_laser(df.configs_single_cycle_dict[c]['configs_561_laser'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_561_laser(df.configs_daq_single_cycle_dict[c]['configs_561_laser'])
 
 
 def test_receive_device_single_cycle_configs_639_laser():
@@ -437,9 +437,9 @@ def test_receive_device_single_cycle_configs_639_laser():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_639_laser(df.configs_single_cycle_dict[c]['configs_639_laser'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_639_laser(df.configs_daq_single_cycle_dict[c]['configs_639_laser'])
 
 
 def test_receive_device_single_cycle_configs_bright_field():
@@ -447,6 +447,6 @@ def test_receive_device_single_cycle_configs_bright_field():
     process_configs = load_process_configs(path=path)
     df = DevicesFcltr()
     df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                         device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-    for c in df.configs_single_cycle_dict.keys():
-        assert_configs_bright_field(df.configs_single_cycle_dict[c]['configs_bright_field'])
+                                         daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+    for c in df.configs_daq_single_cycle_dict.keys():
+        assert_configs_bright_field(df.configs_daq_single_cycle_dict[c]['configs_bright_field'])

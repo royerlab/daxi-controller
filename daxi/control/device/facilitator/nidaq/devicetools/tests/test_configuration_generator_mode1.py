@@ -1,6 +1,6 @@
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
-from daxi.globals_configs_constants_general_tools_needbettername.constants import params_test_selected_params, configs_daq_terminals
+from daxi.globals_configs_constants_general_tools_needbettername.constants import params_test_selected_params, configs_daq_terminals_calibrations
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 import pytest
 
@@ -10,7 +10,7 @@ import pytest
 def daq_terminal_configs():
     # now get the terminal configurations
     p2 = NIDAQConfigsParser()
-    p2.set_configs_path(configs_daq_terminals)
+    p2.set_configs_path(configs_daq_terminals_calibrations)
     section = 'Connection Section'
     keyword = 'nidaq_terminals'
     output = \
@@ -33,7 +33,7 @@ def process_parameters():
 def calibration_records():
     # now get the terminal configurations
     p2 = NIDAQConfigsParser()
-    p2.set_configs_path(configs_daq_terminals)
+    p2.set_configs_path(configs_daq_terminals_calibrations)
     section = 'Connection Section'
     keyword = 'calibration_records'
     output = \
@@ -45,7 +45,7 @@ def calibration_records():
 def alignment_records():
     # now get the terminal configurations
     p2 = NIDAQConfigsParser()
-    p2.set_configs_path(configs_daq_terminals)
+    p2.set_configs_path(configs_daq_terminals_calibrations)
     section = 'Connection Section'
     keyword = 'alignment_records'
     output = \
@@ -56,19 +56,19 @@ def alignment_records():
 @pytest.fixture
 def configs_generator():
     p = NIDAQConfigsParser()
-    p.set_configs_path(configs_daq_terminals)
+    p.set_configs_path(configs_daq_terminals_calibrations)
     section = 'Connection Section'
     keyword = 'nidaq_terminals'
     d = \
         p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
 
-    p.set_configs_path(configs_daq_terminals)
+    p.set_configs_path(configs_daq_terminals_calibrations)
     section = 'Connection Section'
     keyword = 'calibration_records'
     c = \
         p.get_configs_by_path_section_keyword(section, keyword, verbose=False)
 
-    p.set_configs_path(configs_daq_terminals)
+    p.set_configs_path(configs_daq_terminals_calibrations)
     section = 'Connection Section'
     keyword = 'alignment_records'
     a = \

@@ -16,9 +16,6 @@ def simulated_orca_camera_image_feeder(camera : OrcaFlash4Simulation, processor=
 
 
 def demo_daxiviewer_on_simulated_orca_flash4():
-    a = DaXiViewer()
-    camera = OrcaFlash4Simulation(camera_index=0)
-    camera.get_ready(camera_ids=[0])
     # define camera configurations
     camera_configs = {}
     camera_configs['exposure time (ms)'] = 100
@@ -36,15 +33,24 @@ def demo_daxiviewer_on_simulated_orca_flash4():
     camera_configs['buffer size (frame number)'] = 300
     camera_configs['xdim'] = 100
     camera_configs['ydim'] = 200
+
+    # prepare a camera
+    camera = OrcaFlash4Simulation(camera_index=0)
+    camera.get_ready(camera_ids=[0])
     camera.set_configurations(camera_configs=camera_configs)
     camera.start(camera_ids=[0])
+
+    # prepare a stack processor
     p = StackProcessing()
+
+    # prepare a viewer
+    a = DaXiViewer()
     a.prepare(
               image_feeder=simulated_orca_camera_image_feeder,
               camera=camera,
               processor=p,
               )
-    a.go()
+    a.start()
     return 'success'
 
 

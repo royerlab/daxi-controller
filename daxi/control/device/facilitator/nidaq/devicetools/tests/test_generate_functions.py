@@ -1,5 +1,5 @@
-from daxi.control.device.facilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
-from daxi.control.device.facilitator.nidaq.devicetools.generate_functions import get_soft_retraction
+from daxi.control.device.facilitator.config_tools.generate_functions import DAQDataGenerator
+from daxi.control.device.facilitator.config_tools.generate_functions import get_soft_retraction
 
 
 def test_getfcn_sinusoidal(amplitude=1,

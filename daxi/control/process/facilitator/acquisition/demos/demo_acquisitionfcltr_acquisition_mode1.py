@@ -1,7 +1,7 @@
 import os
 
 from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.process.facilitator.acquisition.acquisition_facilitator import AcquisitionFcltr
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
@@ -27,7 +27,7 @@ process_configs = load_process_configs(path=path)
 
 # 1. get configurations
 df.receive_device_configs_all_cycles(process_configs=process_configs,
-                                     device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                     daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
 # checkout a single config from the loop
 df.checkout_single_cycle_configs(key='view1 color488')

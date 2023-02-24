@@ -1,4 +1,4 @@
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.device.facilitator.nidaq.nidaq import SubTaskAO, SubTaskDO
 
@@ -104,10 +104,9 @@ class InspectionFcltr:
         :return:
         """
         print('AcquisitionFcltr - this will inspect metronome')
-        self.devices_fcltr.receive_device_configs_all_cycles(
-                                    process_configs=self.process_configs,
-                                    device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.process_configs,
+                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
 
@@ -126,11 +125,10 @@ class InspectionFcltr:
     def inspect_counter(self):
         print('AcquisitionFcltr - this will inspect counter')
         # receive configs
-        self.devices_fcltr.receive_device_configs_all_cycles(
-                                    process_configs=self.process_configs,
-                                    device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.process_configs,
+                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
         # map first cycle configurations
-        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
         # map out first cycle configurations
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
@@ -152,10 +150,9 @@ class InspectionFcltr:
         print(devices_configs_key)
         # 0.  checkout a devices facilitator (already passed in by the command)
         # 1. receive configurations and checkout a singel configuration.
-        self.devices_fcltr.receive_device_configs_all_cycles(
-            process_configs=self.process_configs,
-            device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.process_configs,
+                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
 
@@ -195,10 +192,9 @@ class InspectionFcltr:
         print(devices_configs_key)
         # 0.  checkout a devices facilitator (already passed in by the command)
         # 1. receive configurations and checkout a singel configuration.
-        self.devices_fcltr.receive_device_configs_all_cycles(
-            process_configs=self.process_configs,
-            device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.process_configs,
+                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
 
@@ -241,10 +237,9 @@ class InspectionFcltr:
         print('AcquisitionFcltr - this will inspect scanning galvo')
         # 0.  checkout a devices facilitator (already passed in by the command)
         # 1. receive configurations and checkout a singel configuration.
-        self.devices_fcltr.receive_device_configs_all_cycles(
-            process_configs=self.process_configs,
-            device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
-        first_cycle_key = next(iter(self.devices_fcltr.configs_single_cycle_dict))
+        self.devices_fcltr.receive_device_configs_all_cycles(process_configs=self.process_configs,
+                                                             daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+        first_cycle_key = next(iter(self.devices_fcltr.configs_daq_single_cycle_dict))
         self.devices_fcltr.checkout_single_cycle_configs(key=first_cycle_key,
                                                          verbose=True)
 
@@ -419,7 +414,7 @@ class InspectionFcltr:
         self.status_serial_placeholder = 'good'
         return 0
 
-    def inspect_camera_placeholder(self):
+    def inspect_camera(self):
         print('AcquisitionFcltr - this will inspect camera [place holder]')
         self.status_camera_placeholder = 'good'
         return 0

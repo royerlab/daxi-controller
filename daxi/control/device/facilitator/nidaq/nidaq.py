@@ -1,6 +1,6 @@
 # general description:
 import nidaqmx
-from daxi.control.device.facilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
+from daxi.control.device.facilitator.config_tools.generate_functions import DAQDataGenerator
 
 """
     To manage the DAQ card controlled devices, we have the module level manager class defined as the DAQDeviceManager
@@ -152,7 +152,7 @@ class TaskBundle:
             self.task_handle['status'] = 'closed'
 
     def update_data(self):
-        print('          this update the data_list for both ao and do, in the same format.')
+        print('             this update the data_list for both ao and do, in the same format.')
         self.data_list=[]
         for sub_task in self.sub_tasks:
             # if sub_task.data is not None:
@@ -202,6 +202,7 @@ class TaskBundle:
             self.task_handle['trigger'] = 'terminal is' + self.trigger_terminal
 
     def write_data(self):
+        print('             this write the data to both ao and do channels, in the same format.')
         if self.devices_connected:
             # 5, write data of all ao sub_task to the device
 
@@ -543,8 +544,8 @@ class Metronome:
                 trigger_source=self.trigger_terminal,
                 trigger_edge=trigger_edge_const,
             )
-            # self.task_handle.triggers.start_trigger.retriggerable = self.retriggerable
-            self.task_handle.triggers.start_trigger.retriggerable = True
+            self.task_handle.triggers.start_trigger.retriggerable = self.retriggerable
+            # self.task_handle.triggers.start_trigger.retriggerable = True
         else:
             self.status = 'metronome started'
 

@@ -2,6 +2,7 @@ import click
 from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
 from daxi.control.process.facilitator.acquisition.acquisition_facilitator import AcquisitionFcltr
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
+from daxi.globals_configs_constants_general_tools_needbettername.constants import process_configs_yaml_path
 from daxi.globals_configs_constants_general_tools_needbettername.python_globals import devices_connected
 
 """
@@ -17,7 +18,7 @@ python cli/firstcli.py -c [path-to-configs]
 class CliInvoker:
     """
     this is the invoker type in the command pattern.
-    perhaps for the sake of symmetry, we can also have GuiInvoker, or ther invokers.
+    perhaps for the sake of symmetry, we can also have GuiInvoker, or other invokers.
     """
 
     def __init__(self):
@@ -40,14 +41,19 @@ class CliInvoker:
 
     def execute_process(self, device_fcltr, process_configs):
         """ this will execute the command with the configurations specified in configs """
-        self.process.execute(devices_fcltr=device_fcltr, process_configs=process_configs)
+        self.process.execute(devices_fcltr=device_fcltr,  # device facilitator here is the receiver
+                             process_configs=process_configs)
+                             # and process_configs is the data that specifies the command action.
         # the focused process facilitators all should have an execute method. develop the abstraction
         # when many focused process facilitators are implemented.
 
 
 @click.command()
-@click.option('--configs_path', '-c', prompt='the full path of the configuration file',
-              help='please type in the full path of the process configuration file')
+@click.option('--configs_path', '-c', prompt='the full path of the configuration file. For template, it should be\n'
+              + process_configs_yaml_path,
+              help='please type in the full path of the process configuration fil, it should be\n'
+                   + process_configs_yaml_path
+              )
 def acquire(configs_path):
     """
     familiarize with with "command pattern" before you re-start implementing this module.
@@ -109,14 +115,15 @@ def acquire(configs_path):
     """
     print('will perform acquisition specified in' + configs_path)
     # get the configuration files (that specifies the execution of the process). it is the data that will be delivered
-    # to the receiver through the command
+    # to the receiver through the command (this is the data)
     configs = load_process_configs(path=configs_path)
 
-    # create a DevicesFcltr (create the receiver)
+    # create a DevicesFcltr (this is the receiver)
     device_fcltr = DevicesFcltr(devices_connected=devices_connected)
 
-    # create the AcquisitionFcltr that takes the DevicesFcltr
-    acquisition = AcquisitionFcltr()
+    # create the AcquisitionFcltr that takes the DevicesFcltr (this is the command)
+    acquisition = AcquisitionFcltr()  # in this case the command is not aware of the receiver,
+    # but instead the receiver would be passed to the command by the invoker.
     # this is the command object. it does not create or destroy the device_fcltr,
 
     # create an invoker
@@ -125,6 +132,7 @@ def acquire(configs_path):
     # it only access the device_fcltr. destroying
     # acquisition do not destroy the device_fcltr instances.
     invoker.add_process(process=acquisition)  # log the process after execute.
+    # now the invoker invokes the command (process) with specification stored in the data (process_configs).
     invoker.execute_process(device_fcltr=device_fcltr, process_configs=configs)
 
     # invoker takes a concrete command that takes a receiver with it, it invokes the method of a receiver through the

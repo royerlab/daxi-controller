@@ -1,0 +1,163 @@
+device configurations:
+  alignment_records:
+    O1:
+      home voltage offset for view 1: 0.1
+      home voltage offset for view 2: -0.1
+    O3:
+      home voltage offset for view 1: 0.1
+      home voltage offset for view 2: -0.1
+    beta galvo light sheet incident angle:
+      home voltage offset for view 1: 0.1
+      home voltage offset for view 2: -0.1
+    gamma galvo strip reduction:
+      home voltage offset for view 1: 0.1
+      home voltage offset for view 2: 0.1
+    scanning galvo:
+      home voltage offset for view 1: 0.12
+      home voltage offset for view 2: -0.05
+    view switching galvo 1:
+      home voltage offset for view 1: 3.0
+      home voltage offset for view 2: -3.0
+    view switching galvo 2:
+      home voltage offset for view 1: -3.0
+      home voltage offset for view 2: 3.0
+  calibration_records:
+    O1:
+      distance (um) to voltage (v) conversion factor (v/um): 0.01
+    gamma galvo strip reduction:
+      linear ramp start for view 1: 0.1
+      linear ramp start for view 2: 0.2
+      linear ramp stop for view 1: 0.3
+      linear ramp stop for view 2: 0.4
+    scanning galvo:
+      distance (um) to voltage (v) conversion factor (v/um): 0.004
+  camera_core_configs:
+    buffer size (stack number): 3
+    burst times: 1
+    camera ids:
+    - 0
+    master pulse interval: 0.03
+    master pulse mode: START
+    master pulse trigger: EXTERNAL
+    output trigger kind: TRIGGER READY
+    output trigger polarity: POSITIVE
+    trigger mode: NORMAL
+    trigger polarity: POSITIVE
+    trigger source: MASTER PULSE
+    trigger times: 1
+    xdim: 100
+    ydim: 200
+  nidaq_terminals:
+    405 laser:
+      device name: 405 laser
+      type: physical device
+      voltage output terminal: cDAQ1DIO/port0/line0
+    488 laser:
+      device name: 488 laser
+      type: physical device
+      voltage output terminal: cDAQ1DIO/port0/line1
+    561 laser:
+      device name: 561 laser
+      type: physical device
+      voltage output terminal: cDAQ1DIO/port0/line2
+    639 laser:
+      device name: 639 laser
+      type: physical device
+      voltage output terminal: cDAQ1DIO/port0/line3
+    DAQ operation frequency: 1000.0
+    O1:
+      device name: O1
+      type: physical device
+      voltage output terminal: cDAQ1AO2/ao1
+    O3:
+      device name: O3
+      type: physical device
+      voltage output terminal: cDAQ1AO2/ao2
+    ao task bundle:
+      device name: AO_task_bundle
+      trigger terminal: /cDAQ1/PFI0
+      type: ao task
+    beta galvo light sheet incident angle:
+      device name: beta galvo light sheet incident angle
+      type: physical device
+      voltage output terminal: cDAQ1AO2/ao0
+    bright field:
+      device name: bright field
+      type: physical device
+      voltage output terminal: cDAQ1DIO/port0/line4
+    counter terminals:
+      counter terminal: /cDAQ1/_ctr1
+      counting input terminal: /cDAQ1/PFI0
+      device name: counter
+      type: virtual tool
+    do task bundle:
+      device name: DO_task_bundle
+      trigger terminal: /cDAQ1/PFI0
+      type: do task
+    gamma galvo strip reduction:
+      device name: gamma galvo strip reduction
+      type: physical device
+      voltage output terminal: cDAQ1AO/ao3
+    metronome terminals:
+      counter terminal: /cDAQ1/_ctr0
+      counting output terminal: /cDAQ1/Ctr0InternalOutput
+      device name: metronome
+      trigger terminal: /cDAQ1/PFI0
+      type: virtual tool
+    scanning galvo:
+      device name: scanning galvo
+      type: physical device
+      voltage output terminal: cDAQ1AO/ao0
+    view switching galvo 1:
+      device name: view switching galvo 1
+      type: physical device
+      voltage output terminal: cDAQ1AO/ao1
+    view switching galvo 2:
+      device name: view switching galvo 2
+      type: physical device
+      voltage output terminal: cDAQ1AO/ao2
+  stage_core_configs:
+    BAUD RATE: 9600
+    COM Port: COM6
+    encoder divide: 24
+    end position: null
+    scan range (um): null
+    scan speed (um/ms): null
+    start position: null
+process configs:
+  acquisition parameters:
+    camera read out time (ms): 10.0
+    colors:
+    - '488'
+    - '561'
+    exposure time (ms): 20.0
+    galvo scanning speed (nm/ms): 94.28090415820635
+    looping order: '[mode 7] - [layer 1: position] - [layer 2: view] - [layer 3: color]
+      - [layer 4: slice] - [scan: O1]'
+    mag-factor: 5
+    metronome frequency: 10000
+    n slices: 4
+    name: mode7
+    number of time points: 2
+    pixel size in xy (um): 0.4
+    positions:
+      position name 1:
+        x: 1
+        y: 10
+      position name 2:
+        x: 23
+        y: 12
+    scanning galvo scan range limit (um): 0.8
+    scanning galvo scan range per slice (um): null
+    scanning range (um): 11.313708498984761
+    slice distance (um): 2.0
+    stage retraction time (ms): 20.0
+    stage scanning speed (nm/ms): 94.28090415820635
+    time per stack per view (s): 0.14
+    time per time point (s): 0.56
+    type: mode7
+    views:
+    - '1'
+    - '2'
+  process type: acquisition, mode 7
+process type: acquisition, mode 7

@@ -14,21 +14,22 @@ from daxi.globals_configs_constants_general_tools_needbettername.constants impor
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 
 
-def real_orca_camera_image_feeder(camera: OrcaFlash4, processor=None, counter=None):
+def real_orca_camera_image_feeder(camera: OrcaFlash4,
+                                  processor=None,
+                                  counter=None):
     counter_output = counter.read()
     # need to wrape the counter_countput into frame count (periodic boundary condition).
 
     processor.camera = camera
     print('counter output is:' + str(counter_output))
-    current_frame_count = counter_output % (camera.buffer_size_frame_number )
+    current_frame_count = counter_output % (camera.buffer_size_frame_number)
     stitched_mips = processor.get_current_stitched_mips(camera_id=0, current_frame_count=current_frame_count)
     return stitched_mips
 
 
 def demo_daxiviewer_on_real_orca_flash4():
     # this demo itself may function as the combination of a process/data/device fcltr.
-    camera = OrcaFlash4()  # this is a device
-    camera.get_ready(camera_ids=[0])
+
     # define camera configurations
     camera_configs = {}
     camera_configs['exposure time (ms)'] = 100
@@ -46,8 +47,13 @@ def demo_daxiviewer_on_real_orca_flash4():
     camera_configs['buffer size (frame number)'] = 300
     camera_configs['xdim'] = 100
     camera_configs['ydim'] = 200
+
+    # create a camera and get ready.
+    camera = OrcaFlash4()  # this is a device
+    camera.get_ready(camera_ids=[0])
     camera.set_configurations(camera_configs=camera_configs)
     camera.start(camera_ids=[0])
+
     # get counter configs:
     p = NIDAQConfigsParser()
     p.set_configs_path(virtual_tools_configs_path)
@@ -61,15 +67,25 @@ def demo_daxiviewer_on_real_orca_flash4():
     counter.set_configurations(counter_configs=configs)
     counter.get_ready()
     counter.start()
+
+    # define stack processing tool
     p = StackProcessing()  # this is a data tool
+
+    # get a viewer, and prepare it with the processing tool and the relevant devices.
     daxi_viewer = DaXiViewer()  # this is a data tool
     daxi_viewer.prepare(
               image_feeder=real_orca_camera_image_feeder,
-              camera=camera,
-              processor=p,
-              counter=counter,
+              # the image feeder deals with devices, and the output of devices.
+
+              camera=camera,  # this is a device
+              processor=p,  # this is a data processing tool
+              counter=counter,  # this is a deivce
               )
-    daxi_viewer.go()
+
+    # start the viewer
+    daxi_viewer.start()
+
+
     counter.stop()
     counter.close()
     camera.stop()

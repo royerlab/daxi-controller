@@ -33,7 +33,7 @@ class DaXiViewer:
     def __init__(self):
         self.camera_index = 0
 
-    def update_layers(self, images_data : dict):
+    def update_layers(self, images_data: dict):
         """
         Add images to napari is layer or updates a pre-existing layer
         """
@@ -106,7 +106,7 @@ class DaXiViewer:
             yield self.process_image(self.image)
             time.sleep(0.05)
 
-    def go(self):
+    def start(self):
         # Start the loop
         self.worker = self.loop_run()
         self.worker.yielded.connect(self.update_layers)

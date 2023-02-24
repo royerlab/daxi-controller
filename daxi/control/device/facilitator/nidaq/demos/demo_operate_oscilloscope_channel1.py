@@ -9,7 +9,7 @@
 # we expect each "operation" to be defined as methods in the facilitators' level.
 
 from daxi.control.device.facilitator.nidaq.nidaq import Metronome, TaskBundleAO, SubTaskAO
-from daxi.control.device.facilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
+from daxi.control.device.facilitator.config_tools.generate_functions import DAQDataGenerator
 from daxi.globals_configs_constants_general_tools_needbettername.parser import NIDAQConfigsParser
 from daxi.globals_configs_constants_general_tools_needbettername.constants import virtual_tools_configs_path
 from time import sleep
@@ -56,7 +56,7 @@ metronome.get_ready()
 taskbundle_ao = TaskBundleAO()
 
 # set the ao task bundle configurations
-taskbundle_ao.set_configurations(task_bundle_ao_configs, metronome)
+taskbundle_ao.set_configurations(task_bundle_ao_configs)
 
 # add metronome
 taskbundle_ao.add_metronome(metronome)

@@ -19,7 +19,7 @@ m = AcqParamMode6(dx=0.4,
 
 m.adapt()
 
-m.find_parameter_combinations()
+m.find_parameter_combinations_ls3scan()
 
 m.display_parameter_options()
 

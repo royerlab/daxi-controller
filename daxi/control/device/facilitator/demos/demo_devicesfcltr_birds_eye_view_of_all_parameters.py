@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 
 
 from daxi.control.device.facilitator.devicesfacilitator import DevicesFcltr
-from daxi.control.device.facilitator.nidaq.devicetools.configuration_generator_mode1 import \
+from daxi.control.device.facilitator.config_tools.configuration_generator_mode1 import \
     NIDAQDevicesConfigsGeneratorMode1
 from daxi.control.process.facilitator.processes_facilitator import load_process_configs
 from daxi.globals_configs_constants_general_tools_needbettername.constants import process_templates
@@ -19,7 +19,7 @@ configs = load_process_configs(path=path)
 
 # 1. receive configurations
 df.receive_device_configs_all_cycles(process_configs=configs,
-                                     device_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
+                                     daqdevice_configs_generator_class=NIDAQDevicesConfigsGeneratorMode1)
 
 # should have an extra step to choose a view/color, and map it to the
 # single cycle configs, then move on.

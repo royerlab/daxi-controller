@@ -7,7 +7,6 @@ import numpy as np
 class StackProcessing:
     def __init__(self):
         print('stack processing initiated...')
-        self.camera = None  # this will be the device object that belongs to the camera category.
         self.last_frame = None
         self.mip0 = None
         self.mip1 = None
@@ -25,25 +24,26 @@ class StackProcessing:
         # maybe should do the ring buffer in the camera module. But here, just take the last stack
         # use the simulated camera for this.
 
-    def get_last_frame(self):
-        data = self.camera.buf_getlastframedata()
+    def get_last_frame(self, camera):
+        data = camera.buf_getlastframedata()
         self.last_frame = data
         return data
 
-    def _retrieve_last_stack(self, camera_id, current_frame_count):
+    def _retrieve_last_stack(self, camera_id, current_frame_count, camera):
         """this will take the entire stack from the current buffer"""
         # ToDo - need to implement this method in the camera module.
-        self.last_stack = self.camera.get_current_stack(camera_id=camera_id,
-                                                        current_frame_count=current_frame_count,
-                                                        data_window=self.data_window)
+        self.last_stack = camera.get_current_stack(camera_id=camera_id,
+                                                   current_frame_count=current_frame_count,
+                                                   data_window=self.data_window)
         return self.last_stack
 
     def _get_current_3d_mips(self):
         self.mip0, self.mip1, self.mip2, self.stitched_mips = get_3d_mips(self.last_stack)
 
-    def get_current_stitched_mips(self, camera_id, current_frame_count):
+    def get_current_stitched_mips(self, camera_id, current_frame_count, camera):
         self._retrieve_last_stack(camera_id=camera_id,
-                                  current_frame_count=current_frame_count)
+                                  current_frame_count=current_frame_count,
+                                  camera=camera)
         self._get_current_3d_mips()
         return self.stitched_mips
 

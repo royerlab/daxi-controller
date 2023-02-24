@@ -179,17 +179,58 @@ definition start.
 {
     'scanning galvo':
     {
-    'distance (um) to voltage (v) conversion factor (v/um)': float(0.004),
+    'distance (um) to voltage (v) conversion factor (v/um)': float(0.04), # this value is a placeholder.
+    },
+
+    'O1':
+    {
+    'distance (um) to voltage (v) conversion factor (v/um)': float(0.025), # This is calibrated. (40 um/V)
     },
 
     'gamma galvo strip reduction':
     {
-    'linear ramp start for view 1': float(0.1), # volt, should be obtained and adjusted during alignment
-    'linear ramp stop for view 1': float(0.3), # volt, should be obtained and adjusted during alignment
-    'linear ramp start for view 2': float(0.2), # volt, should be obtained and adjusted during alignment
-    'linear ramp stop for view 2': float(0.4), # volt, should be obtained and adjusted during alignment
+    'linear ramp start for view 1': float(0), # volt, should be obtained and adjusted during alignment
+    'linear ramp stop for view 1': float(0.5), # volt, should be obtained and adjusted during alignment
+    'linear ramp start for view 2': float(-0.1), # volt, should be obtained and adjusted during alignment
+    'linear ramp stop for view 2': float(-0.4), # volt, should be obtained and adjusted during alignment
     },
 
 }
 definition end.
 
+
+------------------------------------ Connection Section: camera_core_configs
+camera_core_configs:
+definition start.
+{
+    'camera ids': [0],
+    'trigger source': 'MASTER PULSE',
+    'trigger mode': 'NORMAL',
+    'trigger polarity': 'POSITIVE',
+    'trigger times': 1,
+    'output trigger kind': 'TRIGGER READY',
+    'output trigger polarity': 'POSITIVE',
+    'master pulse mode': 'START',
+    'burst times': 1,
+    'master pulse interval': None,
+    'master pulse trigger': 'EXTERNAL',
+    'buffer size (stack number)': 3,
+    'xdim': 100,
+    'ydim': 200,
+}
+definition end.
+
+------------------------------------ Connection Section: stage_core_configs
+
+:
+definition start.
+{
+    'scan speed (um/ms)': None,
+    'scan range (um)': None,
+    'start position': None,
+    'end position': None,
+    'encoder divide': 24,
+    'COM Port': "COM6",
+    'BAUD RATE':9600,
+}
+definition end.

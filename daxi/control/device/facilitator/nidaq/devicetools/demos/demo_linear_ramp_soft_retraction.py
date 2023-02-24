@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from daxi.control.device.facilitator.nidaq.devicetools.generate_functions import DAQDataGenerator
+from daxi.control.device.facilitator.config_tools.generate_functions import DAQDataGenerator
 
 dg = DAQDataGenerator()
 data = dg.getfcn_linear_ramp_soft_retraction(v0=20,

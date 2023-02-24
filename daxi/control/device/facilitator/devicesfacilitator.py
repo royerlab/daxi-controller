@@ -43,6 +43,7 @@ class DevicesFcltr:
     """
 
     def __init__(self, devices_connected=True):
+        self.display_message = True
         self.devices_connected = devices_connected
         self.description = "This is the devices facilitator for DaXi microscope"
         self.subtask_ao_list = []
@@ -73,7 +74,9 @@ class DevicesFcltr:
         self.configs_bright_field = None
         self.configs_O1 = None
         self.configs_O3 = None
-        self.configs_single_cycle_dict = None
+        self.configs_daq_single_cycle_dict = None
+        self.configs_cam_single_cycle_dict = None
+        self.configs_stage_single_cycle_dict = None
         self.configs_camera = None
         self.configs_asi_stage = None
 
@@ -113,10 +116,14 @@ class DevicesFcltr:
                 # assign the attributes
                 setattr(self, 'configs_' + device_tool, configs)
 
-    def receive_device_configs_all_cycles(self, process_configs, device_configs_generator_class):
+    def receive_device_configs_all_cycles(self,
+                                          process_configs,
+                                          daqdevice_configs_generator_class,
+                                          camera_configs_generator_class=None,
+                                          stage_configs_generator_class=None):
         """
 
-        :param device_configs_generator_class: the class for device generator
+        :param daqdevice_configs_generator_class: the class for device generator
         :param process_configs: dict. It should be passed in by a command - a FocusedProcessFcltr type.
         (leave abstraction for future for now.)
         this should do things equivalent to load_device_configs, but instead of doing it from loading things from file,
@@ -149,10 +156,13 @@ class DevicesFcltr:
         configuraitons.
         OK it makes more sense to have it in the focused processes fcltr.
 
+        this function should also append all positions to the asi stage.
+
         :return: nothing
+        @type stage_configs_generator_class: object
         """
         # synthesize the configurations - process_parameter
-        process_parameters = process_configs['process configs']['acquisition parameters']
+        acquisition_parameters = process_configs['process configs']['acquisition parameters']
 
         # synthesize the configurations - daq_terminal_configs
         daq_terminal_configs = process_configs['device configurations']['nidaq_terminals']
@@ -163,62 +173,98 @@ class DevicesFcltr:
         # synthesize the configurations - alignment_records
         alignment_records = process_configs['device configurations']['alignment_records']
 
-        # now get the configuration generator
-        configs_generator = \
-            device_configs_generator_class(params=process_parameters,
-                                           nidaq_terminals=daq_terminal_configs,
-                                           calibration_records=calibration_records,
-                                           alignment_records=alignment_records)
+        # synthesize the configurations - camera_core_configs
+        camera_core_configs = process_configs['device configurations']['camera_core_configs']
 
-        # now generate all device configurations
+        # synthesize the configurations - stage_core_configs
+        stage_core_configs = process_configs['device configurations']['stage_core_configs']
+
+        # now get the configuration generator for daq devices configurations
+        daq_configs_generator = \
+            daqdevice_configs_generator_class(process_configs=process_configs,
+                                              params=acquisition_parameters,
+                                              nidaq_terminals=daq_terminal_configs,
+                                              calibration_records=calibration_records,
+                                              alignment_records=alignment_records)
+        # now generate all daq device configurations
         self.configs_all_cycles['configs_metronome'] = \
-            configs_generator.get_configs_for_metronome()
+            daq_configs_generator.get_configs_for_metronome()
         self.configs_all_cycles['configs_counter'] = \
-            configs_generator.get_configs_for_counter()
+            daq_configs_generator.get_configs_for_counter()
         self.configs_all_cycles['configs_DO_task_bundle'] = \
-            configs_generator.get_configs_do_task_bundle()
+            daq_configs_generator.get_configs_do_task_bundle()
         self.configs_all_cycles['configs_AO_task_bundle'] = \
-            configs_generator.get_configs_ao_task_bundle()
+            daq_configs_generator.get_configs_ao_task_bundle()
         self.configs_all_cycles['configs_scanning_galvo'] = \
-            configs_generator.get_configs_scanning_galvo(params=process_parameters)
+            daq_configs_generator.get_configs_scanning_galvo(params=acquisition_parameters)
         self.configs_all_cycles['configs_view_switching_galvo_1'] = \
-            configs_generator.get_configs_view_switching_galvo_1(params=process_parameters)
+            daq_configs_generator.get_configs_view_switching_galvo_1(params=acquisition_parameters)
         self.configs_all_cycles['configs_view_switching_galvo_2'] = \
-            configs_generator.get_configs_view_switching_galvo_2(params=process_parameters)
+            daq_configs_generator.get_configs_view_switching_galvo_2(params=acquisition_parameters)
         self.configs_all_cycles['configs_gamma_galvo_strip_reduction'] = \
-            configs_generator.get_configs_gamma_galvo_strip_reduction(params=process_parameters)
+            daq_configs_generator.get_configs_gamma_galvo_strip_reduction(params=acquisition_parameters)
         self.configs_all_cycles['configs_beta_galvo_light_sheet_incident_angle'] = \
-            configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(process_parameters)
+            daq_configs_generator.get_configs_beta_galvo_light_sheet_incident_angle(acquisition_parameters)
         self.configs_all_cycles['configs_O1'] = \
-            configs_generator.get_configs_o1(process_parameters)
+            daq_configs_generator.get_configs_o1(acquisition_parameters)
         self.configs_all_cycles['configs_O3'] = \
-            configs_generator.get_configs_o3(process_parameters)
+            daq_configs_generator.get_configs_o3(acquisition_parameters)
         self.configs_all_cycles['configs_405_laser'] = \
-            configs_generator.get_configs_405_laser(process_parameters)
+            daq_configs_generator.get_configs_405_laser(acquisition_parameters)
         self.configs_all_cycles['configs_488_laser'] = \
-            configs_generator.get_configs_488_laser(process_parameters)
+            daq_configs_generator.get_configs_488_laser(acquisition_parameters)
         self.configs_all_cycles['configs_561_laser'] = \
-            configs_generator.get_configs_561_laser(process_parameters)
+            daq_configs_generator.get_configs_561_laser(acquisition_parameters)
         self.configs_all_cycles['configs_639_laser'] = \
-            configs_generator.get_configs_639_laser(process_parameters)
+            daq_configs_generator.get_configs_639_laser(acquisition_parameters)
         self.configs_all_cycles['configs_bright_field'] = \
-            configs_generator.get_configs_bright_field(process_parameters)
+            daq_configs_generator.get_configs_bright_field(acquisition_parameters)
+        self.configs_all_cycles['configs_daq_general'] = \
+            daq_configs_generator.get_configs_daq_general()
         # all the configurations are mapped to a dictionary that stores different cycle types,
         # specified by its own dictionary keys with acquisition-mode specific name patterns.
-        self.configs_single_cycle_dict = \
-            configs_generator.get_configs_single_cycle_dict(process_parameters)
+        self.configs_daq_single_cycle_dict = \
+            daq_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
+
+        # now get the configuration generator for camera and set the configurations:
+        if camera_configs_generator_class is not None:
+            camera_configs_generator = camera_configs_generator_class(
+                                          camera_core_configs=camera_core_configs
+                                          )
+            self.configs_all_cycles['configs_camera'] = \
+                camera_configs_generator.get_configs_camera(params=acquisition_parameters)
+
+            self.configs_cam_single_cycle_dict = \
+                camera_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
+
+        # now get the configuration generator for stage and set the configurations:
+        if stage_configs_generator_class is not None:
+            stage_configs_generator = stage_configs_generator_class(
+                                        stage_core_configs=stage_core_configs
+                                        )
+            self.configs_all_cycles['configs_stage'] = \
+                stage_configs_generator.get_configs_asi_stage(acquisition_params=acquisition_parameters)
+
+            self.configs_stage_single_cycle_dict = \
+                stage_configs_generator.get_configs_single_cycle_dict(acquisition_parameters)
 
     def checkout_single_cycle_configs(self, key=None, verbose=False):
         if verbose:
-            print('          checking out a single  cycle configuration for '+str(key))
-        configs = self.configs_single_cycle_dict[key]
-        # now map all the attributes in configs into this object
-        for k in configs.keys():
-            setattr(self, k, configs[k])
+            print('             checking out a single  cycle configuration for '+str(key))
+        daq_configs = self.configs_daq_single_cycle_dict[key]
+        # now map all the attributes in daq configs into this object
+        for k in daq_configs.keys():
+            setattr(self, k, daq_configs[k])
+
+        if self.configs_cam_single_cycle_dict is not None:
+            setattr(self, 'configs_camera', self.configs_cam_single_cycle_dict[key])
+
+        if self.configs_stage_single_cycle_dict is not None:
+            setattr(self, 'configs_asi_stage', self.configs_stage_single_cycle_dict[key])
 
     def show_devices_configs(self):
         """
-        print out the names of the devices for convenience
+        print out the configurations for all the devices.
         :return:
         """
         for m in self.__dict__.keys():
@@ -250,8 +296,10 @@ class DevicesFcltr:
             self.counter = Counter(
                 devices_connected=self.devices_connected)
         else:
-            self.counter = SimulatedCounter(
-                devices_connected=self.devices_connected)
+            # self.counter = SimulatedCounter(
+            #     devices_connected=self.devices_connected)
+            self.counter = SimulatedCounter(devices_connected=self.devices_connected,
+                                            camera=self.camera, camera_id=0)
 
         self.counter.set_configurations(self.configs_counter)
 
@@ -476,7 +524,7 @@ class DevicesFcltr:
         :param color:
         :return:
         """
-        print("          Move Filter Wheel: we will move the filter wheel to the following color: "+str(color))
+        print("             Move Filter Wheel: we will move the filter wheel to the following color: "+str(color))
         # need to have a configuration file of filters in the configs.
         pass
 
@@ -490,7 +538,7 @@ class DevicesFcltr:
 
     def camera_prepare(self, simulation=False):
         if simulation is True:
-            self.camera = OrcaFlash4Simulation()
+            self.camera = OrcaFlash4Simulation(display_message=self.display_message)
         else:
             self.camera = OrcaFlash4()
 
@@ -500,15 +548,15 @@ class DevicesFcltr:
                                        camera_configs=self.configs_camera)
 
     def camera_start(self):
-        print("          this will start the camera, leave it out for now. will implement in the future.")
+        print("             this will start the camera, implemented and tested with simulated devices, and real device.")
         self.camera.start(camera_ids=self.configs_camera['camera ids'])
 
     def camera_stop(self):
-        print("          this will stop the camera, leave it out for now. will implement in the future.")
+        print("         this will stop the camera, implemented and tested with simulated devices, and real device..")
         self.camera.stop(camera_ids=self.configs_camera['camera ids'])
 
     def camera_close(self):
-        print("          this will close the camera, leave it out for now. will implement in the future.")
+        print("          this will close the camera.")
         self.camera.release_buffer(camera_ids=self.configs_camera['camera ids'])
         self.camera.close(camera_ids=self.configs_camera['camera ids'])
 
@@ -554,6 +602,27 @@ class DevicesFcltr:
         else:
             self.asi_stage = DaxiMs2kStage(self.configs_asi_stage['COM Port'],
                                            self.configs_asi_stage['BAUD RATE'])
+
+        # set the default raster scan configurations to have the current speed and range
+        scan_configs = {'scan speed': self.configs_asi_stage['scan speed (um/ms)'],
+                        'scan range': self.configs_asi_stage['scan range (um)'],
+                        'start position': None,
+                        'end position': None,
+                        'encoder divide': 24,
+                        }
+
+        # adding positions to the asi_stage object
+        for pos_name in self.configs_asi_stage['position list'].keys():
+            x = self.configs_asi_stage['position list'][pos_name]['x']
+            y = self.configs_asi_stage['position list'][pos_name]['y']
+            pos = {'unit': 'mm',
+                   'X': x,
+                   'Y': y,
+                   'scan configurations': scan_configs}
+            pos['scan configurations']['start position'] = pos['X']
+            pos['scan configurations']['end position'] = scan_configs['scan range'] + pos['X']
+
+            self.asi_stage.add_position_to_list(name=pos_name, unit='mm', pos_in=pos)
 
     def stage_get_ready(self):
         if self.asi_stage is not None:
@@ -619,4 +688,50 @@ class DevicesFcltr:
                                                    scan_speed=scan_speed)
         else:
             raise ValueError('asi stage is not initialized yet.')
+
+
+def prepare_all_devices_and_get_ready(devices_fcltr: DevicesFcltr = None, is_simulation: bool = True):
+    """
+    This function will take a devices facilitator, and prepare all the devices, and make sure all the devices are ready.
+    @param devices_fcltr:
+    @param is_simulation:
+    @return:
+    """
+    # camera get ready (for now, display an image to prompt the user to run the HCI)
+    devices_fcltr.camera_prepare(simulation=is_simulation)
+    devices_fcltr.camera_get_ready()
+
+    # 2. prepare subtasks and calculate the data for all subtasks
+    devices_fcltr.daq_prepare_subtasks_ao()
+    devices_fcltr.daq_prepare_subtasks_do()
+
+    # 3. prepare metronome and counter
+    devices_fcltr.daq_prepare_metronome()
+    devices_fcltr.daq_prepare_counter()
+
+    # 4. prepare AO and DO task bundle
+    devices_fcltr.daq_prepare_taskbundle_ao()
+    devices_fcltr.daq_prepare_taskbundle_do()
+
+    # 5. add metronome to ao task bundle
+    devices_fcltr.daq_add_metronome()
+
+    # 6. add sub-tasks for ao task bundle
+    devices_fcltr.daq_add_subtasks_ao()
+    devices_fcltr.daq_add_subtasks_do()
+
+    # 7. get ready, and start/stop.
+    devices_fcltr.daq_get_ready()
+    devices_fcltr.daq_start()
+    devices_fcltr.daq_stop()  # run a start-stop cycle to flush the buffer.
+
+    # ASI stage get ready (handle the receivers) (design for now and leave implementation after framework with a
+    # working daq is done)
+    devices_fcltr.stage_prepare(simulation=is_simulation)
+    devices_fcltr.stage_get_ready()
+    # self.devices_fcltr.
+    # copy/organize from the previous ad-hoc in the old_workbench
+    # the speed and everything should already be stored in the list of positions.
+    # think:
+    # this should be in device facilitator
 
